@@ -14,12 +14,132 @@ Repository: [github.com/chenxingqiang/GRC-PIM](https://github.com/chenxingqiang/
 
 RRAM PIM arrays suffer from **conductance drift** and **read noise**. Classical GF(3) NB-LDPC decoding (Shi et al.) uses **single-cycle hard decisions** and misses **multi-cycle temporal evidence**. GRC-PIM adds a **compact INT8 GEMV residual calibrator** (425 parameters) on top of the training-free **B′** multi-cycle soft-LLR baseline—but only when a **dual gate** says it is safe:
 
-1. **Drift gate** — global temporal disagreement score \(d_\mathrm{global} > \tau_d\)
-2. **Model-confidence gate** — mean per-symbol confidence \(\bar g > 0.6\)
+**Drift gate** — global temporal disagreement exceeds a calibrated threshold:
+
+$$
+d_{\mathrm{global}} \;\ge\; \tau_d
+\qquad\text{with}\qquad
+d_{\mathrm{global}} = \frac{4}{nk}\sum_{i=1}^{n}\mathrm{Var}_{t=1..T}\!\bigl(b_{i,t}\bigr) \in [0,1]
+$$
+
+where $b_{i,t}\in\{0,1\}$ is bit $i$ at PIM read cycle $t$ ($T$ cycles, $n$ bits per codeword).
+
+**Model-confidence gate** — mean per-symbol MLP gate confidence exceeds a fixed threshold:
+
+$$
+\bar g \;\ge\; \tau_g
+\qquad\text{with}\qquad
+\bar g = \frac{1}{n}\sum_{i=1}^{n} g_i,
+\quad g_i = \sigma\!\bigl(\mathbf{w}_g^{\mathsf T}\mathbf{f}_i + b_g\bigr) \in (0,1)
+$$
+
+where $\mathbf{f}_i$ is the 13-D GEMV feature vector for symbol $i$.
+
+Both gates must **open** (AND logic). Paper defaults: $\tau_d = 0.030$ (E2 ablation tables use $\tau_d = 0.025$), $\tau_g = 0.6$.
+
+$$
+\mathrm{USE\_GEMV} = \mathbb{1}\!\left[d_{\mathrm{global}} \ge \tau_d\right] \;\land\; \mathbb{1}\!\left[\bar g \ge \tau_g\right]
+$$
 
 If either gate closes, output **equals B′ by construction** (no extra error risk).
 
 This repository ships everything needed to **run the simulator, inspect paper numbers, retrain models, and cosim the RTL**. Paper figures are included as **high-resolution PNG** under [`figures/`](figures/) (see below).
+
+---
+
+## System architecture
+
+GRC-PIM sits **between multi-cycle PIM readout and the GF(3) NB-LDPC BP decoder**. It reuses the training-free **B′** multi-cycle soft-LLR product as an anchor, optionally adds a **residual INT8 GEMV correction** $\Delta\mathrm{LLR}$, and falls back to B′ whenever the dual gate closes.
+
+![Fig. 1 — GRC-PIM system architecture](figures/fig1.png)
+
+### End-to-end data flow
+
+```mermaid
+flowchart LR
+  subgraph PIM["PIM array (T read cycles)"]
+    ADC["3-bit ADC per symbol/cycle"]
+  end
+
+  subgraph CPU["CPU / digital front-end (off-chip)"]
+    FEAT["13-D feature build\n→ FEAT_IN[103:0]"]
+  end
+
+  subgraph GRC["GRC_PIM_TOP (on-chip)"]
+    Bp["B′ accumulator\n(cycle LLR product)"]
+    DRIFT["Drift detector\n$d_{\mathrm{global}}$"]
+    MLP["INT8 GEMV MLP\n13→24→3 + gate"]
+    GATE["Dual gate\nUSE_GEMV"]
+    MUX["LLR mux"]
+  end
+
+  subgraph ECC["NB-LDPC decoder"]
+    BP["GF(3) BP\nSerial_ECC_TOP_FSM"]
+  end
+
+  ADC --> Bp
+  ADC --> DRIFT
+  FEAT --> MLP
+  Bp --> MLP
+  Bp --> MUX
+  DRIFT --> GATE
+  MLP --> GATE
+  GATE --> MUX
+  MLP --> MUX
+  MUX --> BP
+```
+
+**Four-stage pipeline** (paper Fig. 1):
+
+| Stage | Block | Input → output | Role |
+|-------|-------|----------------|------|
+| **1** | Multi-cycle PIM readout | stored weights → $T$ ADC streams | Captures drift + read noise over time |
+| **2** | B′ soft-LLR (`GRC_MESSAGE_TRANS` + accumulator) | per-cycle 3-bit LLR → anchor $\mathrm{LLR}_{B'}$ | Training-free baseline; always computed |
+| **3** | Gated GEMV calibrator | $\mathrm{LLR}_{B'}$ + 13-D features → $\Delta\mathrm{LLR}$ | 425-param INT8 MLP ($13{\to}24{\to}3$ + gate head); active only if $\mathrm{USE\_GEMV}=1$ |
+| **4** | GF(3) BP decoder | prior LLR bus → decoded symbols | `deps/NBLDPC_PIM/` parity-check propagation |
+
+Parallel **control paths** (not on the main LLR bus):
+
+- **Drift detector** (`DRIFT_DETECTOR_CODEWORD`) — computes $d_{\mathrm{global}}$ from cross-cycle bit disagreement.
+- **Model-confidence gate** — $\bar g$ from per-symbol sigmoid outputs of the GEMV head.
+
+### Output mux (safe fallback)
+
+Per symbol $i$, the emitted prior is:
+
+$$
+\mathrm{LLR}_i =
+\begin{cases}
+\mathrm{LLR}_{B',i} + \Delta\mathrm{LLR}_i & \mathrm{USE\_GEMV} = 1 \\
+\mathrm{LLR}_{B',i} & \mathrm{USE\_GEMV} = 0
+\end{cases}
+$$
+
+When the gate closes, GRC-PIM is **bit-identical to B′** — no un-gated MLP path reaches the decoder.
+
+### On-chip vs off-chip split
+
+| Location | Responsibility | Repo reference |
+|----------|----------------|----------------|
+| **PIM + ADC** | $T$-cycle conductance readout, 3-bit quantization | `core/noise3d.py` (simulation channel) |
+| **CPU / front-end** | 13-D feature extraction, INT8 quantize, stream on `FEAT_IN` | `hw/feat.py`, [`hw/FEATURE_OFFLOAD.md`](pim_predecoder/hw/FEATURE_OFFLOAD.md) |
+| **GRC silicon** | B′ accumulate, drift score, INT8 GEMV, dual gate, LLR emit | `rtl/GRC_PIM_TOP.v`, `rtl/INT8_GEMV_MLP.v` |
+| **ECC backend** | Prior mux into full codeword LLR bus → BP decode | `rtl/GRC_ECC_PRIOR_MUX.v`, `deps/NBLDPC_PIM/` |
+
+Default RTL thresholds (1024-scale): `TAU_D_Q16 = 1638` ($\tau_d \approx 0.025$), `TAU_G_Q16 = 39321` ($\tau_g = 0.6$).
+
+### Code map (simulation ↔ RTL)
+
+| Architecture block | Python | Verilog |
+|--------------------|--------|---------|
+| Multi-cycle noise + readout | `core/noise3d.py` | (testbench stimulus) |
+| B′ soft-LLR product | `core/codec.py`, `hw/llr.py` | `GRC_LLR_LUT.v` |
+| 13-D features | `core/gemv_calibrator.py`, `hw/feat.py` | off-chip → `FEAT_IN` |
+| Drift + dual gate + GEMV | `core/gemv_calibrator.py` | `DRIFT_DETECTOR_CODEWORD.v`, `INT8_GEMV_MLP.v`, `GRC_PIM_TOP.v` |
+| Weight export | `hw/export_weights.py` | `rtl/Weights/*.hex` |
+| Prior mux + decode cosim | `cosim/cascade.py`, `cosim/decode.py` | `GRC_ECC_PRIOR_MUX.v` + `Serial_ECC_TOP_FSM.v` |
+
+See **Fig. 1** below for the paper diagram and Step 0 smoke-test commands.
 
 ---
 
@@ -54,6 +174,8 @@ Use the five main figures as a reading order. Each subsection links to **bundled
 ### Fig. 1 — System architecture (`fig:architecture`)
 
 ![Fig. 1 — GRC-PIM system architecture](figures/fig1.png)
+
+> Block-level pipeline, on-chip/off-chip split, and code map: see [System architecture](#system-architecture) above.
 
 **What it shows:** Four-stage stack:
 
@@ -135,7 +257,7 @@ python3 -m pim_predecoder.experiments.gemv \
 
 **What it shows:** At \(p_\mathrm{bit}=5\times10^{-3}\), 1024-symbol, seed 1:
 
-- **(a)** Drift score vs. threshold \(\tau_d=0.030\); gate opens only in **E2** (matched strong drift).
+- **(a)** Drift score $d_{\mathrm{global}}$ vs. $\tau_d=0.030$; gate opens only in **E2** (matched strong drift).
 - **(b)** BER: **E2** → **2.08×** gain; **E1/E3/E4** → resolution floor; **E5** → GRC-PIM **matches B′** (no degradation under mismatch).
 
 **Noise scenarios:**
