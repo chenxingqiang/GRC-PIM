@@ -1,0 +1,74 @@
+{
+  "label": "E1_gemv_gated_weak",
+  "train_p_drift": 0.0005,
+  "train_p_row_burst": 0.001,
+  "test_p_drift": 0.0005,
+  "test_p_row_burst": 0.001,
+  "n_codewords": 2000,
+  "n_cycles": 4,
+  "model": "GEMVResidualCalibrator",
+  "drift_score_threshold": 0.03,
+  "model_gate_threshold": 0.6,
+  "rows": [
+    {
+      "p_bit": 0.005,
+      "Bp_post": 5.208333333333333e-06,
+      "Bp_iters": 3.0,
+      "GEMV_post": 5.208333333333333e-06,
+      "GEMV_iters": 3.0,
+      "GEMV_raw_symbol": 0.0036909722222222222,
+      "GEMV_gate": 0.9755358695983887,
+      "drift_score": 0.018053820356726646,
+      "use_gemv": false,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.003,
+      "Bp_post": 0.0,
+      "Bp_iters": 1.0,
+      "GEMV_post": 0.0,
+      "GEMV_iters": 1.0,
+      "GEMV_raw_symbol": 3.6458333333333336e-05,
+      "GEMV_gate": 0.9791283309459686,
+      "drift_score": 0.009051648899912834,
+      "use_gemv": false,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.001,
+      "Bp_post": 0.0,
+      "Bp_iters": 1.0,
+      "GEMV_post": 0.0,
+      "GEMV_iters": 1.0,
+      "GEMV_raw_symbol": 6.944444444444445e-06,
+      "GEMV_gate": 0.9852056205272675,
+      "drift_score": 0.004323133733123541,
+      "use_gemv": false,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.0003,
+      "Bp_post": 3.4722222222222224e-06,
+      "Bp_iters": 3.0,
+      "GEMV_post": 3.4722222222222224e-06,
+      "GEMV_iters": 3.0,
+      "GEMV_raw_symbol": 0.004605902777777778,
+      "GEMV_gate": 0.9898668676614761,
+      "drift_score": 0.0035240885335952044,
+      "use_gemv": false,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.0001,
+      "Bp_post": 0.0,
+      "Bp_iters": 1.0,
+      "GEMV_post": 0.0,
+      "GEMV_iters": 1.0,
+      "GEMV_raw_symbol": 0.0,
+      "GEMV_gate": 0.9928223937749863,
+      "drift_score": 0.000311848969431594,
+      "use_gemv": false,
+      "resolution_floor": 5.208333333333333e-06
+    }
+  ]
+}

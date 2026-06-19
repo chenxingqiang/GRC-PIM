@@ -1,0 +1,62 @@
+{
+  "label": "E3_gemv_weak_to_iid",
+  "train_p_drift": 0.0005,
+  "train_p_row_burst": 0.001,
+  "test_p_drift": 0.0,
+  "test_p_row_burst": 0.0,
+  "n_codewords": 2000,
+  "n_cycles": 4,
+  "model": "GEMVResidualCalibrator",
+  "rows": [
+    {
+      "p_bit": 0.005,
+      "Bp_post": 0.0,
+      "Bp_iters": 1.0,
+      "GEMV_post": 0.0,
+      "GEMV_iters": 1.0,
+      "GEMV_raw_symbol": 0.000125,
+      "GEMV_gate": 0.9755175709724426,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.003,
+      "Bp_post": 0.0,
+      "Bp_iters": 1.0,
+      "GEMV_post": 0.0,
+      "GEMV_iters": 1.0,
+      "GEMV_raw_symbol": 2.2569444444444443e-05,
+      "GEMV_gate": 0.9791330248117447,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.001,
+      "Bp_post": 0.0,
+      "Bp_iters": 1.0,
+      "GEMV_post": 0.0,
+      "GEMV_iters": 1.0,
+      "GEMV_raw_symbol": 5.208333333333333e-06,
+      "GEMV_gate": 0.9852135926485062,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.0003,
+      "Bp_post": 0.0,
+      "Bp_iters": 1.0,
+      "GEMV_post": 0.0,
+      "GEMV_iters": 1.0,
+      "GEMV_raw_symbol": 1.7361111111111112e-06,
+      "GEMV_gate": 0.9898810237646103,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.0001,
+      "Bp_post": 0.0,
+      "Bp_iters": 1.0,
+      "GEMV_post": 0.0,
+      "GEMV_iters": 1.0,
+      "GEMV_raw_symbol": 0.0,
+      "GEMV_gate": 0.9928259700536728,
+      "resolution_floor": 5.208333333333333e-06
+    }
+  ]
+}

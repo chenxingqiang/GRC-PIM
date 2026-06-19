@@ -1,0 +1,524 @@
+{
+  "description": "Threshold sweep at 1024-symbol E2, p_bit=5e-3, mean over seeds. Re-evaluates hybrid BP decode with cached GEMV models.",
+  "matrix": "1024-symbol rate 16/17",
+  "p_bit": 0.005,
+  "n_codewords": 2000,
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "default_tau_d_1024": 0.025,
+  "default_tau_g": 0.6,
+  "tau_d_sweep_at_p5e-3": [
+    {
+      "tau_d": 0.015,
+      "tau_g": 0.6,
+      "Bp_BER_mean": 0.0036269914215686268,
+      "GEMV_BER_mean": 0.0017948835784313726,
+      "gain": 2.0207390970384904,
+      "use_gemv_fraction": 1.0,
+      "drift_score_mean": 0.029345722248156864,
+      "GEMV_gate_mean": 0.8969563543796539,
+      "per_seed": [
+        {
+          "seed": 1,
+          "Bp_post_BER": 0.004415441176470588,
+          "GEMV_post_BER": 0.002103170955882353,
+          "gain": 2.0994209548781817,
+          "use_gemv": true,
+          "drift_score": 0.029569048434495926,
+          "GEMV_gate": 0.9844993203878403
+        },
+        {
+          "seed": 2,
+          "Bp_post_BER": 0.004981387867647059,
+          "GEMV_post_BER": 0.002372012867647059,
+          "gain": 2.1000678097452288,
+          "use_gemv": true,
+          "drift_score": 0.030071288347244263,
+          "GEMV_gate": 0.9851486086845398
+        },
+        {
+          "seed": 3,
+          "Bp_post_BER": 0.0014841452205882353,
+          "GEMV_post_BER": 0.0009094669117647059,
+          "gain": 1.6318847902981304,
+          "use_gemv": true,
+          "drift_score": 0.028396829962730408,
+          "GEMV_gate": 0.7212211340665817
+        }
+      ]
+    },
+    {
+      "tau_d": 0.02,
+      "tau_g": 0.6,
+      "Bp_BER_mean": 0.0036269914215686268,
+      "GEMV_BER_mean": 0.0017948835784313726,
+      "gain": 2.0207390970384904,
+      "use_gemv_fraction": 1.0,
+      "drift_score_mean": 0.029345722248156864,
+      "GEMV_gate_mean": 0.8969563543796539,
+      "per_seed": [
+        {
+          "seed": 1,
+          "Bp_post_BER": 0.004415441176470588,
+          "GEMV_post_BER": 0.002103170955882353,
+          "gain": 2.0994209548781817,
+          "use_gemv": true,
+          "drift_score": 0.029569048434495926,
+          "GEMV_gate": 0.9844993203878403
+        },
+        {
+          "seed": 2,
+          "Bp_post_BER": 0.004981387867647059,
+          "GEMV_post_BER": 0.002372012867647059,
+          "gain": 2.1000678097452288,
+          "use_gemv": true,
+          "drift_score": 0.030071288347244263,
+          "GEMV_gate": 0.9851486086845398
+        },
+        {
+          "seed": 3,
+          "Bp_post_BER": 0.0014841452205882353,
+          "GEMV_post_BER": 0.0009094669117647059,
+          "gain": 1.6318847902981304,
+          "use_gemv": true,
+          "drift_score": 0.028396829962730408,
+          "GEMV_gate": 0.7212211340665817
+        }
+      ]
+    },
+    {
+      "tau_d": 0.022,
+      "tau_g": 0.6,
+      "Bp_BER_mean": 0.0036269914215686268,
+      "GEMV_BER_mean": 0.0017948835784313726,
+      "gain": 2.0207390970384904,
+      "use_gemv_fraction": 1.0,
+      "drift_score_mean": 0.029345722248156864,
+      "GEMV_gate_mean": 0.8969563543796539,
+      "per_seed": [
+        {
+          "seed": 1,
+          "Bp_post_BER": 0.004415441176470588,
+          "GEMV_post_BER": 0.002103170955882353,
+          "gain": 2.0994209548781817,
+          "use_gemv": true,
+          "drift_score": 0.029569048434495926,
+          "GEMV_gate": 0.9844993203878403
+        },
+        {
+          "seed": 2,
+          "Bp_post_BER": 0.004981387867647059,
+          "GEMV_post_BER": 0.002372012867647059,
+          "gain": 2.1000678097452288,
+          "use_gemv": true,
+          "drift_score": 0.030071288347244263,
+          "GEMV_gate": 0.9851486086845398
+        },
+        {
+          "seed": 3,
+          "Bp_post_BER": 0.0014841452205882353,
+          "GEMV_post_BER": 0.0009094669117647059,
+          "gain": 1.6318847902981304,
+          "use_gemv": true,
+          "drift_score": 0.028396829962730408,
+          "GEMV_gate": 0.7212211340665817
+        }
+      ]
+    },
+    {
+      "tau_d": 0.025,
+      "tau_g": 0.6,
+      "Bp_BER_mean": 0.0036269914215686268,
+      "GEMV_BER_mean": 0.0017948835784313726,
+      "gain": 2.0207390970384904,
+      "use_gemv_fraction": 1.0,
+      "drift_score_mean": 0.029345722248156864,
+      "GEMV_gate_mean": 0.8969563543796539,
+      "per_seed": [
+        {
+          "seed": 1,
+          "Bp_post_BER": 0.004415441176470588,
+          "GEMV_post_BER": 0.002103170955882353,
+          "gain": 2.0994209548781817,
+          "use_gemv": true,
+          "drift_score": 0.029569048434495926,
+          "GEMV_gate": 0.9844993203878403
+        },
+        {
+          "seed": 2,
+          "Bp_post_BER": 0.004981387867647059,
+          "GEMV_post_BER": 0.002372012867647059,
+          "gain": 2.1000678097452288,
+          "use_gemv": true,
+          "drift_score": 0.030071288347244263,
+          "GEMV_gate": 0.9851486086845398
+        },
+        {
+          "seed": 3,
+          "Bp_post_BER": 0.0014841452205882353,
+          "GEMV_post_BER": 0.0009094669117647059,
+          "gain": 1.6318847902981304,
+          "use_gemv": true,
+          "drift_score": 0.028396829962730408,
+          "GEMV_gate": 0.7212211340665817
+        }
+      ]
+    },
+    {
+      "tau_d": 0.028,
+      "tau_g": 0.6,
+      "Bp_BER_mean": 0.0036269914215686268,
+      "GEMV_BER_mean": 0.0017948835784313726,
+      "gain": 2.0207390970384904,
+      "use_gemv_fraction": 1.0,
+      "drift_score_mean": 0.029345722248156864,
+      "GEMV_gate_mean": 0.8969563543796539,
+      "per_seed": [
+        {
+          "seed": 1,
+          "Bp_post_BER": 0.004415441176470588,
+          "GEMV_post_BER": 0.002103170955882353,
+          "gain": 2.0994209548781817,
+          "use_gemv": true,
+          "drift_score": 0.029569048434495926,
+          "GEMV_gate": 0.9844993203878403
+        },
+        {
+          "seed": 2,
+          "Bp_post_BER": 0.004981387867647059,
+          "GEMV_post_BER": 0.002372012867647059,
+          "gain": 2.1000678097452288,
+          "use_gemv": true,
+          "drift_score": 0.030071288347244263,
+          "GEMV_gate": 0.9851486086845398
+        },
+        {
+          "seed": 3,
+          "Bp_post_BER": 0.0014841452205882353,
+          "GEMV_post_BER": 0.0009094669117647059,
+          "gain": 1.6318847902981304,
+          "use_gemv": true,
+          "drift_score": 0.028396829962730408,
+          "GEMV_gate": 0.7212211340665817
+        }
+      ]
+    },
+    {
+      "tau_d": 0.03,
+      "tau_g": 0.6,
+      "Bp_BER_mean": 0.0036269914215686268,
+      "GEMV_BER_mean": 0.002757199754901961,
+      "gain": 1.3154619701094503,
+      "use_gemv_fraction": 0.3333333333333333,
+      "drift_score_mean": 0.029345722248156864,
+      "GEMV_gate_mean": 0.8969563543796539,
+      "per_seed": [
+        {
+          "seed": 1,
+          "Bp_post_BER": 0.004415441176470588,
+          "GEMV_post_BER": 0.004415441176470588,
+          "gain": 1.0,
+          "use_gemv": false,
+          "drift_score": 0.029569048434495926,
+          "GEMV_gate": 0.9844993203878403
+        },
+        {
+          "seed": 2,
+          "Bp_post_BER": 0.004981387867647059,
+          "GEMV_post_BER": 0.002372012867647059,
+          "gain": 2.1000678097452288,
+          "use_gemv": true,
+          "drift_score": 0.030071288347244263,
+          "GEMV_gate": 0.9851486086845398
+        },
+        {
+          "seed": 3,
+          "Bp_post_BER": 0.0014841452205882353,
+          "GEMV_post_BER": 0.0014841452205882353,
+          "gain": 1.0,
+          "use_gemv": false,
+          "drift_score": 0.028396829962730408,
+          "GEMV_gate": 0.7212211340665817
+        }
+      ]
+    },
+    {
+      "tau_d": 0.032,
+      "tau_g": 0.6,
+      "Bp_BER_mean": 0.0036269914215686268,
+      "GEMV_BER_mean": 0.0036269914215686268,
+      "gain": 1.0,
+      "use_gemv_fraction": 0.0,
+      "drift_score_mean": 0.029345722248156864,
+      "GEMV_gate_mean": 0.8969563543796539,
+      "per_seed": [
+        {
+          "seed": 1,
+          "Bp_post_BER": 0.004415441176470588,
+          "GEMV_post_BER": 0.004415441176470588,
+          "gain": 1.0,
+          "use_gemv": false,
+          "drift_score": 0.029569048434495926,
+          "GEMV_gate": 0.9844993203878403
+        },
+        {
+          "seed": 2,
+          "Bp_post_BER": 0.004981387867647059,
+          "GEMV_post_BER": 0.004981387867647059,
+          "gain": 1.0,
+          "use_gemv": false,
+          "drift_score": 0.030071288347244263,
+          "GEMV_gate": 0.9851486086845398
+        },
+        {
+          "seed": 3,
+          "Bp_post_BER": 0.0014841452205882353,
+          "GEMV_post_BER": 0.0014841452205882353,
+          "gain": 1.0,
+          "use_gemv": false,
+          "drift_score": 0.028396829962730408,
+          "GEMV_gate": 0.7212211340665817
+        }
+      ]
+    },
+    {
+      "tau_d": 0.035,
+      "tau_g": 0.6,
+      "Bp_BER_mean": 0.0036269914215686268,
+      "GEMV_BER_mean": 0.0036269914215686268,
+      "gain": 1.0,
+      "use_gemv_fraction": 0.0,
+      "drift_score_mean": 0.029345722248156864,
+      "GEMV_gate_mean": 0.8969563543796539,
+      "per_seed": [
+        {
+          "seed": 1,
+          "Bp_post_BER": 0.004415441176470588,
+          "GEMV_post_BER": 0.004415441176470588,
+          "gain": 1.0,
+          "use_gemv": false,
+          "drift_score": 0.029569048434495926,
+          "GEMV_gate": 0.9844993203878403
+        },
+        {
+          "seed": 2,
+          "Bp_post_BER": 0.004981387867647059,
+          "GEMV_post_BER": 0.004981387867647059,
+          "gain": 1.0,
+          "use_gemv": false,
+          "drift_score": 0.030071288347244263,
+          "GEMV_gate": 0.9851486086845398
+        },
+        {
+          "seed": 3,
+          "Bp_post_BER": 0.0014841452205882353,
+          "GEMV_post_BER": 0.0014841452205882353,
+          "gain": 1.0,
+          "use_gemv": false,
+          "drift_score": 0.028396829962730408,
+          "GEMV_gate": 0.7212211340665817
+        }
+      ]
+    }
+  ],
+  "tau_g_sweep_at_p5e-3": [
+    {
+      "tau_g": 0.4,
+      "tau_d": 0.025,
+      "Bp_BER_mean": 0.0036269914215686268,
+      "GEMV_BER_mean": 0.0017948835784313726,
+      "gain": 2.0207390970384904,
+      "use_gemv_fraction": 1.0,
+      "drift_score_mean": 0.029345722248156864,
+      "GEMV_gate_mean": 0.8969563543796539,
+      "per_seed": [
+        {
+          "seed": 1,
+          "Bp_post_BER": 0.004415441176470588,
+          "GEMV_post_BER": 0.002103170955882353,
+          "gain": 2.0994209548781817,
+          "use_gemv": true,
+          "drift_score": 0.029569048434495926,
+          "GEMV_gate": 0.9844993203878403
+        },
+        {
+          "seed": 2,
+          "Bp_post_BER": 0.004981387867647059,
+          "GEMV_post_BER": 0.002372012867647059,
+          "gain": 2.1000678097452288,
+          "use_gemv": true,
+          "drift_score": 0.030071288347244263,
+          "GEMV_gate": 0.9851486086845398
+        },
+        {
+          "seed": 3,
+          "Bp_post_BER": 0.0014841452205882353,
+          "GEMV_post_BER": 0.0009094669117647059,
+          "gain": 1.6318847902981304,
+          "use_gemv": true,
+          "drift_score": 0.028396829962730408,
+          "GEMV_gate": 0.7212211340665817
+        }
+      ]
+    },
+    {
+      "tau_g": 0.5,
+      "tau_d": 0.025,
+      "Bp_BER_mean": 0.0036269914215686268,
+      "GEMV_BER_mean": 0.0017948835784313726,
+      "gain": 2.0207390970384904,
+      "use_gemv_fraction": 1.0,
+      "drift_score_mean": 0.029345722248156864,
+      "GEMV_gate_mean": 0.8969563543796539,
+      "per_seed": [
+        {
+          "seed": 1,
+          "Bp_post_BER": 0.004415441176470588,
+          "GEMV_post_BER": 0.002103170955882353,
+          "gain": 2.0994209548781817,
+          "use_gemv": true,
+          "drift_score": 0.029569048434495926,
+          "GEMV_gate": 0.9844993203878403
+        },
+        {
+          "seed": 2,
+          "Bp_post_BER": 0.004981387867647059,
+          "GEMV_post_BER": 0.002372012867647059,
+          "gain": 2.1000678097452288,
+          "use_gemv": true,
+          "drift_score": 0.030071288347244263,
+          "GEMV_gate": 0.9851486086845398
+        },
+        {
+          "seed": 3,
+          "Bp_post_BER": 0.0014841452205882353,
+          "GEMV_post_BER": 0.0009094669117647059,
+          "gain": 1.6318847902981304,
+          "use_gemv": true,
+          "drift_score": 0.028396829962730408,
+          "GEMV_gate": 0.7212211340665817
+        }
+      ]
+    },
+    {
+      "tau_g": 0.6,
+      "tau_d": 0.025,
+      "Bp_BER_mean": 0.0036269914215686268,
+      "GEMV_BER_mean": 0.0017948835784313726,
+      "gain": 2.0207390970384904,
+      "use_gemv_fraction": 1.0,
+      "drift_score_mean": 0.029345722248156864,
+      "GEMV_gate_mean": 0.8969563543796539,
+      "per_seed": [
+        {
+          "seed": 1,
+          "Bp_post_BER": 0.004415441176470588,
+          "GEMV_post_BER": 0.002103170955882353,
+          "gain": 2.0994209548781817,
+          "use_gemv": true,
+          "drift_score": 0.029569048434495926,
+          "GEMV_gate": 0.9844993203878403
+        },
+        {
+          "seed": 2,
+          "Bp_post_BER": 0.004981387867647059,
+          "GEMV_post_BER": 0.002372012867647059,
+          "gain": 2.1000678097452288,
+          "use_gemv": true,
+          "drift_score": 0.030071288347244263,
+          "GEMV_gate": 0.9851486086845398
+        },
+        {
+          "seed": 3,
+          "Bp_post_BER": 0.0014841452205882353,
+          "GEMV_post_BER": 0.0009094669117647059,
+          "gain": 1.6318847902981304,
+          "use_gemv": true,
+          "drift_score": 0.028396829962730408,
+          "GEMV_gate": 0.7212211340665817
+        }
+      ]
+    },
+    {
+      "tau_g": 0.7,
+      "tau_d": 0.025,
+      "Bp_BER_mean": 0.0036269914215686268,
+      "GEMV_BER_mean": 0.0017948835784313726,
+      "gain": 2.0207390970384904,
+      "use_gemv_fraction": 1.0,
+      "drift_score_mean": 0.029345722248156864,
+      "GEMV_gate_mean": 0.8969563543796539,
+      "per_seed": [
+        {
+          "seed": 1,
+          "Bp_post_BER": 0.004415441176470588,
+          "GEMV_post_BER": 0.002103170955882353,
+          "gain": 2.0994209548781817,
+          "use_gemv": true,
+          "drift_score": 0.029569048434495926,
+          "GEMV_gate": 0.9844993203878403
+        },
+        {
+          "seed": 2,
+          "Bp_post_BER": 0.004981387867647059,
+          "GEMV_post_BER": 0.002372012867647059,
+          "gain": 2.1000678097452288,
+          "use_gemv": true,
+          "drift_score": 0.030071288347244263,
+          "GEMV_gate": 0.9851486086845398
+        },
+        {
+          "seed": 3,
+          "Bp_post_BER": 0.0014841452205882353,
+          "GEMV_post_BER": 0.0009094669117647059,
+          "gain": 1.6318847902981304,
+          "use_gemv": true,
+          "drift_score": 0.028396829962730408,
+          "GEMV_gate": 0.7212211340665817
+        }
+      ]
+    },
+    {
+      "tau_g": 0.8,
+      "tau_d": 0.025,
+      "Bp_BER_mean": 0.0036269914215686268,
+      "GEMV_BER_mean": 0.0019864430147058824,
+      "gain": 1.825872373240794,
+      "use_gemv_fraction": 0.6666666666666666,
+      "drift_score_mean": 0.029345722248156864,
+      "GEMV_gate_mean": 0.8969563543796539,
+      "per_seed": [
+        {
+          "seed": 1,
+          "Bp_post_BER": 0.004415441176470588,
+          "GEMV_post_BER": 0.002103170955882353,
+          "gain": 2.0994209548781817,
+          "use_gemv": true,
+          "drift_score": 0.029569048434495926,
+          "GEMV_gate": 0.9844993203878403
+        },
+        {
+          "seed": 2,
+          "Bp_post_BER": 0.004981387867647059,
+          "GEMV_post_BER": 0.002372012867647059,
+          "gain": 2.1000678097452288,
+          "use_gemv": true,
+          "drift_score": 0.030071288347244263,
+          "GEMV_gate": 0.9851486086845398
+        },
+        {
+          "seed": 3,
+          "Bp_post_BER": 0.0014841452205882353,
+          "GEMV_post_BER": 0.0014841452205882353,
+          "gain": 1.0,
+          "use_gemv": false,
+          "drift_score": 0.028396829962730408,
+          "GEMV_gate": 0.7212211340665817
+        }
+      ]
+    }
+  ]
+}

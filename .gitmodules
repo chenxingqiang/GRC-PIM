@@ -1,0 +1,3 @@
+[submodule "NBLDPC_PIM"]
+	path = deps/NBLDPC_PIM
+	url = git@github.com:carabdis/NBLDPC_PIM.git

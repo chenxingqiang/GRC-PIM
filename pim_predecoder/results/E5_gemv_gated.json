@@ -1,0 +1,74 @@
+{
+  "label": "E5_gemv_gated_iid_to_strong",
+  "train_p_drift": 0.0,
+  "train_p_row_burst": 0.0,
+  "test_p_drift": 0.005,
+  "test_p_row_burst": 0.005,
+  "n_codewords": 2000,
+  "n_cycles": 4,
+  "model": "GEMVResidualCalibrator",
+  "drift_score_threshold": 0.03,
+  "model_gate_threshold": 0.6,
+  "rows": [
+    {
+      "p_bit": 0.005,
+      "Bp_post": 0.003010416666666667,
+      "Bp_iters": 3.0,
+      "GEMV_post": 0.003010416666666667,
+      "GEMV_iters": 3.0,
+      "GEMV_raw_symbol": 0.019838541666666668,
+      "GEMV_gate": 0.39220795035362244,
+      "drift_score": 0.03422916680574417,
+      "use_gemv": false,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.003,
+      "Bp_post": 0.004180555555555555,
+      "Bp_iters": 3.0,
+      "GEMV_post": 0.004180555555555555,
+      "GEMV_iters": 3.0,
+      "GEMV_raw_symbol": 0.02456423611111111,
+      "GEMV_gate": 0.38664765655994415,
+      "drift_score": 0.03393663093447685,
+      "use_gemv": false,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.001,
+      "Bp_post": 1.5625e-05,
+      "Bp_iters": 3.0,
+      "GEMV_post": 1.5625e-05,
+      "GEMV_iters": 3.0,
+      "GEMV_raw_symbol": 0.012696180555555556,
+      "GEMV_gate": 0.3825227916240692,
+      "drift_score": 0.016028212383389473,
+      "use_gemv": false,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.0003,
+      "Bp_post": 0.0,
+      "Bp_iters": 2.0,
+      "GEMV_post": 0.0,
+      "GEMV_iters": 2.0,
+      "GEMV_raw_symbol": 0.0058940972222222224,
+      "GEMV_gate": 0.3735254555940628,
+      "drift_score": 0.013945529237389565,
+      "use_gemv": false,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.0001,
+      "Bp_post": 0.00290625,
+      "Bp_iters": 3.0,
+      "GEMV_post": 0.00290625,
+      "GEMV_iters": 3.0,
+      "GEMV_raw_symbol": 0.010368055555555556,
+      "GEMV_gate": 0.36831772327423096,
+      "drift_score": 0.008145399391651154,
+      "use_gemv": false,
+      "resolution_floor": 5.208333333333333e-06
+    }
+  ]
+}

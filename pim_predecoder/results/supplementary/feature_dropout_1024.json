@@ -1,0 +1,115 @@
+{
+  "description": "Feature-group dropout ablation at 1024-symbol E2, p_bit=5e-3, seed=1, n_codewords=2000. Dropped groups zeroed at inference.",
+  "matrix": "1024-symbol rate 16/17",
+  "p_bit": 0.005,
+  "seed": 1,
+  "n_codewords": 2000,
+  "rows": [
+    {
+      "Bp_post_BER": 0.004415441176470588,
+      "GEMV_post_BER": 0.002103170955882353,
+      "gain": 2.0994209548781817,
+      "drift_score": 0.029569048434495926,
+      "GEMV_gate": 0.9844993352890015,
+      "use_gemv": true,
+      "configuration": "full (13 features)",
+      "dropped_indices": []
+    },
+    {
+      "Bp_post_BER": 0.004415441176470588,
+      "GEMV_post_BER": 0.004109375,
+      "gain": 1.074479982106911,
+      "drift_score": 0.029569048434495926,
+      "GEMV_gate": 0.9140294790267944,
+      "use_gemv": true,
+      "configuration": "drop LLR scale (\u00d73)",
+      "dropped_indices": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "Bp_post_BER": 0.004415441176470588,
+      "GEMV_post_BER": 0.002193474264705882,
+      "gain": 2.0129897339199667,
+      "drift_score": 0.029569048434495926,
+      "GEMV_gate": 0.9629929661750793,
+      "use_gemv": true,
+      "configuration": "drop symbol counts (\u00d74)",
+      "dropped_indices": [
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "Bp_post_BER": 0.004415441176470588,
+      "GEMV_post_BER": 0.00246875,
+      "gain": 1.7885331347728965,
+      "drift_score": 0.029569048434495926,
+      "GEMV_gate": 0.9753189086914062,
+      "use_gemv": true,
+      "configuration": "drop bit means (\u00d72)",
+      "dropped_indices": [
+        7,
+        8
+      ]
+    },
+    {
+      "Bp_post_BER": 0.004415441176470588,
+      "GEMV_post_BER": 0.0038676470588235295,
+      "gain": 1.141634980988593,
+      "drift_score": 0.029569048434495926,
+      "GEMV_gate": 0.9835206866264343,
+      "use_gemv": true,
+      "configuration": "drop bit disagreement (\u00d72)",
+      "dropped_indices": [
+        9,
+        10
+      ]
+    },
+    {
+      "Bp_post_BER": 0.004415441176470588,
+      "GEMV_post_BER": 0.00219921875,
+      "gain": 2.0077316894786335,
+      "drift_score": 0.029569048434495926,
+      "GEMV_gate": 0.9845113754272461,
+      "use_gemv": true,
+      "configuration": "drop entropy",
+      "dropped_indices": [
+        11
+      ]
+    },
+    {
+      "Bp_post_BER": 0.004415441176470588,
+      "GEMV_post_BER": 0.002102022058823529,
+      "gain": 2.10056843025798,
+      "drift_score": 0.029569048434495926,
+      "GEMV_gate": 0.9845106601715088,
+      "use_gemv": true,
+      "configuration": "drop column position",
+      "dropped_indices": [
+        12
+      ]
+    },
+    {
+      "Bp_post_BER": 0.004415441176470588,
+      "GEMV_post_BER": 0.0022647058823529412,
+      "gain": 1.9496753246753247,
+      "drift_score": 0.029569048434495926,
+      "GEMV_gate": 0.9630458950996399,
+      "use_gemv": true,
+      "configuration": "LLR + temporal only (drop sym/entropy/col)",
+      "dropped_indices": [
+        3,
+        4,
+        5,
+        6,
+        11,
+        12
+      ]
+    }
+  ]
+}

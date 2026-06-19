@@ -1,0 +1,62 @@
+{
+  "label": "E1_gemv_weak",
+  "train_p_drift": 0.0005,
+  "train_p_row_burst": 0.001,
+  "test_p_drift": 0.0005,
+  "test_p_row_burst": 0.001,
+  "n_codewords": 2000,
+  "n_cycles": 4,
+  "model": "GEMVResidualCalibrator",
+  "rows": [
+    {
+      "p_bit": 0.005,
+      "Bp_post": 5.208333333333333e-06,
+      "Bp_iters": 3.0,
+      "GEMV_post": 5.208333333333333e-06,
+      "GEMV_iters": 3.0,
+      "GEMV_raw_symbol": 0.0036909722222222222,
+      "GEMV_gate": 0.9755358695983887,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.003,
+      "Bp_post": 0.0,
+      "Bp_iters": 1.0,
+      "GEMV_post": 0.0,
+      "GEMV_iters": 1.0,
+      "GEMV_raw_symbol": 3.6458333333333336e-05,
+      "GEMV_gate": 0.9791283309459686,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.001,
+      "Bp_post": 0.0,
+      "Bp_iters": 1.0,
+      "GEMV_post": 0.0,
+      "GEMV_iters": 1.0,
+      "GEMV_raw_symbol": 6.944444444444445e-06,
+      "GEMV_gate": 0.9852056205272675,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.0003,
+      "Bp_post": 3.4722222222222224e-06,
+      "Bp_iters": 3.0,
+      "GEMV_post": 3.4722222222222224e-06,
+      "GEMV_iters": 3.0,
+      "GEMV_raw_symbol": 0.004605902777777778,
+      "GEMV_gate": 0.9898668676614761,
+      "resolution_floor": 5.208333333333333e-06
+    },
+    {
+      "p_bit": 0.0001,
+      "Bp_post": 0.0,
+      "Bp_iters": 1.0,
+      "GEMV_post": 0.0,
+      "GEMV_iters": 1.0,
+      "GEMV_raw_symbol": 0.0,
+      "GEMV_gate": 0.9928223937749863,
+      "resolution_floor": 5.208333333333333e-06
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "label": "E2_baselines_1024_s3_n10000",
+  "train_p_drift": 0.005,
+  "train_p_row_burst": 0.005,
+  "test_p_drift": 0.005,
+  "test_p_row_burst": 0.005,
+  "n_codewords": 10000,
+  "n_cycles": 4,
+  "matrix_info": 1024,
+  "matrix_rate": "16_17",
+  "matrix_shape": {
+    "H": [
+      64,
+      1088
+    ],
+    "G": [
+      1024,
+      1088
+    ]
+  },
+  "model": "GEMVResidualCalibrator",
+  "baselines": "majority_vote + per_column_affine",
+  "drift_score_threshold": 0.025,
+  "composite_drift_threshold": null,
+  "model_gate_threshold": 0.6,
+  "rows": [
+    {
+      "p_bit": 0.005,
+      "Bp_post": 0.009112408088235295,
+      "Bp_post_BER": 0.00470390625,
+      "Bp_iters": 3.0,
+      "Maj_post": 0.019445863970588236,
+      "Maj_post_BER": 0.011277895220588235,
+      "Maj_iters": 3.0,
+      "GEMV_post": 0.0049552389705882355,
+      "GEMV_post_BER": 0.0025310661764705884,
+      "GEMV_iters": 3.0,
+      "GEMV_raw_symbol": 0.016394577205882353,
+      "GEMV_raw_BER": 0.008237821691176471,
+      "GEMV_gate": 0.7224842816591263,
+      "drift_score": 0.030591579154133797,
+      "column_persistence": 0.3786064684391022,
+      "row_burst": 0.07472611328514893,
+      "syndrome_instability": 0.5207502554575603,
+      "composite_drift": 0.22445394356226422,
+      "use_gemv": true,
+      "resolution_floor": 2.7573529411764703e-07,
+      "Affine_post": 0.009132720588235294,
+      "Affine_post_BER": 0.004715625,
+      "Affine_iters": 3.0
+    }
+  ]
+}
