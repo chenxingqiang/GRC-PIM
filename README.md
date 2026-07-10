@@ -24,6 +24,7 @@ This tree also hosts **CiM-ResLDPC**: residual error–calibrated robust **edge 
 | HF MiniLM eval (v1.3) | `pip install -r cim_resldpc/requirements-ir.txt && PYTHONPATH=. python3 -m cim_resldpc.experiments.run_hf_eval` |
 | Scaled BGE / Flan (v1.4) | `PYTHONPATH=. python3 -m cim_resldpc.experiments.run_scaled_eval --encoder bge --n_queries 200` |
 | Ablations (v1.5) | `PYTHONPATH=. python3 -m cim_resldpc.experiments.run_ablation_v15 --encoder bge` |
+| MSMARCO 500q (v1.6) | `...run_ablation_v15 --n_queries 500 --emb_cache cim_resldpc/data/cache/bge_msmarco_n500_emb.npz` |
 | Tests | `PYTHONPATH=. python3 -m pytest cim_resldpc/tests -v` |
 
 English title: *CiM-ResLDPC: Residual Error Calibrated Robust Retrieval-Augmented Generation on NOR Flash Compute-in-Memory Arrays*.

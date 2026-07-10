@@ -1,21 +1,30 @@
-# Related Work Draft (Four Modules)
+# Related Work Draft (camera-ready tone)
 
-## Module 1 — LLM-oriented RAG bottlenecks (2026)
+## 2.1 LLM-oriented RAG and retrieval noise
 
-Cloud RAG primarily models *textual* noise and retrieval–generation mismatch. Edge local RAG additionally stores embeddings in analog CiM, so **hardware noise propagates into ranking and amplifies LLM hallucination**. Compressing float embeddings to CiM bit-width / GF(q) alphabets induces **semantic collapse**, especially for long-tail industrial knowledge. Local-first privacy forbids uploading raw documents, yet heavy denoisers violate **sub-10 ms** retrieval budgets. Existing text-only denoisers do not model floating-gate temporal soft evidence.
+Modern RAG pipelines retrieve passages to condition LLM generation [Lewis et al.; Guu et al.]. Most IR work models *textual* noise, spurious correlations, or retrieval–generation mismatch. Edge local RAG adds a different noise source: **analog CiM storage and MAC**. Text denoisers and LLM-side filters do not correct corrupted embedding coordinates. Our focus is this hardware-induced ranking degradation and its propagation into answerability / hallucination proxies.
 
-## Module 2 — CiM-accelerated retrieval
+## 2.2 Dense retrieval and edge constraints
 
-Representative systems (e.g., RoCR, CiMRAG) focus on **in-memory similarity acceleration**. Noise handling is typically random masking or simple averaging, without NOR-specific multi-cycle soft LLRs or gated residual correction. SRAM CiM is quieter but capacity-limited; NOR Flash CiM is dense but noise-rich—yet **no retrieval stack is specialized to NOR + GF(3) LDPC residual gating**. Hardware, ranking models, and ECC are optimized in silos without end-to-end feedback.
+Dense encoders (DPR, Contriever, BGE, etc.) dominate MSMARCO-style ranking. Edge deployment forces compression: product quantization, binary codes, or low-dimensional projections. We adopt a transparent protocol—**frozen teacher → fixed projection to `cim_dim` → GF(3) packing**—so that measured gains can be attributed to the CiM protection/recovery path rather than to opaque end-to-end finetuning. Hybrid BM25+dense remains a strong systems baseline for latency; we report it as a *system* result, separate from dense-only scientific tables.
 
-## Module 3 — LDPC in storage vs retrieval
+## 2.3 CiM-accelerated retrieval
 
-Classical LDPC protects raw Flash bitstreams. Soft residuals are used to repair bits, **not to recalibrate embedding geometry or rerank documents**. Multi-cycle MAC residual soft evidence is an untapped signal for relevance scoring under analog noise. CiM-ResLDPC closes this gap by feeding GRC-PIM residual features into TONEL-Res training and hybrid fusion.
+CiM / PIM accelerators reduce data movement for similarity search and neural kernels. Representative CiM-RAG efforts emphasize in-array MAC throughput. Their noise treatments are typically insufficient for NOR-like multi-cycle soft channels: they do not expose residual soft LLRs to ranking, nor protect ternary embedding codes with NB-LDPC. SRAM CiM is quieter but capacity-limited; NOR Flash CiM is denser but noise-rich. **CiM-ResLDPC targets the latter regime.**
 
-## Module 4 — Hardware–IR crossover at SIGIR
+## 2.4 LDPC and soft residual calibration in storage
 
-Edge retrieval, energy-aware ranking, and hardware-aware IR are rising, but few IR authors model Flash analog channels, and few microelectronics authors report nDCG/MAP/RAG factuality. SIGIR-AP’s industry–academia emphasis makes **cross-layer CiM + RAG** a differentiated submission niche.
+Non-binary LDPC and soft-decision decoding are mature in Flash controllers. GRC-PIM adds a gated residual GEMV calibrator on multi-cycle soft LLRs with safe fallback to B′. Prior art stops at bit/symbol reliability. We instead ask whether the same soft residual evidence can **reconstruct embedding geometry** and improve nDCG/MAP under CiM noise. Empirically, BP recovery helps under typical NOR-mapped stress; SER improvements do not automatically transfer to ranking at every corner—hence our operating-point tables.
 
-## Positioning vs GRC-PIM
+## 2.5 Hardware-aware IR at SIGIR
 
-GRC-PIM provides the **reliability layer** (B′, gated ΔLLR, GF(3) BP). CiM-ResLDPC is the **IR layer** that consumes those signals for representation learning and retrieval—complementary, not competing, contributions.
+Energy-aware ranking, on-device search, and systems-for-IR are rising SIGIR themes, yet few papers jointly report IR metrics and CiM channel models. Microelectronics venues rarely evaluate nDCG. CiM-ResLDPC sits in that sparse intersection and is written for SIGIR-AP’s applied + industrial audience.
+
+## 2.6 Summary of differences
+
+| Line of work | Typical focus | Missing for edge CiM-RAG |
+|--------------|---------------|---------------------------|
+| Dense IR / RAG | Semantics, fusion, generation | Analog CiM embedding corruption |
+| CiM-RAG accelerators | MAC speed / energy | LDPC-protected embeddings + ranking soft evidence |
+| Flash LDPC / GRC-PIM | BER/SER, gated ΔLLR | nDCG/MAP/RAG hallucination |
+| **CiM-ResLDPC (ours)** | Cross-layer residual retrieval | — |

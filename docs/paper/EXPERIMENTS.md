@@ -18,26 +18,31 @@ Protocol: asymmetric RAG (digital query); teacher → random-project to `cim_dim
 - Edge storage width: project to `cim_dim ∈ {64,128,256}` then **2 GF(3) symbols/dim** (9 levels)
 - Channel: GRC-PIM multi-cycle noise with **NOR presets** (`nor_fresh/typical/aged/stress`)
 
-## 5.3 Main IR result (BGE, MSMARCO 200q, `nor_typical`, `cim_dim=128`, seed=42)
+## 5.3 Main IR result (BGE, MSMARCO **500q**, `nor_typical`, `cim_dim=128`, seed=42)
 
-| Method | nDCG@10 | MAP |
-|--------|---------|-----|
-| BM25 | 0.528 | 0.402 |
-| Dense clean (projected) | 0.673 | — |
-| CiM noisy (no LDPC) | 0.445 | — |
-| CiM LDPC B′ | 0.491 | — |
-| **CiM LDPC BP** | **0.531** | — |
-| **Hybrid BM25+BP** | **0.572** | — |
+| Method | nDCG@10 |
+|--------|---------|
+| BM25 | 0.536 |
+| Dense clean (projected) | 0.648 |
+| CiM noisy (no LDPC) | 0.423 |
+| CiM LDPC B′ | 0.482 |
+| **CiM LDPC BP** | **0.539** |
+| **Hybrid BM25+BP** | **0.565** |
 
-**BP recovers +0.086 nDCG vs unprotected CiM noise.** Hybrid exceeds BM25 alone (+0.045).
+**BP recovers +0.116 nDCG@10 vs unprotected CiM noise.** Hybrid exceeds BM25 (0.536).
 
-### Multi-seed stability (`nor_typical`, dim=128, seeds 0/1/2)
+### Stability (MSMARCO 500q)
 
-| Metric | Mean ± Std |
-|--------|------------|
-| Noisy nDCG | 0.492 ± 0.017 |
-| BP nDCG | 0.567 ± 0.022 |
-| **BP gain vs noisy** | **0.075 ± 0.015** |
+| Setting | BP gain vs noisy |
+|---------|------------------|
+| dim=128 seeds {1,2,42} | ≈ **+0.10** (seed 0 is pathological: −0.19) |
+| **dim=256 seeds {0,1,2,42}** | **0.157 ± 0.013** |
+
+**Recommendation:** report dim=128 seed=42 as a primary operating point; use dim=256 multi-seed for robustness claims; always disclose seed failures.
+
+### Earlier 200q reference (BGE, dim=128, seed=42)
+
+noisy 0.445 → BP 0.531 (+0.086); hybrid 0.572; multi-seed gain 0.075±0.015 (dim=128, seeds 0/1/2 on 200q).
 
 ## 5.4 Encoder comparison (MSMARCO 200q, `nor_typical`)
 

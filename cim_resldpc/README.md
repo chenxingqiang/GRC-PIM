@@ -78,3 +78,18 @@ PYTHONPATH=. python3 -m cim_resldpc.experiments.run_ablation_v15 --encoder bge -
 - [`../docs/paper/V15_ABLATION_REPORT.md`](../docs/paper/V15_ABLATION_REPORT.md)
 - [`../docs/paper/EXPERIMENTS.md`](../docs/paper/EXPERIMENTS.md)
 - [`../docs/paper/METHOD.md`](../docs/paper/METHOD.md)
+
+## v1.6 MSMARCO 500q + paper prose
+
+```bash
+PYTHONPATH=. python3 -m cim_resldpc.experiments.build_hf_cache --n_queries 500
+PYTHONPATH=. python3 -m cim_resldpc.experiments.run_ablation_v15 \
+  --encoder bge --n_queries 500 \
+  --emb_cache cim_resldpc/data/cache/bge_msmarco_n500_emb.npz --force_encode \
+  --out_json cim_resldpc/results/sigir_eval_v16_msmarco500.json
+```
+
+- [`../docs/paper/INTRODUCTION.md`](../docs/paper/INTRODUCTION.md)
+- [`../docs/paper/RELATED_WORK.md`](../docs/paper/RELATED_WORK.md)
+- [`../docs/paper/PAPER_OUTLINE.md`](../docs/paper/PAPER_OUTLINE.md)
+- [`../docs/paper/V16_MSMARCO500_REPORT.md`](../docs/paper/V16_MSMARCO500_REPORT.md)
