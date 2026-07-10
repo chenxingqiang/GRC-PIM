@@ -22,6 +22,7 @@ This tree also hosts **CiM-ResLDPC**: residual error–calibrated robust **edge 
 | Offline eval | `PYTHONPATH=. python3 -m cim_resldpc.experiments.run_sigir_eval` |
 | Extended eval (v1.2) | `PYTHONPATH=. python3 -m cim_resldpc.experiments.run_extended_eval --nor nor_typical` |
 | HF MiniLM eval (v1.3) | `pip install -r cim_resldpc/requirements-ir.txt && PYTHONPATH=. python3 -m cim_resldpc.experiments.run_hf_eval` |
+| Scaled BGE / Flan (v1.4) | `PYTHONPATH=. python3 -m cim_resldpc.experiments.run_scaled_eval --encoder bge --n_queries 200` |
 | Tests | `PYTHONPATH=. python3 -m pytest cim_resldpc/tests -v` |
 
 English title: *CiM-ResLDPC: Residual Error Calibrated Robust Retrieval-Augmented Generation on NOR Flash Compute-in-Memory Arrays*.

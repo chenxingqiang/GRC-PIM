@@ -59,3 +59,13 @@ PYTHONPATH=. python3 -m cim_resldpc.experiments.run_hf_eval --encoder st --nor n
 
 Report: [`../docs/paper/V13_HF_MINILM_REPORT.md`](../docs/paper/V13_HF_MINILM_REPORT.md)
 
+## v1.4 Scaled (200q) + BGE + Flan RAG
+
+```bash
+PYTHONPATH=. python3 -m cim_resldpc.experiments.build_hf_cache --n_queries 200
+PYTHONPATH=. python3 -m cim_resldpc.experiments.run_scaled_eval --encoder bge --n_queries 200 --corpora msmarco_hf
+PYTHONPATH=. python3 -m cim_resldpc.experiments.run_scaled_eval --rag_generator flan --n_queries 48 --corpora msmarco_hf
+```
+
+Report: [`../docs/paper/V14_SCALED_BGE_FLAN_REPORT.md`](../docs/paper/V14_SCALED_BGE_FLAN_REPORT.md)
+

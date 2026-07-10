@@ -2,3 +2,4 @@
 sentence-transformers>=3.0
 datasets>=2.19
 scikit-learn>=1.4
+transformers>=4.40
