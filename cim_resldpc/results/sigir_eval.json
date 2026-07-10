@@ -1,0 +1,84 @@
+{
+  "config": {
+    "embed_dim": 64,
+    "n_cycles": 4,
+    "tau_d": 0.025,
+    "tau_g": 0.6,
+    "tau_skip": 0.015,
+    "lambda_res": 0.5,
+    "lambda_gf3": 0.1,
+    "alpha": 0.3,
+    "beta": 0.5,
+    "gamma": 0.2,
+    "bm25_cutoff_m": 32,
+    "p_indep": 0.005,
+    "p_drift": 0.005,
+    "p_row_burst": 0.005,
+    "drift_persist": 3,
+    "top_k": 10,
+    "local_only": true,
+    "seed": 42,
+    "gf3_levels": [
+      -1.0,
+      0.0,
+      1.0
+    ],
+    "learning_rate": 0.001,
+    "contrastive_temp": 0.07
+  },
+  "synthetic": {
+    "n_docs": 24,
+    "n_queries": 6
+  },
+  "semi": {
+    "n_docs": 8,
+    "n_queries": 8
+  },
+  "baselines": {
+    "bm25": {
+      "ndcg@10": 0.9355245321275764,
+      "map": 0.9027777777777777,
+      "recall@10": 1.0,
+      "n_queries": 6.0
+    },
+    "naive_dense": {
+      "ndcg@10": 0.7849261216634104,
+      "map": 0.6990740740740741,
+      "recall@10": 1.0,
+      "n_queries": 6.0
+    },
+    "cim_noisy": {
+      "ndcg@10": 0.36468991047758864,
+      "map": 0.2702380952380952,
+      "recall@10": 0.5833333333333334,
+      "n_queries": 6.0
+    },
+    "bm25_semi": {
+      "ndcg@10": 0.9251244310318,
+      "map": 0.8791666666666667,
+      "recall@10": 1.0,
+      "n_queries": 8.0
+    }
+  },
+  "cim_resldpc": {
+    "synthetic": {
+      "ndcg@10": 0.9331006576234896,
+      "map": 0.861111111111111,
+      "recall@10": 0.9166666666666666,
+      "n_queries": 6.0,
+      "latency_ms_mean": 0.5152118392288685
+    },
+    "semi": {
+      "ndcg@10": 0.861874734518006,
+      "map": 0.796875,
+      "recall@10": 1.0,
+      "n_queries": 8.0,
+      "latency_ms_mean": 0.4464651246962603
+    },
+    "robustness": {
+      "naive_degradation": 0.5353831393650906,
+      "ours_degradation_vs_clean": -0.1887751367556334,
+      "skip_rate": 0.0
+    }
+  }
+}
