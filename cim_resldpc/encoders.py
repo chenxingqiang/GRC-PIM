@@ -106,7 +106,11 @@ class SentenceTransformerEncoder(TextEncoder):
                 "sentence-transformers not installed; use encoder=tfidf_svd or hash"
             ) from e
         self._model = SentenceTransformer(model_name)
-        self._dim = int(self._model.get_sentence_embedding_dimension())
+        # Compatible with sentence-transformers v5+ rename
+        if hasattr(self._model, "get_embedding_dimension"):
+            self._dim = int(self._model.get_embedding_dimension())
+        else:
+            self._dim = int(self._model.get_sentence_embedding_dimension())
         self._model_name = model_name
 
     @property

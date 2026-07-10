@@ -1,0 +1,185 @@
+{
+  "protocol_version": "v1.3",
+  "notes": "MiniLM (or chosen encoder) on HF MSMARCO/NQ-open subsets with local JSON cache. Teacher embeddings are projected to cim_dim before GF(3)/LDPC CiM storage. NQ-open passages are answer-grounded pseudo-docs (dataset has no passages). NOR presets remain engineering maps onto GRC-PIM channel.",
+  "nor_presets": [
+    {
+      "name": "nor_fresh",
+      "description": "Fresh programmed NOR MLC, room temp, few reads",
+      "vread_v": 1.0,
+      "temperature_c": 25.0,
+      "read_cycles_equiv": 10,
+      "source": "proxy: low read-disturb / retention (engineering map to GRC-PIM channel)",
+      "profile": {
+        "p_indep": 0.001,
+        "p_drift": 0.0005,
+        "p_row_burst": 0.0002,
+        "n_cycles": 4,
+        "drift_persist": 2
+      }
+    },
+    {
+      "name": "nor_typical",
+      "description": "Typical edge RAG duty: moderate read disturb + weak drift",
+      "vread_v": 1.2,
+      "temperature_c": 55.0,
+      "read_cycles_equiv": 1000,
+      "source": "proxy: mid stress aligned with GRC-PIM E2-like defaults",
+      "profile": {
+        "p_indep": 0.005,
+        "p_drift": 0.005,
+        "p_row_burst": 0.001,
+        "n_cycles": 4,
+        "drift_persist": 3
+      }
+    },
+    {
+      "name": "nor_aged",
+      "description": "Aged / high read-count NOR: strong column drift + disturb",
+      "vread_v": 1.5,
+      "temperature_c": 85.0,
+      "read_cycles_equiv": 100000,
+      "source": "proxy: high-temp retention + cumulative read disturb",
+      "profile": {
+        "p_indep": 0.02,
+        "p_drift": 0.03,
+        "p_row_burst": 0.005,
+        "n_cycles": 4,
+        "drift_persist": 4
+      }
+    },
+    {
+      "name": "nor_stress_sweep",
+      "description": "Aggressive stress corner for ablation (not nominal)",
+      "vread_v": 1.8,
+      "temperature_c": 105.0,
+      "read_cycles_equiv": 1000000,
+      "source": "proxy: worst-case corner for robustness curves",
+      "profile": {
+        "p_indep": 0.05,
+        "p_drift": 0.05,
+        "p_row_burst": 0.01,
+        "n_cycles": 6,
+        "drift_persist": 4
+      }
+    }
+  ],
+  "config": {
+    "encoder": "st",
+    "st_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "nor": "nor_stress_sweep",
+    "use_gemv": true,
+    "n_queries": 48,
+    "cim_dim": 128,
+    "seed": 42
+  },
+  "msmarco_hf": {
+    "corpus": "msmarco_hf",
+    "n_docs": 403,
+    "n_queries": 48,
+    "dense_only": {
+      "bm25": {
+        "ndcg@10": 0.5872173819109756,
+        "map": 0.4694196428571429,
+        "recall@10": 0.9583333333333334,
+        "n_queries": 48.0
+      },
+      "dense_clean": {
+        "ndcg@10": 0.702752133589685,
+        "map": 0.6051132605820105,
+        "recall@10": 1.0,
+        "n_queries": 48.0
+      },
+      "cim_noisy_no_ldpc": {
+        "ndcg@10": 0.33391931631865784,
+        "map": 0.2733217592592592,
+        "recall@10": 0.4947916666666667,
+        "n_queries": 48.0
+      },
+      "cim_ldpc_bprime": {
+        "ndcg@10": 0.28554201024006537,
+        "map": 0.21770006613756612,
+        "recall@10": 0.4895833333333333,
+        "n_queries": 48.0
+      },
+      "cim_ldpc_bp": {
+        "ndcg@10": 0.25045346223166315,
+        "map": 0.19284887566137565,
+        "recall@10": 0.4166666666666667,
+        "n_queries": 48.0
+      },
+      "cim_ldpc_gemv_bp": {
+        "ndcg@10": 0.30595699026322654,
+        "map": 0.24363425925925927,
+        "recall@10": 0.4791666666666667,
+        "n_queries": 48.0
+      }
+    },
+    "robustness": {
+      "nor_preset": "nor_stress_sweep",
+      "encoder": "st:sentence-transformers/all-MiniLM-L6-v2",
+      "teacher_dim": 384,
+      "cim_dim": 128,
+      "embed_dim": 128,
+      "noisy_vs_clean": 0.5248405513719537,
+      "bprime_gain_vs_noisy": -0.048377306078592475,
+      "bp_gain_vs_noisy": -0.0834658540869947,
+      "gemv_gain_vs_noisy": -0.027962326055431308
+    },
+    "rag_generation": {
+      "clean": {
+        "rag_f1": 0.17195751567657847,
+        "rag_em": 0.020833333333333332,
+        "rag_support": 0.9973876698014629,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.6875,
+        "n_queries": 48.0,
+        "k": 3.0
+      },
+      "noisy": {
+        "rag_f1": 0.1087677480010495,
+        "rag_em": 0.0,
+        "rag_support": 0.9992283950617283,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.3541666666666667,
+        "n_queries": 48.0,
+        "k": 3.0
+      },
+      "bprime": {
+        "rag_f1": 0.1235294702660935,
+        "rag_em": 0.0,
+        "rag_support": 0.997466583942877,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.25,
+        "n_queries": 48.0,
+        "k": 3.0
+      },
+      "bp": {
+        "rag_f1": 0.1258114759225135,
+        "rag_em": 0.0,
+        "rag_support": 0.997466583942877,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.22916666666666666,
+        "n_queries": 48.0,
+        "k": 3.0
+      },
+      "bm25": {
+        "rag_f1": 0.11914776287181898,
+        "rag_em": 0.0,
+        "rag_support": 0.9973836926961926,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.5416666666666666,
+        "n_queries": 48.0,
+        "k": 3.0
+      },
+      "gemv_bp": {
+        "rag_f1": 0.12342140558544538,
+        "rag_em": 0.0,
+        "rag_support": 0.998448275862069,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.3125,
+        "n_queries": 48.0,
+        "k": 3.0
+      }
+    }
+  }
+}

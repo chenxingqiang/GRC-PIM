@@ -1,0 +1,96 @@
+{
+  "nq_hf_hard": {
+    "corpus": "nq_hf_hard",
+    "n_docs": 224,
+    "n_queries": 48,
+    "dense_only": {
+      "bm25": {
+        "ndcg@10": 0.06889265389841431,
+        "map": 0.05833333333333333,
+        "recall@10": 0.10416666666666667,
+        "n_queries": 48.0
+      },
+      "dense_clean": {
+        "ndcg@10": 0.1969739105680942,
+        "map": 0.16310350529100529,
+        "recall@10": 0.3125,
+        "n_queries": 48.0
+      },
+      "cim_noisy_no_ldpc": {
+        "ndcg@10": 0.11053813406519865,
+        "map": 0.08750000000000001,
+        "recall@10": 0.1875,
+        "n_queries": 48.0
+      },
+      "cim_ldpc_bprime": {
+        "ndcg@10": 0.1070112068989542,
+        "map": 0.07638888888888888,
+        "recall@10": 0.20833333333333334,
+        "n_queries": 48.0
+      },
+      "cim_ldpc_bp": {
+        "ndcg@10": 0.13045361690419396,
+        "map": 0.09952876984126985,
+        "recall@10": 0.22916666666666666,
+        "n_queries": 48.0
+      }
+    },
+    "robustness": {
+      "nor_preset": "nor_typical",
+      "encoder": "st:sentence-transformers/all-MiniLM-L6-v2",
+      "teacher_dim": 384,
+      "cim_dim": 128,
+      "embed_dim": 128,
+      "noisy_vs_clean": 0.4388184011456409,
+      "bprime_gain_vs_noisy": -0.003526927166244448,
+      "bp_gain_vs_noisy": 0.019915482838995316
+    },
+    "rag_generation": {
+      "clean": {
+        "rag_f1": 0.07371031746031746,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.16666666666666666,
+        "n_queries": 48.0,
+        "k": 3.0
+      },
+      "noisy": {
+        "rag_f1": 0.014136904761904762,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.08333333333333333,
+        "n_queries": 48.0,
+        "k": 3.0
+      },
+      "bprime": {
+        "rag_f1": 0.00992063492063492,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.0625,
+        "n_queries": 48.0,
+        "k": 3.0
+      },
+      "bp": {
+        "rag_f1": 0.029333513708513708,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.14583333333333334,
+        "n_queries": 48.0,
+        "k": 3.0
+      },
+      "bm25": {
+        "rag_f1": 0.035962301587301584,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.0625,
+        "n_queries": 48.0,
+        "k": 3.0
+      }
+    }
+  }
+}

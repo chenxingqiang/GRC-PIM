@@ -48,3 +48,14 @@ CiM-ResLDPC **does not replace** ECC. It consumes multi-cycle soft evidence and 
 PYTHONPATH=. python3 -m cim_resldpc.experiments.run_extended_eval \
   --encoder tfidf_svd --nor nor_aged --out_json cim_resldpc/results/sigir_eval_extended.json
 ```
+
+## v1.3 HuggingFace + MiniLM
+
+```bash
+pip install -r cim_resldpc/requirements-ir.txt
+PYTHONPATH=. python3 -m cim_resldpc.experiments.build_hf_cache --n_queries 48
+PYTHONPATH=. python3 -m cim_resldpc.experiments.run_hf_eval --encoder st --nor nor_typical
+```
+
+Report: [`../docs/paper/V13_HF_MINILM_REPORT.md`](../docs/paper/V13_HF_MINILM_REPORT.md)
+

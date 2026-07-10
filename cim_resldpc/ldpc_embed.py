@@ -63,29 +63,47 @@ def soft_expectation_from_llr_base3(
 ) -> np.ndarray:
     """Soft-reconstruct floats from per-symbol LLRs over base-3 digits.
 
-    For each embedding dim, digits form a base-3 integer; we compute the
-    expected index under independent digit posteriors, then map to [-1,1].
+    Args:
+      llr_info: (batch, sym_dim, 3) info-symbol LLRs already unpacked across
+                LDPC blocks (no pad), OR (N_blocks, k, 3) which must be
+                reshaped by the caller first.
+      n_sym_per_dim: base-3 digits per embedding dim.
+      emb_dim: original float embedding width.
     """
-    # llr_info: (B, n_sym_total, 3) for info symbols (may include pad)
-    B = llr_info.shape[0]
     need = emb_dim * n_sym_per_dim
+    if llr_info.shape[1] < need:
+        raise ValueError(
+            f"llr_info width {llr_info.shape[1]} < required {need} "
+            f"(emb_dim={emb_dim}, n_sym_per_dim={n_sym_per_dim})"
+        )
+    B = llr_info.shape[0]
     llr = llr_info[:, :need, :]
     m = llr.max(axis=-1, keepdims=True)
     probs = np.exp(llr - m)
     probs /= probs.sum(axis=-1, keepdims=True) + 1e-8  # (B, need, 3)
 
-    # Reshape to (B, emb_dim, n_sym, 3) MSB-first
     probs = probs.reshape(B, emb_dim, n_sym_per_dim, 3)
-    # Expected digit values
     digit_vals = np.arange(3, dtype=np.float32)
     exp_digits = (probs * digit_vals).sum(axis=-1)  # (B, emb_dim, n_sym)
-    # Expected index
     idx = np.zeros((B, emb_dim), dtype=np.float32)
     for s in range(n_sym_per_dim):
         idx = idx * 3.0 + exp_digits[:, :, s]
     n_levels = 3 ** n_sym_per_dim
     x = idx / float(n_levels - 1)
     return (x * 2.0 - 1.0).astype(np.float32)
+
+
+def unpack_llr_info_blocks(
+    llr_codewords: np.ndarray,
+    batch: int,
+    sym_dim: int,
+    n_blocks: int,
+    k: int,
+) -> np.ndarray:
+    """Unpack info-prefix LLRs from (batch*n_blocks, n, 3) → (batch, sym_dim, 3)."""
+    info = llr_codewords[:, :k, :]  # (B*n_blocks, k, 3)
+    flat = info.reshape(batch, n_blocks * k, 3)
+    return flat[:, :sym_dim, :]
 
 
 @dataclass
@@ -180,11 +198,10 @@ def protect_and_recover(
     if quant_mode == "base3":
         emb_bprime = dequantize_base3(sym_bprime, n_sym_per_dim=n_sym_per_dim, dim=dim)
         emb_bp = dequantize_base3(sym_bp, n_sym_per_dim=n_sym_per_dim, dim=dim)
+        llr_info = unpack_llr_info_blocks(llr, batch, sym_dim, n_blocks, code.k)
         emb_soft = soft_expectation_from_llr_base3(
-            llr[:, : code.k, :], n_sym_per_dim=n_sym_per_dim, emb_dim=dim,
+            llr_info, n_sym_per_dim=n_sym_per_dim, emb_dim=dim,
         )
-        if sym_dim > code.k:
-            emb_soft = emb_bprime
     else:
         emb_bprime = dequantize_from_gf3(sym_bprime, levels=levels)
         emb_bp = dequantize_from_gf3(sym_bp, levels=levels)
