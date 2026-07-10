@@ -109,3 +109,16 @@ Primary claim (BGE, `nor_typical`, dim=128, seed=42): noisy 0.283 → BP 0.496 (
 - [`../docs/paper/CONCLUSION.md`](../docs/paper/CONCLUSION.md)
 - [`../docs/paper/V17_MSMARCO1000_REPORT.md`](../docs/paper/V17_MSMARCO1000_REPORT.md)
 - [`../docs/paper/latex/main.tex`](../docs/paper/latex/main.tex)
+
+## v1.8 MSMARCO 2000q focused paper-main
+
+```bash
+PYTHONPATH=. python3 -m cim_resldpc.experiments.build_hf_cache --n_queries 2000
+PYTHONPATH=. python3 -m cim_resldpc.experiments.run_paper_main_v18 --n_queries 2000
+```
+
+Primary claim (BGE, `nor_typical`, dim=128, seed=42): noisy 0.254 → BP 0.475 (+0.221); hybrid 0.557 > BM25 0.531.  
+Multi-seed BP gain **0.145±0.050**; aged NOR spot-check shows near-zero ranking recovery (honesty).
+
+- [`../docs/paper/V18_MSMARCO2000_REPORT.md`](../docs/paper/V18_MSMARCO2000_REPORT.md)
+- [`../docs/paper/latex/references.bib`](../docs/paper/latex/references.bib)

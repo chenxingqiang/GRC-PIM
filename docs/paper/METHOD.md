@@ -22,6 +22,6 @@ Train/adapt embeddings with residual alignment to **channel-calibrated** reconst
 ## 3.4 What we do *not* claim
 
 - NOR presets ≠ full floating-gate TCAD.  
-- 1000q MSMARCO subset ≠ full leaderboard.  
+- 2000q MSMARCO subset ≠ full leaderboard (~10k Dev).  
 - Flan-T5-small ≠ production edge LLM.  
 - BP SER↓ does not always imply nDCG↑ at every noise corner.

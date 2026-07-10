@@ -22,7 +22,7 @@ We propose **CiM-ResLDPC**, a hardware–IR co-design that reuses the GRC-PIM ga
 - **End-to-end CiM-ResLDPC retrieval:** LDPC-protected ternary embeddings + B′/BP recovery + optional GRC GEMV, evaluated under dense-only scientific metrics.  
 - **Edge system optimizations:** decode gating / hybrid sparse–dense fusion, local-only privacy contract, and generative RAG probes (Flan-T5) with measurable hallucination.
 
-**Empirical highlight.** On MSMARCO (**1000 queries / 8503 passages**, BGE-small, `nor_typical`, `cim_dim=128`, seed=42), LDPC BP recovers **+0.214 nDCG@10** versus unprotected CiM noise (0.283→0.496); hybrid BM25+BP reaches **0.549** (above BM25 0.520). Multi-seed BP gain is **0.182±0.031** (dim=128) and **0.180±0.029** (dim=256). At 500 queries the same protocol yields +0.116 (seed=42) with a known pathological seed at dim=128. Gains remain **operating-point and seed dependent**—we report failures rather than hide them.
+**Empirical highlight.** On MSMARCO (**2000 queries / 16894 passages**, BGE-small, `nor_typical`, `cim_dim=128`, seed=42), LDPC BP recovers **+0.221 nDCG@10** versus unprotected CiM noise (0.254→0.475); hybrid BM25+BP reaches **0.557** (above BM25 0.531). Multi-seed BP gain is **0.145±0.050**. At 1000q: +0.214 with multi-seed **0.182±0.031** (dim=128) / **0.180±0.029** (dim=256). Gains remain **operating-point and seed dependent**—we report failures rather than hide them.
 
 ## 1.1 Positioning
 

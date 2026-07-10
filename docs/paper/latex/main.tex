@@ -1,5 +1,5 @@
-% CiM-ResLDPC — SIGIR-AP 2026 full paper skeleton (acmart)
-% Compile with: pdflatex main && bibtex main && pdflatex main && pdflatex main
+% CiM-ResLDPC — SIGIR-AP 2026 full paper draft (acmart)
+% Compile: pdflatex main && bibtex main && pdflatex main && pdflatex main
 % Requires ACM acmart class (https://github.com/borisveytsman/acmart)
 \documentclass[sigconf,review,anonymous]{acmart}
 
@@ -28,11 +28,11 @@ Edge retrieval-augmented generation (RAG) increasingly relies on compute-in-memo
 Dense CiM substrates (including NOR Flash targets) offer capacity for local knowledge bases, but multi-cycle readout noise, quantization to constrained alphabets, and analog residuals corrupt stored embeddings and collapse ranking quality.
 Prior CiM-RAG systems mainly accelerate similarity with in-array MAC and treat noise as a shallow mask; they rarely protect ternary embeddings with non-binary LDPC or feed soft residual evidence into dense scoring.
 
-We present \textbf{CiM-ResLDPC}, a hardware--IR co-design on the GRC-PIM multi-cycle PIM channel.
+We present \textbf{CiM-ResLDPC}, a hardware--IR co-design on the GRC-PIM multi-cycle PIM channel~\cite{grcpim2025}.
 Document embeddings are packed into GF(3) symbols, LDPC-protected for CiM storage, and recovered via B$'$ soft LLRs and/or belief propagation (optionally with gated GEMV residual $\Delta$LLR).
 Queries remain digital (\emph{asymmetric} RAG).
-On a MSMARCO passage subset (1000 queries / 8503 passages, BGE-small teacher, typical NOR-mapped stress), unprotected CiM noise drops nDCG@10 to 0.283; LDPC BP recovers to 0.496 ($+$0.214), and hybrid BM25$+$BP reaches 0.549 above BM25 0.520.
-Multi-seed BP gains are $0.182\pm0.031$ (128-D) and $0.180\pm0.029$ (256-D).
+On MSMARCO passage subsets with a BGE-small teacher~\cite{xiao2023bge} under typical NOR-mapped stress, unprotected CiM noise causes large nDCG@10 drops; LDPC BP recovers ranking (e.g., $+0.221$ at 2000 queries / 16894 passages; $+0.214$ at 1000q), and hybrid BM25$+$BP exceeds BM25 alone.
+Multi-seed BP gains remain positive at 128-D and 256-D.
 Gains are operating-point and seed dependent; we report failures rather than hide them.
 \end{abstract}
 
@@ -59,88 +59,153 @@ Gains are operating-point and seed dependent; we report failures rather than hid
 \maketitle
 
 \section{Introduction}
-% Full prose: docs/paper/INTRODUCTION.md
-Retrieval-augmented generation (RAG) is becoming the default way to ground LLMs in private knowledge.
-On edge devices, local-first constraints forbid uploading raw documents, while interactive assistants still demand low retrieval latency.
-Compute-in-memory (CiM) is attractive: dense embeddings can be stored and scored inside memory arrays.
-NOR Flash CiM offers higher density than SRAM CiM at acceptable cost.
+Retrieval-augmented generation (RAG)~\cite{lewis2020rag,guu2020realm} is becoming the default way to ground large language models in private or long-tail knowledge.
+On edge devices, \emph{local-first} constraints forbid uploading raw documents to the cloud, while interactive assistants still demand low retrieval latency.
+Compute-in-memory (CiM) is an attractive substrate~\cite{sebastian2017pcm,shafiee2016isaac}: dense embeddings can be stored and scored inside memory arrays, avoiding costly off-chip data movement.
+NOR Flash CiM is especially appealing for on-device knowledge bases because it offers higher density than SRAM CiM at acceptable cost.
 
-The difficulty is that CiM is not noiseless RAM.
-When document embeddings live in analog arrays, hardware noise directly corrupts the vector geometry that dense retrieval depends on.
-On MSMARCO with a BGE teacher projected to 128-D, unprotected CiM noise drops nDCG@10 from 0.641 to 0.283 at 1000 queries under a typical NOR-mapped stress point.
+The difficulty is that CiM is not a noiseless RAM.
+Floating-gate / analog arrays exhibit read disturb, conductance drift, quantization, and analog MAC residuals.
+When document embeddings live in such arrays, hardware noise is not a minor implementation detail---it \emph{directly corrupts the vector geometry that dense retrieval depends on}.
+In our measurements on MSMARCO~\cite{nguyen2016msmarco} with a BGE teacher projected to a 128-D edge width, unprotected CiM noise drops nDCG@10 from 0.641 to 0.283 at 1000 queries under a typical NOR-mapped stress point.
 
-Existing CiM-RAG systems primarily treat the array as a MAC accelerator.
-Classical storage coding repairs Flash bitstreams but is rarely connected to embedding reconstruction or ranking.
-We propose \textbf{CiM-ResLDPC}, which packs embeddings into GF(3), protects them with non-binary LDPC, and recovers via B$'$/BP soft paths on the GRC-PIM channel, with optional hybrid BM25 fusion.
+Existing CiM-RAG systems primarily treat the array as a MAC accelerator for similarity.
+Noise handling, when present, is often a shallow mask or averaging step.
+In parallel, classical storage coding (including non-binary LDPC~\cite{davey1998nbldpc}) repairs raw Flash bitstreams but is rarely connected to embedding reconstruction or ranking.
+The result is a three-way gap: (i)~hardware noise $\leftrightarrow$ representation; (ii)~alphabet / bit-width mapping from float teachers to GF($q$) storage; (iii)~privacy $\leftrightarrow$ latency under edge budgets.
+
+We propose \textbf{CiM-ResLDPC}, a hardware--IR co-design that reuses the GRC-PIM gated residual stack~\cite{grcpim2025} as a retrieval reliability layer.
+Document embeddings are packed into GF(3) symbols, protected by non-binary LDPC, exposed to a multi-cycle CiM channel (with NOR operating-point presets), and recovered via B$'$ soft LLRs and/or belief propagation---optionally with gated GEMV residual $\Delta$LLR.
+Queries remain on the digital side (\textbf{asymmetric RAG}), matching realistic edge pipelines where only the corpus is CiM-resident.
+A hybrid BM25~\cite{robertson2009bm25} $+$ residual-calibrated dense scorer provides a practical system mode.
 
 \paragraph{Contributions.}
-(1)~TONEL-Res / CiM-aware representation path without clean-embedding oracles;
-(2)~end-to-end LDPC-protected ternary retrieval under NOR-mapped noise;
-(3)~edge system modes (decode gating, hybrid fusion) and generative RAG probes.
+\begin{itemize}
+  \item \textbf{TONEL-Res / CiM-aware representation path:} residual soft-information regularization toward \emph{channel-calibrated} reconstructions (no clean-embedding oracle), with GF(3)-compatible quantization.
+  \item \textbf{End-to-end CiM-ResLDPC retrieval:} LDPC-protected ternary embeddings $+$ B$'$/BP recovery $+$ optional GRC GEMV, evaluated under dense-only scientific metrics.
+  \item \textbf{Edge system optimizations:} decode gating / hybrid sparse--dense fusion, local-only privacy contract, and generative RAG probes (Flan-T5~\cite{raffel2020t5}) with measurable hallucination.
+\end{itemize}
+
+\paragraph{Empirical highlight.}
+On MSMARCO (2000 queries / 16894 passages, BGE-small, \texttt{nor\_typical}, \texttt{cim\_dim}=128, seed=42), LDPC BP recovers $+0.221$ nDCG@10 versus unprotected CiM noise (0.254$\rightarrow$0.475); hybrid BM25$+$BP reaches 0.557 (above BM25 0.531).
+Multi-seed BP gain is $0.145\pm0.050$.
+At 1000q the same protocol yields $+0.214$ with multi-seed $0.182\pm0.031$ (128-D).
+Gains remain operating-point and seed dependent---we report failures rather than hide them.
 
 \section{Related Work}
-% Full prose: docs/paper/RELATED_WORK.md
-We position against (i)~dense retrieval and RAG, (ii)~CiM / PIM accelerators for similarity, and (iii)~non-binary LDPC and Flash ECC.
-CiM-ResLDPC is complementary to GRC-PIM: GRC-PIM is the reliability layer; CiM-ResLDPC is the IR layer that consumes soft residual signals for ranking.
+
+\subsection{LLM-oriented RAG and retrieval noise}
+Modern RAG pipelines retrieve passages to condition LLM generation~\cite{lewis2020rag,guu2020realm}.
+Most IR work models \emph{textual} noise or retrieval--generation mismatch.
+Edge local RAG adds a different noise source: \textbf{analog CiM storage and MAC}.
+Text denoisers and LLM-side filters do not correct corrupted embedding coordinates.
+
+\subsection{Dense retrieval and edge constraints}
+Dense encoders (DPR~\cite{karpukhin2020dpr}, Contriever~\cite{izacard2022contriever}, BGE~\cite{xiao2023bge}, Sentence-BERT~\cite{reimers2019sentencebert}) dominate MSMARCO-style ranking.
+Edge deployment forces compression.
+We adopt a transparent protocol---frozen teacher $\rightarrow$ fixed projection to \texttt{cim\_dim} $\rightarrow$ GF(3) packing---so measured gains can be attributed to the CiM protection/recovery path.
+
+\subsection{CiM-accelerated retrieval}
+CiM / PIM accelerators reduce data movement for similarity search~\cite{sebastian2017pcm,shafiee2016isaac}.
+Representative CiM-RAG efforts emphasize in-array MAC throughput; their noise treatments are typically insufficient for NOR-like multi-cycle soft channels.
+SRAM CiM is quieter but capacity-limited; NOR Flash CiM is denser but noise-rich.
+\textbf{CiM-ResLDPC targets the latter regime.}
+
+\subsection{LDPC and soft residual calibration}
+Non-binary LDPC and soft-decision decoding are mature in Flash controllers~\cite{gallager1962ldpc,davey1998nbldpc}.
+GRC-PIM adds a gated residual GEMV calibrator on multi-cycle soft LLRs~\cite{grcpim2025}.
+Prior art stops at bit/symbol reliability.
+We ask whether the same soft residual evidence can \emph{reconstruct embedding geometry} and improve nDCG under CiM noise.
 
 \section{Method}
-% Full prose: docs/paper/METHOD.md
+
+\subsection{Problem}
+Edge RAG stores document embeddings in CiM.
+Multi-cycle analog readout (drift, disturb, quantization) corrupts vectors and collapses nDCG.
+Prior CiM-RAG accelerates MAC but does not protect ternary embeddings with NB-LDPC or feed residual soft evidence into retrieval.
+
+\subsection{CiM-ResLDPC pipeline}
 \begin{enumerate}
   \item Teacher encode (BGE/MiniLM) $\rightarrow$ project to edge width \texttt{cim\_dim}.
   \item Base-3 GF(3) pack (2 symbols/dim).
-  \item LDPC encode with shipped GF(3) NB-LDPC.
-  \item Multi-cycle CiM channel (GRC-PIM noise; NOR presets map stress).
-  \item Recover: B$'$ and/or BP; optional GRC GEMV gated $\Delta$LLR.
-  \item Asymmetric cosine retrieval (digital query vs recovered docs).
-  \item Optional hybrid: BM25 $+$ dense $+$ residual-confidence fusion.
+  \item LDPC encode with shipped GF(3) NB-LDPC (systematic $G$).
+  \item Multi-cycle CiM channel (GRC-PIM noise; NOR presets map stress $\rightarrow$ $(p_{\mathrm{indep}},p_{\mathrm{drift}},T)$).
+  \item Recover: B$'$ soft-LLR product and/or BP; optional GRC GEMV gated $\Delta$LLR before BP.
+  \item Retrieve: asymmetric cosine (clean digital query vs.\ recovered doc vectors).
+  \item Optional hybrid: BM25 cutoff $+$ dense $+$ residual-confidence fusion.
+  \item Generate: extractive or Flan-T5 conditioned on top-$k$ passages.
 \end{enumerate}
 
+\subsection{TONEL-Res}
+Train/adapt embeddings with residual alignment to \emph{channel-calibrated} reconstructions (no clean oracle) plus a soft ternary quantization penalty.
+In large-scale tables we evaluate frozen teachers $+$ projection for IR fairness; TONEL remains the training-time regularizer for CiM-aware fine-tuning.
+
+\subsection{What we do not claim}
+NOR presets are engineering maps onto the GRC-PIM channel, not full floating-gate TCAD.
+MSMARCO stratified subsets are not the full leaderboard protocol.
+Flan-T5-small is a probe, not a production edge LLM.
+BP SER reductions do not always imply nDCG gains at every noise corner.
+
 \section{Experiments}
-% Full prose: docs/paper/EXPERIMENTS.md ; numbers from sigir_eval_v17_msmarco1000.json
 
 \subsection{Setup}
 Protocol: asymmetric RAG; BGE-small-en-v1.5 $\rightarrow$ random-project to \texttt{cim\_dim} $\rightarrow$ base-3 GF(3) $\rightarrow$ multi-cycle NOR-mapped channel $\rightarrow$ B$'$/BP.
-Primary corpus: MSMARCO HF validation subset, \textbf{1000 queries / 8503 passages}.
+Dense-only is the scientific core; hybrid is reported as a system mode.
+Primary corpus: MSMARCO HF validation subsets (200 / 500 / 1000 / 2000 queries).
 
-\subsection{Main result (1000q, \texttt{nor\_typical}, dim=128, seed=42)}
+\subsection{Main result (2000q primary; 1000q reference)}
 \begin{table}[t]
-\caption{MSMARCO 1000q nDCG@10 (BGE, nor\_typical, cim\_dim=128, seed=42).}
-\label{tab:main1000}
-\begin{tabular}{lc}
+\caption{MSMARCO nDCG@10 (BGE, \texttt{nor\_typical}, \texttt{cim\_dim}=128, seed=42).}
+\label{tab:main}
+\begin{tabular}{lcc}
 \toprule
-Method & nDCG@10 \\
+Method & 1000q & 2000q \\
 \midrule
-BM25 & 0.520 \\
-Dense clean (projected) & 0.641 \\
-CiM noisy (no LDPC) & 0.283 \\
-CiM LDPC B$'$ & 0.381 \\
-\textbf{CiM LDPC BP} & \textbf{0.496} \\
-\textbf{Hybrid BM25+BP} & \textbf{0.549} \\
+BM25 & 0.520 & 0.531 \\
+Dense clean (projected) & 0.641 & 0.636 \\
+CiM noisy (no LDPC) & 0.283 & 0.254 \\
+\textbf{CiM LDPC BP} & \textbf{0.496} & \textbf{0.475} \\
+\textbf{Hybrid BM25+BP} & \textbf{0.549} & \textbf{0.557} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-BP recovers $+0.214$ nDCG@10 vs unprotected noise.
-Multi-seed BP gain (seeds $\{0,1,2,42\}$): $0.182\pm0.031$ at 128-D; $0.180\pm0.029$ at 256-D.
+BP recovers $+0.214$ / $+0.221$ nDCG@10 vs.\ unprotected noise at 1000q / 2000q.
+Multi-seed BP gain at 2000q (seeds $\{0,1,2,42\}$): $0.145\pm0.050$ at 128-D; dim=256 seed=42 spot-check $+0.208$.
 
 \subsection{Scale ladder}
-At the same protocol (dim=128, seed=42): 200q $+0.086$; 500q $+0.116$; 1000q $+0.214$.
-Hybrid exceeds BM25 at each scale.
+\begin{table}[t]
+\caption{Scale ladder (BGE, dim=128, seed=42, \texttt{nor\_typical}): noisy$\rightarrow$BP nDCG@10.}
+\label{tab:scale}
+\begin{tabular}{lccc}
+\toprule
+Scale & Noisy $\rightarrow$ BP & Gain & Hybrid vs.\ BM25 \\
+\midrule
+200q & 0.445 $\rightarrow$ 0.531 & $+0.086$ & 0.572 $>$ 0.528 \\
+500q & 0.423 $\rightarrow$ 0.539 & $+0.116$ & 0.565 $>$ 0.536 \\
+1000q & 0.283 $\rightarrow$ 0.496 & $+0.214$ & 0.549 $>$ 0.520 \\
+2000q & 0.254 $\rightarrow$ 0.475 & $+0.221$ & 0.557 $>$ 0.531 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Operating-point honesty}
 Under aged/stress NOR maps, ranking can still degrade even when SER improves.
-We report the operating point and historical pathological seeds (e.g., 500q dim=128 seed=0).
+We report the operating point and historical pathological seeds (e.g., 500q dim=128 seed=0 with negative BP gain).
+
+\subsection{Generative probe}
+Flan-T5-small on MSMARCO 48q yields non-zero hallucination rates, enabling a true RAG unsupported-answer metric beyond extractive proxies.
 
 \section{Conclusion}
-% Full prose: docs/paper/CONCLUSION.md
 CiM-ResLDPC shows that residual soft information from CiM channels can be turned into measurable retrieval robustness for private on-device RAG, when claims are tied to explicit noise operating points.
 Limitations include subset (not full Dev) scale, engineering NOR presets (not TCAD), random projection, and frozen-teacher IR tables.
+Future work: full MSMARCO Dev/DL, learned GF(3)/PQ maps, measured NOR array noise, and on-device LLMs.
 
 \begin{acks}
 Acknowledgments omitted for anonymous review.
 \end{acks}
 
 \bibliographystyle{ACM-Reference-Format}
-% \bibliography{references}  % add .bib when citations are finalized
+\bibliography{references}
 
 \end{document}

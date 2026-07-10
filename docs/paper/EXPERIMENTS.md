@@ -7,7 +7,7 @@ Protocol: asymmetric RAG (digital query); teacher → random-project to `cim_dim
 
 | Corpus | Source | Scale used | Notes |
 |--------|--------|------------|-------|
-| MSMARCO passage | `microsoft/ms_marco` v1.1 validation | **1000q / 8503**, also 500/200/48 | Selected passages as relevance |
+| MSMARCO passage | `microsoft/ms_marco` v1.1 validation | **2000q / 16894**, also 1000/500/200/48 | Selected passages as relevance |
 | NQ-open (hard) | `google-research-datasets/nq_open` | **200 queries / 911 docs** | Answer-only pseudo-passages + distractors |
 | Geometric probe | synthetic clusters | 100 docs / 20 queries | Validates LDPC when geometry is known |
 | SemiCorpusMini | bundled | 8–12 docs | Semiconductor domain flavor |
@@ -18,27 +18,26 @@ Protocol: asymmetric RAG (digital query); teacher → random-project to `cim_dim
 - Edge storage width: project to `cim_dim ∈ {64,128,256}` then **2 GF(3) symbols/dim** (9 levels)
 - Channel: GRC-PIM multi-cycle noise with **NOR presets** (`nor_fresh/typical/aged/stress`)
 
-## 5.3 Main IR result (BGE, MSMARCO **1000q**, `nor_typical`, `cim_dim=128`, seed=42)
+## 5.3 Main IR result (BGE, MSMARCO **2000q**, `nor_typical`, `cim_dim=128`, seed=42)
 
 | Method | nDCG@10 |
 |--------|---------|
-| BM25 | 0.520 |
-| Dense clean (projected) | 0.641 |
-| CiM noisy (no LDPC) | 0.283 |
-| CiM LDPC B′ | 0.381 |
-| **CiM LDPC BP** | **0.496** |
-| **Hybrid BM25+BP** | **0.549** |
+| BM25 | 0.531 |
+| Dense clean (projected) | 0.636 |
+| CiM noisy (no LDPC) | 0.254 |
+| **CiM LDPC BP** | **0.475** |
+| **Hybrid BM25+BP** | **0.557** |
 
-**BP recovers +0.214 nDCG@10 vs unprotected CiM noise.** Hybrid exceeds BM25 (0.520).
+**BP recovers +0.221 nDCG@10 vs unprotected CiM noise.** Hybrid exceeds BM25 (0.531).
 
-### Stability (MSMARCO 1000q)
+### Stability (MSMARCO 2000q)
 
 | Setting | BP gain vs noisy |
 |---------|------------------|
-| **dim=128 seeds {0,1,2,42}** | **0.182 ± 0.031** |
-| **dim=256 seeds {0,1,2,42}** | **0.180 ± 0.029** |
+| **dim=128 seeds {0,1,2,42}** | **0.145 ± 0.050** |
+| dim=256 seed=42 (spot-check) | **+0.208** |
 
-**Recommendation:** report dim=128 seed=42 as the primary 1000q operating point; use multi-seed summaries for robustness; disclose historical pathological seeds (e.g., 500q dim=128 seed=0).
+NOR honesty (dim=128, seed=42): fresh +0.010; **aged +0.006** with absolute BP nDCG≈0.061—do not claim wins under aged maps.
 
 ### Scale ladder (BGE, dim=128, seed=42, `nor_typical`)
 
@@ -46,7 +45,8 @@ Protocol: asymmetric RAG (digital query); teacher → random-project to `cim_dim
 |-------|------------|----------------|
 | 200q | 0.445 → 0.531 (+0.086) | 0.572 > 0.528 |
 | 500q | 0.423 → 0.539 (+0.116) | 0.565 > 0.536 |
-| **1000q** | **0.283 → 0.496 (+0.214)** | **0.549 > 0.520** |
+| 1000q | 0.283 → 0.496 (+0.214) | 0.549 > 0.520 |
+| **2000q** | **0.254 → 0.475 (+0.221)** | **0.557 > 0.531** |
 
 ## 5.4 Encoder comparison (MSMARCO 200q, `nor_typical`)
 
@@ -100,7 +100,7 @@ At p=0.03: noisy nDCG 0.905 → B′ **0.952** (SER 0.086→0.038). Establishes 
 ## 5.9 Takeaways for the paper narrative
 
 1. Hardware noise on CiM-stored dense vectors **materially hurts** MSMARCO nDCG (worse at larger subsets under the same map).  
-2. GF(3) LDPC (esp. BP) **recovers** ranking under NOR-typical maps; 1000q multi-seed gain **0.182±0.031** (BGE, dim=128).  
-3. Hybrid BM25+BP is a strong **system** result (1000q: 0.549 > BM25 0.520).  
+2. GF(3) LDPC (esp. BP) **recovers** ranking under NOR-typical maps; 2000q multi-seed gain **0.145±0.050** (BGE, dim=128); 1000q **0.182±0.031**.  
+3. Hybrid BM25+BP is a strong **system** result (2000q: 0.557 > BM25 0.531).  
 4. Gains are **operating-point dependent**—do not claim universal win under aged/stress without qualification.  
 5. Generative Flan RAG shows retrieval→generation coupling with measurable hallucination.

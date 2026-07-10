@@ -155,8 +155,15 @@ def main(argv=None) -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--n_queries", type=int, default=64)
     p.add_argument("--force", action="store_true")
+    p.add_argument(
+        "--corpus",
+        default="all",
+        choices=["all", "msmarco_hf", "nq_hf"],
+        help="Which HF subset(s) to build (default: both).",
+    )
     args = p.parse_args(argv)
-    for name in ("msmarco_hf", "nq_hf"):
+    names = ("msmarco_hf", "nq_hf") if args.corpus == "all" else (args.corpus,)
+    for name in names:
         docs, queries, path = load_cached_or_build(name, n_queries=args.n_queries, force=args.force)
         print(f"{name}: {len(docs)} docs, {len(queries)} queries -> {path}")
 
