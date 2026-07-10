@@ -69,3 +69,12 @@ PYTHONPATH=. python3 -m cim_resldpc.experiments.run_scaled_eval --rag_generator 
 
 Report: [`../docs/paper/V14_SCALED_BGE_FLAN_REPORT.md`](../docs/paper/V14_SCALED_BGE_FLAN_REPORT.md)
 
+## v1.5 Ablations + paper drafts
+
+```bash
+PYTHONPATH=. python3 -m cim_resldpc.experiments.run_ablation_v15 --encoder bge --n_queries 200
+```
+
+- [`../docs/paper/V15_ABLATION_REPORT.md`](../docs/paper/V15_ABLATION_REPORT.md)
+- [`../docs/paper/EXPERIMENTS.md`](../docs/paper/EXPERIMENTS.md)
+- [`../docs/paper/METHOD.md`](../docs/paper/METHOD.md)
