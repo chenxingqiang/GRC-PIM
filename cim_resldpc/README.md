@@ -93,3 +93,19 @@ PYTHONPATH=. python3 -m cim_resldpc.experiments.run_ablation_v15 \
 - [`../docs/paper/RELATED_WORK.md`](../docs/paper/RELATED_WORK.md)
 - [`../docs/paper/PAPER_OUTLINE.md`](../docs/paper/PAPER_OUTLINE.md)
 - [`../docs/paper/V16_MSMARCO500_REPORT.md`](../docs/paper/V16_MSMARCO500_REPORT.md)
+
+## v1.7 MSMARCO 1000q + Conclusion + ACM LaTeX
+
+```bash
+PYTHONPATH=. python3 -m cim_resldpc.experiments.build_hf_cache --n_queries 1000
+PYTHONPATH=. python3 -m cim_resldpc.experiments.run_ablation_v15 \
+  --encoder bge --n_queries 1000 --seeds 0,1,2,42 \
+  --emb_cache cim_resldpc/data/cache/bge_msmarco_n1000_emb.npz \
+  --out_json cim_resldpc/results/sigir_eval_v17_msmarco1000.json
+```
+
+Primary claim (BGE, `nor_typical`, dim=128, seed=42): noisy 0.283 → BP 0.496 (+0.214); hybrid 0.549 > BM25 0.520.
+
+- [`../docs/paper/CONCLUSION.md`](../docs/paper/CONCLUSION.md)
+- [`../docs/paper/V17_MSMARCO1000_REPORT.md`](../docs/paper/V17_MSMARCO1000_REPORT.md)
+- [`../docs/paper/latex/main.tex`](../docs/paper/latex/main.tex)

@@ -1,13 +1,13 @@
 # Experiments Draft (SIGIR-AP Full Paper)
 
-Numbers from repo artifacts (`sigir_eval_v14_*`, `sigir_eval_v15_ablation.json`).  
+Numbers from repo artifacts (`sigir_eval_v14_*` … `sigir_eval_v17_msmarco1000.json`).  
 Protocol: asymmetric RAG (digital query); teacher → random-project to `cim_dim` → base-3 GF(3) → multi-cycle PIM/NOR-mapped channel → B′ / BP recovery; dense-only is the scientific core.
 
 ## 5.1 Datasets
 
 | Corpus | Source | Scale used | Notes |
 |--------|--------|------------|-------|
-| MSMARCO passage | `microsoft/ms_marco` v1.1 validation | **200 queries / 1720 passages** (also 48q cache) | Selected passages as relevance |
+| MSMARCO passage | `microsoft/ms_marco` v1.1 validation | **1000q / 8503**, also 500/200/48 | Selected passages as relevance |
 | NQ-open (hard) | `google-research-datasets/nq_open` | **200 queries / 911 docs** | Answer-only pseudo-passages + distractors |
 | Geometric probe | synthetic clusters | 100 docs / 20 queries | Validates LDPC when geometry is known |
 | SemiCorpusMini | bundled | 8–12 docs | Semiconductor domain flavor |
@@ -18,31 +18,35 @@ Protocol: asymmetric RAG (digital query); teacher → random-project to `cim_dim
 - Edge storage width: project to `cim_dim ∈ {64,128,256}` then **2 GF(3) symbols/dim** (9 levels)
 - Channel: GRC-PIM multi-cycle noise with **NOR presets** (`nor_fresh/typical/aged/stress`)
 
-## 5.3 Main IR result (BGE, MSMARCO **500q**, `nor_typical`, `cim_dim=128`, seed=42)
+## 5.3 Main IR result (BGE, MSMARCO **1000q**, `nor_typical`, `cim_dim=128`, seed=42)
 
 | Method | nDCG@10 |
 |--------|---------|
-| BM25 | 0.536 |
-| Dense clean (projected) | 0.648 |
-| CiM noisy (no LDPC) | 0.423 |
-| CiM LDPC B′ | 0.482 |
-| **CiM LDPC BP** | **0.539** |
-| **Hybrid BM25+BP** | **0.565** |
+| BM25 | 0.520 |
+| Dense clean (projected) | 0.641 |
+| CiM noisy (no LDPC) | 0.283 |
+| CiM LDPC B′ | 0.381 |
+| **CiM LDPC BP** | **0.496** |
+| **Hybrid BM25+BP** | **0.549** |
 
-**BP recovers +0.116 nDCG@10 vs unprotected CiM noise.** Hybrid exceeds BM25 (0.536).
+**BP recovers +0.214 nDCG@10 vs unprotected CiM noise.** Hybrid exceeds BM25 (0.520).
 
-### Stability (MSMARCO 500q)
+### Stability (MSMARCO 1000q)
 
 | Setting | BP gain vs noisy |
 |---------|------------------|
-| dim=128 seeds {1,2,42} | ≈ **+0.10** (seed 0 is pathological: −0.19) |
-| **dim=256 seeds {0,1,2,42}** | **0.157 ± 0.013** |
+| **dim=128 seeds {0,1,2,42}** | **0.182 ± 0.031** |
+| **dim=256 seeds {0,1,2,42}** | **0.180 ± 0.029** |
 
-**Recommendation:** report dim=128 seed=42 as a primary operating point; use dim=256 multi-seed for robustness claims; always disclose seed failures.
+**Recommendation:** report dim=128 seed=42 as the primary 1000q operating point; use multi-seed summaries for robustness; disclose historical pathological seeds (e.g., 500q dim=128 seed=0).
 
-### Earlier 200q reference (BGE, dim=128, seed=42)
+### Scale ladder (BGE, dim=128, seed=42, `nor_typical`)
 
-noisy 0.445 → BP 0.531 (+0.086); hybrid 0.572; multi-seed gain 0.075±0.015 (dim=128, seeds 0/1/2 on 200q).
+| Scale | Noisy → BP | Hybrid vs BM25 |
+|-------|------------|----------------|
+| 200q | 0.445 → 0.531 (+0.086) | 0.572 > 0.528 |
+| 500q | 0.423 → 0.539 (+0.116) | 0.565 > 0.536 |
+| **1000q** | **0.283 → 0.496 (+0.214)** | **0.549 > 0.520** |
 
 ## 5.4 Encoder comparison (MSMARCO 200q, `nor_typical`)
 
@@ -95,8 +99,8 @@ At p=0.03: noisy nDCG 0.905 → B′ **0.952** (SER 0.086→0.038). Establishes 
 
 ## 5.9 Takeaways for the paper narrative
 
-1. Hardware noise on CiM-stored dense vectors **materially hurts** MSMARCO nDCG.  
-2. GF(3) LDPC (esp. BP) **recovers** ranking under NOR-typical maps; multi-seed gain **0.075±0.015** (BGE, dim=128).  
-3. Hybrid BM25+BP is a strong **system** result (0.572 > BM25 0.528).  
+1. Hardware noise on CiM-stored dense vectors **materially hurts** MSMARCO nDCG (worse at larger subsets under the same map).  
+2. GF(3) LDPC (esp. BP) **recovers** ranking under NOR-typical maps; 1000q multi-seed gain **0.182±0.031** (BGE, dim=128).  
+3. Hybrid BM25+BP is a strong **system** result (1000q: 0.549 > BM25 0.520).  
 4. Gains are **operating-point dependent**—do not claim universal win under aged/stress without qualification.  
 5. Generative Flan RAG shows retrieval→generation coupling with measurable hallucination.
