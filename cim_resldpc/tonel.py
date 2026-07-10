@@ -1,6 +1,7 @@
 """TONEL-Res: residual-aware embedding learning for CiM-ResLDPC."""
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass
 
 import numpy as np
@@ -9,8 +10,15 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from .config import CiMResLDPCConfig
-from .gf3_quantize import dequantize_from_gf3, quantize_to_gf3
-from .noise_bridge import NoiseProfile, apply_embedding_cim_noise, residual_gate_weight
+from .gf3_quantize import quantize_to_gf3
+from .ldpc_embed import LDPCCode, protect_and_recover
+from .noise_bridge import NoiseProfile, residual_gate_weight
+
+
+def stable_token_id(token: str, n_buckets: int) -> int:
+    """Process-stable hash (unlike Python's salted hash())."""
+    digest = hashlib.blake2b(token.encode("utf-8"), digest_size=8).digest()
+    return int.from_bytes(digest, "little") % n_buckets
 
 
 class HashBagEncoder(nn.Module):
@@ -25,13 +33,12 @@ class HashBagEncoder(nn.Module):
         self.proj = nn.Linear(dim, dim)
 
     def _hash_tokens(self, texts: list[str]) -> torch.Tensor:
-        # Returns (B, dim) mean of hashed token embeddings
         batch = []
         for text in texts:
             toks = [t for t in text.lower().split() if t]
             if not toks:
                 toks = ["<empty>"]
-            ids = [hash(t) % self.n_buckets for t in toks]
+            ids = [stable_token_id(t, self.n_buckets) for t in toks]
             idx = torch.tensor(ids, dtype=torch.long)
             vec = self.embed(idx).mean(dim=0)
             batch.append(vec)
@@ -53,13 +60,24 @@ class TONELLossBreakdown:
 
 
 class TONELResEncoder(nn.Module):
-    """Residual soft-info regularized dense encoder (Contribution 1)."""
+    """Residual soft-info regularized dense encoder (Contribution 1).
+
+    Alignment target is ECC-calibrated reconstruction from the CiM channel
+    (B' soft expectation / BP), never a clean-embedding oracle blend.
+    """
 
     def __init__(self, config: CiMResLDPCConfig | None = None):
         super().__init__()
         self.config = config or CiMResLDPCConfig()
         self.encoder = HashBagEncoder(dim=self.config.embed_dim)
         self.opt = torch.optim.Adam(self.parameters(), lr=self.config.learning_rate)
+        self._code: LDPCCode | None = None
+
+    @property
+    def code(self) -> LDPCCode:
+        if self._code is None:
+            self._code = LDPCCode.load()
+        return self._code
 
     def encode(self, texts: list[str]) -> torch.Tensor:
         return self.encoder(texts)
@@ -73,16 +91,13 @@ class TONELResEncoder(nn.Module):
             emb = emb.detach().cpu().numpy()
         return quantize_to_gf3(emb, levels=self.config.gf3_levels)
 
-    def reconstruct_from_symbols(self, symbols: np.ndarray) -> np.ndarray:
-        return dequantize_from_gf3(symbols, levels=self.config.gf3_levels)
-
     def residual_regularizer(
         self,
         emb: torch.Tensor,
         calibrated_emb: torch.Tensor,
         weight: float,
     ) -> torch.Tensor:
-        """Cosine alignment to residual-calibrated reconstruction."""
+        """Cosine alignment to channel-calibrated reconstruction."""
         emb_n = F.normalize(emb, dim=-1)
         cal_n = F.normalize(calibrated_emb, dim=-1)
         align = 1.0 - (emb_n * cal_n).sum(dim=-1).mean()
@@ -91,7 +106,6 @@ class TONELResEncoder(nn.Module):
     def quant_loss(self, emb: torch.Tensor) -> torch.Tensor:
         """Soft ternary quantization penalty toward {-1,0,1}."""
         levels = torch.tensor(self.config.gf3_levels, dtype=emb.dtype, device=emb.device)
-        # distance to nearest level
         dist = (emb.unsqueeze(-1) - levels).abs()
         min_dist = dist.min(dim=-1).values
         return min_dist.mean()
@@ -102,12 +116,10 @@ class TONELResEncoder(nn.Module):
         pos: torch.Tensor,
         negs: torch.Tensor | None = None,
     ) -> torch.Tensor:
-        """InfoNCE with in-batch negatives if negs is None."""
         temp = self.config.contrastive_temp
         q = F.normalize(q, dim=-1)
         pos = F.normalize(pos, dim=-1)
         if negs is None:
-            # in-batch: pos rows are positives for matching queries
             logits = (q @ pos.T) / temp
             labels = torch.arange(q.size(0), device=q.device)
             return F.cross_entropy(logits, labels)
@@ -118,13 +130,12 @@ class TONELResEncoder(nn.Module):
         labels = torch.zeros(q.size(0), dtype=torch.long, device=q.device)
         return F.cross_entropy(logits, labels)
 
-    def _calibrated_embedding_from_noise(
+    def _calibrated_embedding_from_channel(
         self,
         emb_np: np.ndarray,
         rng: np.random.Generator,
     ) -> tuple[np.ndarray, float]:
-        """Simulate CiM store→noisy read→dequantize as calibrated target."""
-        symbols = quantize_to_gf3(emb_np, levels=self.config.gf3_levels)
+        """LDPC-protected CiM readout → soft reconstruction (no clean blend)."""
         profile = NoiseProfile(
             p_indep=self.config.p_indep,
             p_drift=self.config.p_drift,
@@ -132,17 +143,22 @@ class TONELResEncoder(nn.Module):
             n_cycles=self.config.n_cycles,
             drift_persist=self.config.drift_persist,
         )
-        readout = apply_embedding_cim_noise(symbols, profile, rng=rng)
-        recovered = readout.recovered_symbols
-        cal = dequantize_from_gf3(recovered, levels=self.config.gf3_levels)
-        # gate_mean proxy from LLR entropy (higher entropy → lower gate)
-        probs = np.exp(readout.llr_bp - readout.llr_bp.max(axis=-1, keepdims=True))
-        probs /= probs.sum(axis=-1, keepdims=True) + 1e-8
-        ent = -(probs * np.log(probs + 1e-8)).sum(axis=-1).mean()
-        gate_mean = float(np.clip(1.0 - ent / np.log(3.0), 0.0, 1.0))
+        rec = protect_and_recover(
+            emb_np,
+            profile=profile,
+            code=self.code,
+            levels=self.config.gf3_levels,
+            rng=rng,
+            use_bp=True,
+            n_sym_per_dim=self.config.n_sym_per_dim,
+            quant_mode=self.config.quant_mode,
+        )
+        # Prefer B' hard recon under base3 (stable geometry); soft as residual cue.
+        # Aligning to BP/B' reconstruction teaches noise-robust codes without oracle.
+        cal = rec.emb_bprime
         w = residual_gate_weight(
-            readout.drift_score,
-            gate_mean,
+            rec.drift_score,
+            rec.gate_proxy,
             tau_d=self.config.tau_d,
             tau_g=self.config.tau_g,
         )
@@ -164,7 +180,7 @@ class TONELResEncoder(nn.Module):
 
         with torch.no_grad():
             p_np = p.detach().cpu().numpy().astype(np.float32)
-            cal_np, w = self._calibrated_embedding_from_noise(p_np, rng)
+            cal_np, w = self._calibrated_embedding_from_channel(p_np, rng)
         cal = torch.from_numpy(cal_np).to(p.device)
         l_res = self.residual_regularizer(p, cal, weight=w)
         l_q = self.quant_loss(p)

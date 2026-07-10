@@ -1,10 +1,11 @@
 # CiM-ResLDPC Design Document (SIGIR-AP 2026)
 
-**Phase:** Design (approved for Development in this agent run)  
+**Phase:** Design (v1.1 — amended after scientific reflection)  
 **Title (EN):** CiM-ResLDPC: Residual Error Calibrated Robust Retrieval-Augmented Generation on NOR Flash Compute-in-Memory Arrays  
 **Title (CN):** CiM-ResLDPC：面向NOR浮栅存算阵列的残差纠错鲁棒边缘检索增强生成  
-**Base stack:** GRC-PIM (`pim_predecoder`) — gated residual GEMV + GF(3) NB-LDPC + multi-cycle PIM noise  
-**Repo:** GRC-PIM-IR
+**Base stack:** GRC-PIM (`pim_predecoder`) — multi-cycle PIM noise + B′ soft-LLR + GF(3) NB-LDPC BP (+ optional gated GEMV)  
+**Repo:** GRC-PIM-IR  
+**Claim scope (v1.1):** Channel = GRC-PIM multi-cycle PIM noise (NOR is the *target substrate*, not a fitted device model). Default residual path = B′ soft / BP — not clean-embedding oracle. Full INT8 GEMV gate is optional future hook. See `SCIENTIFIC_REFLECTION.md`.
 
 ---
 

@@ -22,31 +22,31 @@
 
 ## Metrics
 
-- **IR:** nDCG@10, MAP, Recall@k  
-- **Robustness:** relative nDCG drop under noise vs clean dense  
-- **Hardware proxy:** mean latency_ms, decode skip rate, BM25 cutoff size  
-- **Privacy:** `local_only` / `uploads_raw_documents=False` contract tests  
+- **IR (scientific core):** dense-only nDCG@10, MAP, Recall@k under CiM doc-store noise  
+- **Robustness:** nDCG drop vs clean dense **within dense-only family**; gain vs unprotected noisy  
+- **Geometric probe:** controlled cluster embeddings (validates LDPC ranking when geometry exists)  
+- **System (separate):** hybrid BM25+dense — not used as robustness denominator  
+- **Hardware proxy:** latency_ms, decode skip rate  
+- **Privacy:** `local_only` contract tests  
 
 ## Commands
 
 ```bash
-python -m cim_resldpc.experiments.run_sigir_eval \
-  --out_json cim_resldpc/results/sigir_eval.json \
-  --train_steps 30 --n_topics 6
-
-python -m pytest cim_resldpc/tests -v
+PYTHONPATH=. python3 -m pytest cim_resldpc/tests -v
+PYTHONPATH=. python3 -m cim_resldpc.experiments.run_sigir_eval \
+  --out_json cim_resldpc/results/sigir_eval.json --noise_p 0.05
 ```
 
 ## Reported artifacts
 
-- `cim_resldpc/results/sigir_eval.json` — primary offline table source  
-- `docs/design/CIM_RESLDPC_DESIGN.md` — method specification  
-- GRC-PIM `pim_predecoder/results/paper1024_E*.json` — hardware ECC evidence to cite for noise realism  
+- `cim_resldpc/results/sigir_eval.json` — v1.1 protocol  
+- `docs/design/SCIENTIFIC_REFLECTION.md` — claim integrity  
+- GRC-PIM `pim_predecoder/results/paper1024_E*.json` — ECC channel evidence  
 
-## Ablations (paper tables)
+## Ablations
 
-1. w/o residual regularizer (`lambda_res=0`)  
-2. w/o hybrid BM25 (`alpha=0`)  
-3. w/o decode prune (`tau_skip=0`)  
-4. Noise strength sweep  
-5. Embedding dim / GF(3) levels sensitivity  
+1. No LDPC vs B′ vs BP vs soft  
+2. Centroid vs base-3 quantization  
+3. Symmetric vs asymmetric query noise  
+4. Noise strength sweep (geometric probe rows)  
+5. Hybrid vs dense-only (system vs science)  

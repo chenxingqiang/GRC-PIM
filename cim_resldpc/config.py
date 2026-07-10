@@ -26,6 +26,10 @@ class CiMResLDPCConfig:
     seed: int = 42
     # GF(3) packing: each float dim maps to one ternary symbol after quantization
     gf3_levels: tuple[float, float, float] = (-1.0, 0.0, 1.0)
+    n_sym_per_dim: int = 2  # base-3 multi-symbol packing (9 levels)
+    quant_mode: str = "base3"  # 'base3' | 'centroid'
+    # Asymmetric RAG: docs stored in noisy CiM; query stays on digital side
+    asymmetric_query: bool = True
     learning_rate: float = 1e-3
     contrastive_temp: float = 0.07
 

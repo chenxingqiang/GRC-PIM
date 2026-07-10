@@ -1,43 +1,41 @@
-# Test Report — CiM-ResLDPC (Testing Phase)
+# Test Report — CiM-ResLDPC (Verification / v1.1)
 
 **Date:** 2026-07-10  
 **Branch:** `cursor/cim-resldpc-edge-rag-a594`  
-**Design:** `docs/design/CIM_RESLDPC_DESIGN.md`  
-**Phase:** Testing → Verification (no design change required)
+**Reflection:** `docs/design/SCIENTIFIC_REFLECTION.md`
 
-## Commands
+## What changed after fact-check
 
-```bash
-export PATH="$HOME/.local/bin:$PATH"
-PYTHONPATH=/workspace python3 -m pytest cim_resldpc/tests -v --tb=short
-PYTHONPATH=/workspace python3 -m cim_resldpc.experiments.run_sigir_eval \
-  --out_json cim_resldpc/results/sigir_eval.json --train_steps 30 --n_topics 6
-```
+| Issue | Fix |
+|-------|-----|
+| Clean-embedding oracle blend | Removed; recover from B′/BP only |
+| No real LDPC on embeddings | `ldpc_embed.protect_and_recover` |
+| BM25 confounding “robustness” | Dense-only scientific table + separate hybrid |
+| Centroid ternary geometry collapse | Default **base-3** multi-symbol packing |
+| Symmetric query+doc noise | Default **asymmetric** (digital query, CiM docs) |
+| Unstable `hash()` | `blake2b` stable token ids |
 
-## Unit / integration tests (T1–T10)
+## Tests
 
-| Result | Detail |
-|--------|--------|
-| **12 passed** | 1.60s, Python 3.12.3 |
+- `cim_resldpc/tests`: **16 passed**
+- Includes `test_no_oracle_blend_in_pipeline_source`, `test_geometric_probe_ldpc_helps`
 
-All design-plan cases passed: GF(3) roundtrip, noise bridge, residual weight monotonicity, TONEL finite losses, hybrid ranking, decode prune, local-only privacy, metrics ranges, eval JSON schema, import smoke.
+## Honest eval highlights (`sigir_eval.json` v1.1)
 
-## Offline SIGIR eval (`cim_resldpc/results/sigir_eval.json`)
+**Dense-only SyntheticIR @ p=0.05 (asymmetric):**
 
-| Method | Split | nDCG@10 | MAP | Notes |
-|--------|-------|---------|-----|-------|
-| BM25 | synthetic | 0.936 | — | strong lexical overlap on toy topics |
-| Naive dense (clean) | synthetic | 0.785 | — | float, no CiM noise |
-| CiM noisy (no residual) | synthetic | 0.365 | — | **53.5%** relative nDCG drop vs clean |
-| **CiM-ResLDPC** | synthetic | **0.933** | **0.861** | hybrid + residual; mean latency **0.52 ms** |
-| **CiM-ResLDPC** | semi corpus | **0.862** | **0.797** | Recall@10 = 1.0; latency **0.45 ms** |
+| Method | nDCG@10 |
+|--------|---------|
+| Clean dense | 0.630 |
+| CiM noisy (no LDPC) | 0.134 |
+| CiM LDPC B′ | **0.308** (+0.175 vs noisy) |
+| CiM LDPC soft | **0.323** |
+| CiM LDPC BP | 0.213 |
 
-**Robustness takeaway:** Under the default PIM noise profile, uncalibrated CiM dense retrieval collapses; CiM-ResLDPC recovers ranking via residual-calibrated dense features + BM25 fusion, matching the paper narrative (hardware noise destroys dense IR; residual soft-info + hybrid restores it).
+**Geometric probe (controlled clusters):** at p=0.03, noisy 0.905 → B′ 0.952; SER 0.086→0.038.
 
-## Verification
+**Note:** BP hard decisions can underperform B′ on *ranking* even when SER improves — report both; do not claim BP always wins IR metrics.
 
-No design modification required. Implementation matches `CIM_RESLDPC_DESIGN.md` APIs and test plan. Optional follow-ups (out of v1 scope): MSMARCO/NQ scale-up, external Contriever/BGE/RoCR checkpoints, full GRC GEMV checkpoint wiring per document instead of LLR-proxy blend.
+## Verdict
 
-## Issues
-
-None blocking.
+Design direction is **viable and now empirically grounded** under an honest protocol. Ready for next iteration: stronger encoders / public IR benchmarks / optional GRC GEMV hook.

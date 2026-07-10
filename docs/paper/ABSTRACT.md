@@ -4,11 +4,11 @@
 
 **Chinese:** CiM-ResLDPC：面向NOR浮栅存算阵列的残差纠错鲁棒边缘检索增强生成
 
-## Abstract
+## Abstract (v1.1 — narrowed claims)
 
-Edge retrieval-augmented generation (RAG) increasingly relies on compute-in-memory (CiM) to keep private corpora on-device under millisecond latency budgets. NOR Flash CiM offers the density needed for large knowledge bases, but floating-gate drift, read disturb, quantization, and analog MAC residuals corrupt stored embeddings and collapse ranking quality. Prior CiM-RAG systems accelerate similarity with in-array MAC while treating noise as a shallow mask; they neither inject multi-cycle soft evidence into representation learning nor couple GF(3) LDPC residual calibration with retrieval scoring.
+Edge retrieval-augmented generation (RAG) increasingly relies on compute-in-memory (CiM) to keep private corpora on-device. Dense CiM substrates (including NOR Flash targets) offer capacity for local knowledge bases, but multi-cycle readout noise, quantization to constrained alphabets, and analog residuals corrupt stored embeddings and collapse ranking quality. Prior CiM-RAG systems mainly accelerate similarity with in-array MAC and treat noise as a shallow mask; they rarely protect ternary embeddings with non-binary LDPC or feed soft residual evidence into representation learning and dense scoring.
 
-We present **CiM-ResLDPC**, a hardware–IR co-design that reuses gated residual calibration (GRC-PIM) as a first-class retrieval signal. (1) **TONEL-Res** distills dense embeddings with a residual soft-information regularizer and GF(3)-aware quantization so representations remain robust under ternary CiM storage. (2) An end-to-end **three-layer pipeline** links NOR multi-cycle readout, residual-calibrated vectors, and residual-aware hybrid reranking (BM25 + dense + residual confidence). (3) **Edge optimizations**—decode pruning under low drift and BM25 candidate cutoff—reduce CiM cycles while preserving local-only privacy. On offline synthetic IR and a semiconductor mini-corpus, CiM-ResLDPC improves nDCG/MAP under PIM noise relative to noisy CiM baselines and reports latency / decode-skip hardware proxies suitable for SIGIR-AP evaluation.
+We present **CiM-ResLDPC**, a hardware–IR co-design on the GRC-PIM multi-cycle PIM channel. (1) **TONEL-Res** trains dense embeddings with a residual soft-information regularizer toward **channel-calibrated** reconstructions (B′ soft expectation / GF(3) BP)—without clean-embedding oracles—and GF(3)-aware quantization. (2) Embeddings are **LDPC-protected** for CiM storage; recovery uses B′/BP soft–hard paths before cosine retrieval. (3) An optional **hybrid** BM25 cutoff reduces candidates for edge latency, reported separately from the dense-only scientific table. Offline synthetic IR and a semiconductor mini-corpus evaluate dense robustness under PIM noise; generation-side RAG metrics and device-physics NOR models remain future work.
 
 ## CCS Concepts
 
