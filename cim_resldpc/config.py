@@ -30,6 +30,10 @@ class CiMResLDPCConfig:
     quant_mode: str = "base3"  # 'base3' | 'centroid'
     # Asymmetric RAG: docs stored in noisy CiM; query stays on digital side
     asymmetric_query: bool = True
+    # v1.2 extensions
+    encoder_kind: str = "tfidf_svd"  # hash | tfidf_svd | st
+    nor_preset: str = "nor_typical"
+    use_gemv: bool = False
     learning_rate: float = 1e-3
     contrastive_temp: float = 0.07
 

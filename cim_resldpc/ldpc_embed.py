@@ -98,6 +98,7 @@ class RecoveredEmbedding:
     drift_score: float
     gate_proxy: float
     used_bp: bool
+    used_gemv: bool
     n_codewords: int
     n_sym_per_dim: int
     emb_dim: int
@@ -113,10 +114,15 @@ def protect_and_recover(
     bp_iters: int = 5,
     n_sym_per_dim: int = 2,
     quant_mode: str = "base3",
+    use_gemv: bool = False,
+    gemv_calibrator=None,
+    tau_d: float = 0.025,
+    tau_g: float = 0.6,
 ) -> RecoveredEmbedding:
-    """Quantize → LDPC encode → CiM noise → B'/BP recover → float embedding.
+    """Quantize → LDPC encode → CiM noise → (optional GEMV) → B'/BP → float emb.
 
     No clean-embedding oracle. Default quant_mode='base3' preserves geometry.
+    When use_gemv=True, GRC-PIM gated residual ΔLLR calibrates priors before BP.
     """
     if rng is None:
         rng = np.random.default_rng(0)
@@ -141,6 +147,20 @@ def protect_and_recover(
     codewords = encode(info_blocks, code.G)
     readout = apply_embedding_cim_noise(codewords, profile, rng=rng, H=code.H)
     llr = readout.llr_bp
+    used_gemv = False
+    gate_mean_gemv = 0.0
+
+    if use_gemv:
+        from .gemv_hook import apply_gemv_llr, load_gemv_calibrator
+
+        cal = gemv_calibrator or load_gemv_calibrator()
+        llr, gate_mean_gemv, used_gemv = apply_gemv_llr(
+            readout.noisy_bits_3d,
+            p_bit=profile.p_indep,
+            calibrator=cal,
+            tau_d=tau_d,
+            tau_g=tau_g,
+        )
 
     hard_bprime = llr.argmax(axis=-1)
     info_bprime = hard_bprime[:, : code.k]
@@ -163,15 +183,11 @@ def protect_and_recover(
         emb_soft = soft_expectation_from_llr_base3(
             llr[:, : code.k, :], n_sym_per_dim=n_sym_per_dim, emb_dim=dim,
         )
-        # If multiple blocks, soft_expectation only used first codeword's info
-        # for dim*n_sym <= k (true for dim<=128 with n_sym=2, k=256).
         if sym_dim > code.k:
-            # Fall back: hard B' soft-less reconstruction for overflow dims
             emb_soft = emb_bprime
     else:
         emb_bprime = dequantize_from_gf3(sym_bprime, levels=levels)
         emb_bp = dequantize_from_gf3(sym_bp, levels=levels)
-        # Soft centroid expectation
         levels_arr = np.asarray(levels, dtype=np.float32)
         llr_i = llr[:, :dim, :]
         m = llr_i.max(axis=-1, keepdims=True)
@@ -182,7 +198,9 @@ def protect_and_recover(
     probs_g = np.exp(llr[:, : code.k, :] - llr[:, : code.k, :].max(axis=-1, keepdims=True))
     probs_g /= probs_g.sum(axis=-1, keepdims=True) + 1e-8
     ent = -(probs_g * np.log(probs_g + 1e-8)).sum(axis=-1).mean()
-    gate_proxy = float(np.clip(1.0 - ent / np.log(3.0), 0.0, 1.0))
+    gate_proxy = float(gate_mean_gemv) if use_gemv else float(
+        np.clip(1.0 - ent / np.log(3.0), 0.0, 1.0)
+    )
 
     return RecoveredEmbedding(
         symbols_bprime=sym_bprime,
@@ -193,6 +211,7 @@ def protect_and_recover(
         drift_score=float(readout.drift_score),
         gate_proxy=gate_proxy,
         used_bp=used_bp,
+        used_gemv=used_gemv,
         n_codewords=int(info_blocks.shape[0]),
         n_sym_per_dim=n_sym_per_dim,
         emb_dim=dim,

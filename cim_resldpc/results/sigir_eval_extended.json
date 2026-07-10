@@ -1,0 +1,282 @@
+{
+  "protocol_version": "v1.2",
+  "notes": "Strong offline encoder (tfidf_svd by default). Bundled MSMARCO/NQ mini fixtures (not full HF dumps). NOR presets are engineering maps onto GRC-PIM channel. Optional GRC GEMV residual LLR before BP. RAG metrics use extractive answer proxy (no external LLM).",
+  "nor_presets": [
+    {
+      "name": "nor_fresh",
+      "description": "Fresh programmed NOR MLC, room temp, few reads",
+      "vread_v": 1.0,
+      "temperature_c": 25.0,
+      "read_cycles_equiv": 10,
+      "source": "proxy: low read-disturb / retention (engineering map to GRC-PIM channel)",
+      "profile": {
+        "p_indep": 0.001,
+        "p_drift": 0.0005,
+        "p_row_burst": 0.0002,
+        "n_cycles": 4,
+        "drift_persist": 2
+      }
+    },
+    {
+      "name": "nor_typical",
+      "description": "Typical edge RAG duty: moderate read disturb + weak drift",
+      "vread_v": 1.2,
+      "temperature_c": 55.0,
+      "read_cycles_equiv": 1000,
+      "source": "proxy: mid stress aligned with GRC-PIM E2-like defaults",
+      "profile": {
+        "p_indep": 0.005,
+        "p_drift": 0.005,
+        "p_row_burst": 0.001,
+        "n_cycles": 4,
+        "drift_persist": 3
+      }
+    },
+    {
+      "name": "nor_aged",
+      "description": "Aged / high read-count NOR: strong column drift + disturb",
+      "vread_v": 1.5,
+      "temperature_c": 85.0,
+      "read_cycles_equiv": 100000,
+      "source": "proxy: high-temp retention + cumulative read disturb",
+      "profile": {
+        "p_indep": 0.02,
+        "p_drift": 0.03,
+        "p_row_burst": 0.005,
+        "n_cycles": 4,
+        "drift_persist": 4
+      }
+    },
+    {
+      "name": "nor_stress_sweep",
+      "description": "Aggressive stress corner for ablation (not nominal)",
+      "vread_v": 1.8,
+      "temperature_c": 105.0,
+      "read_cycles_equiv": 1000000,
+      "source": "proxy: worst-case corner for robustness curves",
+      "profile": {
+        "p_indep": 0.05,
+        "p_drift": 0.05,
+        "p_row_burst": 0.01,
+        "n_cycles": 6,
+        "drift_persist": 4
+      }
+    }
+  ],
+  "msmarco_mini": {
+    "corpus": "msmarco_mini",
+    "n_docs": 12,
+    "n_queries": 12,
+    "dense_only": {
+      "bm25": {
+        "ndcg@10": 0.9585459031219683,
+        "map": 0.9166666666666666,
+        "recall@10": 1.0,
+        "n_queries": 12.0
+      },
+      "dense_clean": {
+        "ndcg@10": 0.8852175636458073,
+        "map": 0.8174603174603176,
+        "recall@10": 1.0,
+        "n_queries": 12.0
+      },
+      "cim_noisy_no_ldpc": {
+        "ndcg@10": 0.7791168437872472,
+        "map": 0.6722222222222222,
+        "recall@10": 1.0,
+        "n_queries": 12.0
+      },
+      "cim_ldpc_bprime": {
+        "ndcg@10": 0.8481301951698456,
+        "map": 0.7708333333333334,
+        "recall@10": 1.0,
+        "n_queries": 12.0
+      },
+      "cim_ldpc_bp": {
+        "ndcg@10": 0.8448494300853081,
+        "map": 0.7625000000000001,
+        "recall@10": 1.0,
+        "n_queries": 12.0
+      },
+      "cim_ldpc_gemv_bp": {
+        "ndcg@10": 0.8415562196503615,
+        "map": 0.7642195767195767,
+        "recall@10": 1.0,
+        "n_queries": 12.0
+      }
+    },
+    "robustness": {
+      "nor_preset": "nor_typical",
+      "encoder": "tfidf_svd",
+      "embed_dim": 128,
+      "noisy_vs_clean": 0.11985835371541839,
+      "bprime_gain_vs_noisy": 0.06901335138259834,
+      "bp_gain_vs_noisy": 0.06573258629806089,
+      "gemv_gain_vs_noisy": 0.06243937586311432
+    },
+    "rag_generation": {
+      "clean": {
+        "rag_f1": 0.10708842814105972,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 1.0,
+        "n_queries": 12.0,
+        "k": 3.0
+      },
+      "noisy": {
+        "rag_f1": 0.10708842814105972,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 1.0,
+        "n_queries": 12.0,
+        "k": 3.0
+      },
+      "bprime": {
+        "rag_f1": 0.10708842814105972,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 1.0,
+        "n_queries": 12.0,
+        "k": 3.0
+      },
+      "bp": {
+        "rag_f1": 0.10708842814105972,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 1.0,
+        "n_queries": 12.0,
+        "k": 3.0
+      },
+      "bm25": {
+        "rag_f1": 0.10708842814105972,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 1.0,
+        "n_queries": 12.0,
+        "k": 3.0
+      },
+      "gemv_bp": {
+        "rag_f1": 0.10708842814105972,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 1.0,
+        "n_queries": 12.0,
+        "k": 3.0
+      }
+    }
+  },
+  "nq_mini": {
+    "corpus": "nq_mini",
+    "n_docs": 10,
+    "n_queries": 10,
+    "dense_only": {
+      "bm25": {
+        "ndcg@10": 1.0,
+        "map": 1.0,
+        "recall@10": 1.0,
+        "n_queries": 10.0
+      },
+      "dense_clean": {
+        "ndcg@10": 0.9630929753571458,
+        "map": 0.95,
+        "recall@10": 1.0,
+        "n_queries": 10.0
+      },
+      "cim_noisy_no_ldpc": {
+        "ndcg@10": 0.906160631164485,
+        "map": 0.875,
+        "recall@10": 1.0,
+        "n_queries": 10.0
+      },
+      "cim_ldpc_bprime": {
+        "ndcg@10": 0.8095192840476247,
+        "map": 0.7476190476190476,
+        "recall@10": 1.0,
+        "n_queries": 10.0
+      },
+      "cim_ldpc_bp": {
+        "ndcg@10": 0.906160631164485,
+        "map": 0.875,
+        "recall@10": 1.0,
+        "n_queries": 10.0
+      },
+      "cim_ldpc_gemv_bp": {
+        "ndcg@10": 0.8095192840476247,
+        "map": 0.7476190476190476,
+        "recall@10": 1.0,
+        "n_queries": 10.0
+      }
+    },
+    "robustness": {
+      "nor_preset": "nor_typical",
+      "encoder": "tfidf_svd",
+      "embed_dim": 128,
+      "noisy_vs_clean": 0.05911406857842407,
+      "bprime_gain_vs_noisy": -0.09664134711686023,
+      "bp_gain_vs_noisy": 0.0,
+      "gemv_gain_vs_noisy": -0.09664134711686023
+    },
+    "rag_generation": {
+      "clean": {
+        "rag_f1": 0.21511538508106015,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 1.0,
+        "n_queries": 10.0,
+        "k": 3.0
+      },
+      "noisy": {
+        "rag_f1": 0.20458906929158643,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.9,
+        "n_queries": 10.0,
+        "k": 3.0
+      },
+      "bprime": {
+        "rag_f1": 0.20458906929158643,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.9,
+        "n_queries": 10.0,
+        "k": 3.0
+      },
+      "bp": {
+        "rag_f1": 0.20458906929158643,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.9,
+        "n_queries": 10.0,
+        "k": 3.0
+      },
+      "bm25": {
+        "rag_f1": 0.21511538508106015,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 1.0,
+        "n_queries": 10.0,
+        "k": 3.0
+      },
+      "gemv_bp": {
+        "rag_f1": 0.20458906929158643,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.9,
+        "n_queries": 10.0,
+        "k": 3.0
+      }
+    }
+  }
+}

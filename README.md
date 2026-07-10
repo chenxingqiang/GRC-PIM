@@ -20,6 +20,7 @@ This tree also hosts **CiM-ResLDPC**: residual error–calibrated robust **edge 
 | Design | [`docs/design/CIM_RESLDPC_DESIGN.md`](docs/design/CIM_RESLDPC_DESIGN.md) |
 | Paper drafts | [`docs/paper/`](docs/paper/) (abstract, related work, experiments, test report) |
 | Offline eval | `PYTHONPATH=. python3 -m cim_resldpc.experiments.run_sigir_eval` |
+| Extended eval (v1.2) | `PYTHONPATH=. python3 -m cim_resldpc.experiments.run_extended_eval --nor nor_typical` |
 | Tests | `PYTHONPATH=. python3 -m pytest cim_resldpc/tests -v` |
 
 English title: *CiM-ResLDPC: Residual Error Calibrated Robust Retrieval-Augmented Generation on NOR Flash Compute-in-Memory Arrays*.

@@ -33,3 +33,18 @@ python -m cim_resldpc.experiments.run_sigir_eval --out_json cim_resldpc/results/
 ## Relation to GRC-PIM
 
 CiM-ResLDPC **does not replace** ECC. It consumes multi-cycle soft evidence and gated residual signals from GRC-PIM and feeds them into retrieval representation learning and reranking—closing the hardware-noise ↔ IR representation gap.
+
+## v1.2 extensions
+
+| Piece | Module | Purpose |
+|-------|--------|---------|
+| Strong offline encoder | `encoders.py` (`tfidf_svd`) | IR-credible dense vectors without HF download |
+| MSMARCO/NQ mini | `data/*.json`, `ir_benchmarks.py` | Standard-schema IR fixtures (+ optional HF loaders) |
+| Optional GRC GEMV | `gemv_hook.py` → `ldpc_embed.use_gemv` | Real gated ΔLLR before BP |
+| NOR calibration presets | `nor_calibration.py` | Named stress maps onto GRC-PIM channel |
+| RAG generation proxy | `rag_eval.py` | Extractive F1 / support / hallucination rate |
+
+```bash
+PYTHONPATH=. python3 -m cim_resldpc.experiments.run_extended_eval \
+  --encoder tfidf_svd --nor nor_aged --out_json cim_resldpc/results/sigir_eval_extended.json
+```
