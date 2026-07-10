@@ -44,3 +44,6 @@ Thumbs.db
 # Local env / secrets
 .env
 .env.*
+
+# Large embedding caches (rebuild with run_ablation_v15 --force_encode)
+cim_resldpc/data/cache/*_emb.npz
