@@ -208,9 +208,10 @@ We also do not run RoCR/CiMRAG head-to-head: they target personalization profile
 \section{Experiments}
 
 \subsection{Setup}
-Protocol: asymmetric RAG; BGE-small-en-v1.5 $\rightarrow$ random-project to \texttt{cim\_dim} $\rightarrow$ base-3 GF(3) $\rightarrow$ multi-cycle NOR-mapped channel $\rightarrow$ B$'$/BP.
+Protocol: asymmetric RAG; BGE-small-en-v1.5 $\rightarrow$ random-project to \texttt{cim\_dim} $\rightarrow$ base-3 GF(3) $\rightarrow$ multi-cycle NOR-mapped channel ($T{=}4$ read cycles) $\rightarrow$ B$'$/BP.
 Dense-only is the scientific core; hybrid is reported as a system mode.
-Primary corpus: MSMARCO HF validation subsets (200 / 500 / 1000 / 2000 queries).
+Primary corpus: MSMARCO HF validation subsets (200 / 500 / 1000 / 2000 queries), with NQ-open and bundled mini corpora as cross-datasets.
+\paragraph{Metrics.} We report nDCG@10 and MAP over the ranked list (selected passages as graded relevance) and Recall@10; for generation, extractive / Flan-T5 answer F1, answer support, and an unsupported-answer (hallucination) rate; and on the controlled geometric probe the GF(3) symbol-error rate (SER). All IR numbers are query-averaged.
 
 \subsection{Main result (2000q primary; 1000q reference)}
 \begin{table}[t]
@@ -419,10 +420,12 @@ The on-chip residual-calibrator overhead is inherited from the GRC-PIM 28\,nm an
 The dual gate and decode-prune ($d_{\mathrm{global}}<\tau_{\mathrm{skip}}$ skips the GEMV path) duty-cycle this cost, so the \emph{average} overhead is well below the peak.
 These are analytical estimates carried over from the GRC-PIM stack; a cycle-accurate CiM retrieval-latency model on a measured NOR array is future work, and our Python wall-clock timings are only a software proxy.
 
+\section{Limitations and Future Work}
+Our claims are bounded by: (i) MSMARCO/NQ \emph{subsets}, not full Dev/DL leaderboard protocols; (ii) NOR presets that are engineering maps onto the GRC-PIM multi-cycle channel rather than device-physics TCAD; (iii) a fixed random projection and frozen teachers (TONEL-Res is a training-time regularizer, not re-run at scale); (iv) analytical, not cycle-accurate, hardware cost; and (v) gains that are operating-point, seed, and width dependent, collapsing under aged/stress maps and on near-floor fixtures (NQ-open).
+Future work: full MSMARCO Dev/DL, learned GF(3)/PQ storage maps, measured NOR array noise traces, an on-device LLM generator, and a cycle-accurate CiM retrieval-latency model.
+
 \section{Conclusion}
-CiM-ResLDPC shows that residual soft information from CiM channels can be turned into measurable retrieval robustness for private on-device RAG, when claims are tied to explicit noise operating points.
-Limitations include subset (not full Dev) scale, engineering NOR presets (not TCAD), random projection, and frozen-teacher IR tables.
-Future work: full MSMARCO Dev/DL, learned GF(3)/PQ maps, measured NOR array noise, and on-device LLMs.
+CiM-ResLDPC shows that residual soft information from a CiM channel can be turned into measurable retrieval robustness for private on-device RAG---when claims are tied to explicit noise operating points, teachers, and storage widths, and failures are reported alongside gains.
 
 \begin{acks}
 Acknowledgments omitted for anonymous review.
