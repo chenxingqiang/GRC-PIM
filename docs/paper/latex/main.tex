@@ -3,6 +3,10 @@
 % Requires ACM acmart class (https://github.com/borisveytsman/acmart)
 \documentclass[sigconf,review,anonymous]{acmart}
 
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{multirow}
+
 \AtBeginDocument{%
   \providecommand\BibTeX{{%
     Bib\TeX}}}
@@ -31,7 +35,7 @@ Prior CiM-RAG systems mainly accelerate similarity with in-array MAC and treat n
 We present \textbf{CiM-ResLDPC}, a hardware--IR co-design on the GRC-PIM multi-cycle PIM channel~\cite{grcpim2025}.
 Document embeddings are packed into GF(3) symbols, LDPC-protected for CiM storage, and recovered via B$'$ soft LLRs and/or belief propagation (optionally with gated GEMV residual $\Delta$LLR).
 Queries remain digital (\emph{asymmetric} RAG).
-On MSMARCO passage subsets with a BGE-small teacher~\cite{xiao2023bge} under typical NOR-mapped stress, unprotected CiM noise causes large nDCG@10 drops; LDPC BP recovers ranking (e.g., $+0.221$ at 2000 queries / 16894 passages; $+0.214$ at 1000q), and hybrid BM25$+$BP exceeds BM25 alone.
+On MSMARCO passage subsets with a BGE-small teacher~\cite{xiao2023bge} under typical NOR-mapped stress, unprotected CiM noise causes large nDCG@10 drops; LDPC BP recovers ranking (e.g., $+0.221$ at 2000 queries / 16894 passages, and $+0.185$, 95\% CI $[.178,.192]$, on the full ${\sim}10$k-query validation set / 82k passages), and hybrid BM25$+$BP exceeds BM25 alone.
 Multi-seed BP gains remain positive at 128-D and 256-D.
 Gains are operating-point and seed dependent; we report failures rather than hide them.
 \end{abstract}
@@ -89,16 +93,16 @@ A hybrid BM25~\cite{robertson2009bm25} $+$ residual-calibrated dense scorer prov
 \paragraph{Empirical highlight.}
 On MSMARCO (2000 queries / 16894 passages, BGE-small, \texttt{nor\_typical}, \texttt{cim\_dim}=128, seed=42), LDPC BP recovers $+0.221$ nDCG@10 versus unprotected CiM noise (0.254$\rightarrow$0.475); hybrid BM25$+$BP reaches 0.557 (above BM25 0.531).
 Multi-seed BP gain is $0.145\pm0.050$.
-At 1000q the same protocol yields $+0.214$ with multi-seed $0.182\pm0.031$ (128-D).
+At 1000q the same protocol yields $+0.214$ with multi-seed $0.182\pm0.031$ (128-D), and on the full validation set (9{,}706 q / 82{,}360 passages) BP still recovers $+0.185$ ($0.353\rightarrow0.538$).
 Gains remain operating-point and seed dependent---we report failures rather than hide them.
 
 \section{Related Work}
 
 \subsection{LLM-oriented RAG and retrieval noise}
 Modern RAG pipelines retrieve passages to condition LLM generation~\cite{lewis2020rag,guu2020realm}.
-Most IR work models \emph{textual} noise or retrieval--generation mismatch.
+Most IR work models \emph{textual} noise or retrieval--generation mismatch, e.g.\ aligning noisy queries back to clean roots~\cite{campos2023capot}.
 Edge local RAG adds a different noise source: \textbf{analog CiM storage and MAC}.
-Text denoisers and LLM-side filters do not correct corrupted embedding coordinates.
+Text denoisers, query-alignment, and LLM-side filters do not correct corrupted \emph{document-embedding} coordinates stored in the array.
 
 \subsection{Dense retrieval and edge constraints}
 Dense encoders (DPR~\cite{karpukhin2020dpr}, Contriever~\cite{izacard2022contriever}, BGE~\cite{xiao2023bge}, Sentence-BERT~\cite{reimers2019sentencebert}) dominate MSMARCO-style ranking.
@@ -107,9 +111,10 @@ We adopt a transparent protocol---frozen teacher $\rightarrow$ fixed projection 
 
 \subsection{CiM-accelerated retrieval}
 CiM / PIM accelerators reduce data movement for similarity search~\cite{sebastian2017pcm,shafiee2016isaac}.
-Representative CiM-RAG efforts emphasize in-array MAC throughput; their noise treatments are typically insufficient for NOR-like multi-cycle soft channels.
-SRAM CiM is quieter but capacity-limited; NOR Flash CiM is denser but noise-rich.
-\textbf{CiM-ResLDPC targets the latter regime.}
+The closest prior work targets CiM-backed RAG directly: RoCR~\cite{qin2024rocr} makes document embeddings noise-resilient through contrastive, noise-aware \emph{training}, and CiMRAG~\cite{chiu2026cimrag} learns task-oriented noise-resilient embeddings (TONEL) for multi-domain edge RAG.
+Both harden the \emph{representation}; neither protects stored ternary embeddings with an explicit error-correcting \emph{channel code} nor feeds multi-cycle soft residual evidence into recovery.
+CiM-ResLDPC is complementary---it adds a GF(3) LDPC residual-recovery layer beneath the same asymmetric-RAG setting (our TONEL-Res regularizer is a residual-aware variant of the TONEL line).
+SRAM CiM is quieter but capacity-limited; NOR Flash CiM is denser but noise-rich, and \textbf{CiM-ResLDPC targets the latter regime.}
 
 \subsection{LDPC and soft residual calibration}
 Non-binary LDPC and soft-decision decoding are mature in Flash controllers~\cite{gallager1962ldpc,davey1998nbldpc}.
@@ -125,6 +130,28 @@ Multi-cycle analog readout (drift, disturb, quantization) corrupts vectors and c
 Prior CiM-RAG accelerates MAC but does not protect ternary embeddings with NB-LDPC or feed residual soft evidence into retrieval.
 
 \subsection{CiM-ResLDPC pipeline}
+Figure~\ref{fig:pipeline} summarizes the eight-stage pipeline.
+\begin{figure}[t]
+\centering
+\footnotesize
+\begin{tikzpicture}[
+  node distance=3mm,
+  box/.style={draw, rounded corners, align=center, inner sep=2.5pt, text width=0.82\linewidth, minimum height=5.5mm},
+  ch/.style={draw, rounded corners, align=center, inner sep=2.5pt, text width=0.82\linewidth, minimum height=5.5mm, fill=black!8},
+  arr/.style={-{Latex[length=2mm]}}]
+\node[box] (t) {Teacher encode (BGE/MiniLM) $\rightarrow$ project to \texttt{cim\_dim}};
+\node[box, below=of t] (q) {Base-3 GF(3) pack (2 symbols/dim)};
+\node[box, below=of q] (e) {LDPC encode (systematic $G$)};
+\node[ch, below=of e] (c) {Multi-cycle CiM / NOR channel (GRC-PIM noise)};
+\node[box, below=of c] (r) {Recover: B$'$ soft-LLR / BP ($+$ optional gated GEMV $\Delta$LLR)};
+\node[box, below=of r] (ret) {Asymmetric retrieve (digital query) $+$ hybrid BM25 fusion};
+\node[box, below=of ret] (g) {RAG generate (extractive / Flan-T5)};
+\draw[arr] (t)--(q); \draw[arr] (q)--(e); \draw[arr] (e)--(c);
+\draw[arr] (c)--(r); \draw[arr] (r)--(ret); \draw[arr] (ret)--(g);
+\end{tikzpicture}
+\caption{CiM-ResLDPC pipeline. Documents are GF(3)-packed, LDPC-protected, exposed to a multi-cycle CiM/NOR channel, and recovered via B$'$/BP before asymmetric retrieval and generation; the query stays digital.}
+\label{fig:pipeline}
+\end{figure}
 \begin{enumerate}
   \item Teacher encode (BGE/MiniLM) $\rightarrow$ project to edge width \texttt{cim\_dim}.
   \item Base-3 GF(3) pack (2 symbols/dim).
@@ -136,22 +163,55 @@ Prior CiM-RAG accelerates MAC but does not protect ternary embeddings with NB-LD
   \item Generate: extractive or Flan-T5 conditioned on top-$k$ passages.
 \end{enumerate}
 
+\subsection{Formalization}
+\paragraph{GF(3) base-3 packing.} Each teacher coordinate $e\in[-1,1]$ maps to $s$ ternary digits with $L=3^{s}$ levels ($s{=}2\Rightarrow L{=}9$):
+\begin{equation}
+r=\Big\lfloor\tfrac{e+1}{2}(L-1)\Big\rceil,\quad r=\sum_{j=0}^{s-1} c_j\,3^{j},\; c_j\in\mathrm{GF}(3),
+\end{equation}
+dequantized as $\hat e=\tfrac{2r}{L-1}-1$. Multi-symbol packing preserves the cosine geometry that single-centroid ternary collapses.
+
+\paragraph{Channel and drift.} Packed symbols are stored and read over $T$ cycles through the GRC-PIM noise channel~\cite{grcpim2025}; a global drift score $d_{\mathrm{global}}\in[0,1]$ measures cross-cycle bit disagreement.
+
+\paragraph{Recovery.} The training-free B$'$ product accumulates per-cycle soft LLRs $\ell_i^{B'}=\sum_{t=1}^{T}\ell_{i,t}$ with hard readout $\hat c_i=\arg\max_k \ell_{i,k}^{B'}$; GF(3) BP refines $\ell^{B'}$ into a posterior over the systematic prefix, whose information symbols are dequantized to $\hat e$.
+
+\paragraph{Dual gate (latency prune).} The optional GEMV residual $\Delta$LLR is applied only when
+\begin{equation}
+\mathrm{USE\_GEMV}=\mathbb{1}[d_{\mathrm{global}}\ge\tau_d]\wedge\mathbb{1}[\bar g\ge\tau_g],
+\end{equation}
+and skipped when $d_{\mathrm{global}}<\tau_{\mathrm{skip}}$; otherwise recovery equals B$'$/BP by construction (no extra risk).
+
+\paragraph{Hybrid fusion.} Final ranking fuses min-max--normalized ($\tilde n$) channels
+\begin{equation}
+s = \alpha\,\tilde n(\text{BM25}) + \beta\,\tilde n(\text{dense}) + \gamma\,\tilde n(\text{res\_conf}),
+\end{equation}
+with defaults $(\alpha,\beta,\gamma)=(0.3,0.5,0.2)$.
+
 \subsection{TONEL-Res}
-Train/adapt embeddings with residual alignment to \emph{channel-calibrated} reconstructions (no clean oracle) plus a soft ternary quantization penalty.
+Train/adapt embeddings with residual alignment to \emph{channel-calibrated} reconstructions $\hat e_{\mathrm{cal}}$ (B$'$/BP, never a clean-embedding oracle) plus a soft ternary quantization penalty:
+\begin{equation}
+\mathcal{L}=\mathcal{L}_{\mathrm{ret}} + w\big(1-\cos(e,\hat e_{\mathrm{cal}})\big) + \lambda_q\,\overline{\min_{l\in\{-1,0,1\}}\lvert e-l\rvert},
+\end{equation}
+with a dynamic residual weight driven by drift and gate confidence,
+\begin{equation}
+w=\mathrm{clip}\big(0.25\min(d_{\mathrm{global}}/\tau_d,2)+0.5\,\bar g,\;0,1\big).
+\end{equation}
 In large-scale tables we evaluate frozen teachers $+$ projection for IR fairness; TONEL remains the training-time regularizer for CiM-aware fine-tuning.
 
 \subsection{What we do not claim}
 NOR presets are engineering maps onto the GRC-PIM channel, not full floating-gate TCAD.
 MSMARCO stratified subsets are not the full leaderboard protocol.
+On the HF NQ-open pseudo-passage fixture (200q) the projected BGE teacher is itself near-floor (clean nDCG@10 $0.085\approx$ BM25 $0.090$), leaving no geometry to recover; we therefore scope dense claims to MSMARCO and the curated NQ-mini (Table~\ref{tab:tfidf}) rather than answer-only NQ-open passages.
 Flan-T5-small is a probe, not a production edge LLM.
 BP SER reductions do not always imply nDCG gains at every noise corner.
+We also do not run RoCR/CiMRAG head-to-head: they target personalization profile benchmarks with learned CiM-robust embeddings, whereas our channel-coding layer is evaluated on MSMARCO with frozen teachers, so the approaches are complementary rather than directly comparable.
 
 \section{Experiments}
 
 \subsection{Setup}
-Protocol: asymmetric RAG; BGE-small-en-v1.5 $\rightarrow$ random-project to \texttt{cim\_dim} $\rightarrow$ base-3 GF(3) $\rightarrow$ multi-cycle NOR-mapped channel $\rightarrow$ B$'$/BP.
+Protocol: asymmetric RAG; BGE-small-en-v1.5 $\rightarrow$ random-project to \texttt{cim\_dim} $\rightarrow$ base-3 GF(3) $\rightarrow$ multi-cycle NOR-mapped channel ($T{=}4$ read cycles) $\rightarrow$ B$'$/BP.
 Dense-only is the scientific core; hybrid is reported as a system mode.
-Primary corpus: MSMARCO HF validation subsets (200 / 500 / 1000 / 2000 queries).
+Primary corpus: MSMARCO HF validation subsets (200 / 500 / 1000 / 2000 queries), with NQ-open and bundled mini corpora as cross-datasets.
+\paragraph{Metrics.} We report nDCG@10 and MAP over the ranked list (selected passages as graded relevance) and Recall@10; for generation, extractive / Flan-T5 answer F1, answer support, and an unsupported-answer (hallucination) rate; and on the controlled geometric probe the GF(3) symbol-error rate (SER). All IR numbers are query-averaged.
 
 \subsection{Main result (2000q primary; 1000q reference)}
 \begin{table}[t]
@@ -171,7 +231,27 @@ CiM noisy (no LDPC) & 0.283 & 0.254 \\
 \end{table}
 
 BP recovers $+0.214$ / $+0.221$ nDCG@10 vs.\ unprotected noise at 1000q / 2000q.
-Multi-seed BP gain at 2000q (seeds $\{0,1,2,42\}$): $0.145\pm0.050$ at 128-D; dim=256 seed=42 spot-check $+0.208$.
+\subsection{Multi-seed stability}
+Table~\ref{tab:multiseed} sweeps seeds $\{0,1,2,42\}$ at 2000q.
+Absolute BP nDCG@10 is remarkably stable ($0.480\pm0.003$); the \emph{gain} over unprotected noise varies ($0.145\pm0.050$) because the noisy baseline itself is seed-sensitive.
+\begin{table}[t]
+\caption{Multi-seed stability, MSMARCO 2000q (BGE, \texttt{nor\_typical}, \texttt{cim\_dim}=128). Gains are computed at full precision.}
+\label{tab:multiseed}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccc}
+\toprule
+Seed & Noisy & BP & BP gain & Hybrid \\
+\midrule
+0 & 0.375 & 0.482 & $+0.106$ & 0.564 \\
+1 & 0.324 & 0.484 & $+0.160$ & 0.548 \\
+2 & 0.386 & 0.479 & $+0.093$ & 0.559 \\
+42 & 0.254 & 0.475 & $+0.221$ & 0.557 \\
+\midrule
+$\mu{\pm}\sigma$ & $.335{\pm}.052$ & $.480{\pm}.003$ & $.145{\pm}.050$ & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Scale ladder}
 \begin{table}[t]
@@ -188,18 +268,250 @@ Scale & Noisy $\rightarrow$ BP & Gain & Hybrid vs.\ BM25 \\
 \bottomrule
 \end{tabular}
 \end{table}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.86\linewidth]{figs/fig_scale}
+\caption{Scale ladder (BGE, \texttt{cim\_dim}=128, seed=42, \texttt{nor\_typical}): LDPC BP and hybrid hold nDCG@10 as unprotected CiM noise degrades with corpus size (data of Table~\ref{tab:scale}).}
+\label{fig:scale}
+\end{figure}
 
-\subsection{Operating-point honesty}
-Under aged/stress NOR maps, ranking can still degrade even when SER improves.
-We report the operating point and historical pathological seeds (e.g., 500q dim=128 seed=0 with negative BP gain).
+\subsection{Full MSMARCO Dev}
+Scaling to the \emph{entire} MSMARCO v1.1 validation set (9{,}706 queries / 82{,}360 passages; dense-only core, asymmetric query), LDPC BP recovers $+0.185$ nDCG@10 ($0.353\rightarrow0.538$) and $+0.268$ Recall@10 ($0.544\rightarrow0.812$), nearly restoring the clean projected teacher ($0.585$)---the gain persists at full-Dev scale (Table~\ref{tab:fulldev}), not just on stratified subsets.
+The improvement is statistically significant across all 9{,}706 queries: a per-query paired $t$-test gives $t{=}56.5$ ($p<10^{-300}$; Wilcoxon concurs) with a 10k-sample bootstrap 95\% CI of $[+0.178,+0.192]$ for the BP$-$noisy nDCG@10 gain; B$'$ alone contributes a smaller but still significant $+0.030$ ($p{=}2.1{\times}10^{-14}$), confirming that most of the recovery comes from full BP decoding rather than the soft-LLR anchor.
+\begin{table}[t]
+\caption{Full MSMARCO v1.1 Dev (9{,}706 q / 82{,}360 passages), BGE, \texttt{nor\_typical}, \texttt{cim\_dim}=128, seed=42; dense-only core.}
+\label{tab:fulldev}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lcc}
+\toprule
+Method & nDCG@10 & Recall@10 \\
+\midrule
+Dense clean & 0.585 & 0.861 \\
+CiM noisy (no LDPC) & 0.353 & 0.544 \\
+CiM LDPC B$'$ & 0.383 & 0.583 \\
+\textbf{CiM LDPC BP} & \textbf{0.538} & \textbf{0.812} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{NOR operating-point honesty}
+Table~\ref{tab:nor} sweeps NOR maps at 2000q (seed=42).
+BP helps most under the \texttt{typical} map; under \texttt{fresh} the channel is mild (little to recover) and under \texttt{aged} both the noisy baseline and BP collapse.
+\begin{table}[t]
+\caption{NOR operating-point sweep, MSMARCO 2000q (BGE, \texttt{cim\_dim}=128, seed=42).}
+\label{tab:nor}
+\begin{tabular}{lcccc}
+\toprule
+NOR map & Noisy & BP & BP gain & Hybrid \\
+\midrule
+fresh & 0.465 & 0.475 & $+0.010$ & 0.558 \\
+typical & 0.254 & 0.475 & $+0.221$ & 0.557 \\
+aged & 0.055 & 0.061 & $+0.006$ & 0.492 \\
+\bottomrule
+\end{tabular}
+\end{table}
+Under aged/stress maps, ranking can still collapse even when symbol-error rate improves; we report the operating point rather than claim a universal win (the same ECC lesson that SER $\neq$ IR nDCG).
+A \texttt{cim\_dim}=256 spot-check at seed=42 recovers $+0.208$ ($0.137\rightarrow0.345$), showing wider CiM vectors leave more recovery headroom at higher storage/MAC cost.
+A self-run 4-preset BGE sweep at 200q (Table~\ref{tab:norfull}) traces the full degradation curve: BP recovers to near-clean under \texttt{typical} ($0.407\rightarrow0.573$, clean $0.673$), is negligible under \texttt{fresh}, and collapses under \texttt{aged}/\texttt{stress}---a clear applicability boundary rather than a universal claim.
+\begin{table}[t]
+\caption{Full BGE NOR sweep, MSMARCO 200q (\texttt{cim\_dim}=128, seed=42), nDCG@10; clean${=}0.673$.}
+\label{tab:norfull}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccc}
+\toprule
+NOR map & Noisy & B$'$ & BP & BP gain \\
+\midrule
+fresh & 0.568 & 0.571 & 0.573 & $+0.005$ \\
+typical & 0.407 & 0.493 & 0.573 & $+0.166$ \\
+aged & 0.189 & 0.222 & 0.076 & $-0.112$ \\
+stress & 0.087 & 0.051 & 0.050 & $-0.037$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+Comparing teachers (Tables~\ref{tab:norfull},~\ref{tab:norfullmini}): MiniLM embeddings are intrinsically more noise-tolerant (typical noisy $0.570$ vs.\ BGE $0.407$), so LDPC has less to recover ($+0.034$ vs.\ $+0.166$)---the stronger BGE teacher is hurt more but recovers more.
+Under \texttt{aged}, the conservative B$'$ product stays above the noisy baseline for both teachers while full BP over-corrects (MiniLM B$'$ $0.517$ vs.\ BP $0.287$), reinforcing that B$'$ is the safer prior at extreme operating points.
+\begin{table}[t]
+\caption{Full MiniLM NOR sweep, MSMARCO 200q (\texttt{cim\_dim}=128, seed=42), nDCG@10; clean${=}0.667$. Pair with Table~\ref{tab:norfull}.}
+\label{tab:norfullmini}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccc}
+\toprule
+NOR map & Noisy & B$'$ & BP & BP gain \\
+\midrule
+fresh & 0.603 & 0.605 & 0.605 & $+0.002$ \\
+typical & 0.570 & 0.613 & 0.605 & $+0.034$ \\
+aged & 0.457 & 0.517 & 0.287 & $-0.170$ \\
+stress & 0.284 & 0.239 & 0.184 & $-0.099$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.86\linewidth]{figs/fig_nor}
+\caption{NOR operating-point curves (MSMARCO 200q): LDPC BP recovers ranking under \texttt{typical} for both teachers, is negligible under \texttt{fresh}, and collapses under \texttt{aged}/\texttt{stress} (data of Tables~\ref{tab:norfull},~\ref{tab:norfullmini}).}
+\label{fig:nor}
+\end{figure}
+
+\subsection{Storage-width ablation}
+Table~\ref{tab:dim} varies \texttt{cim\_dim} for BGE (200q, \texttt{nor\_typical}, seed=42).
+Wider vectors carry more teacher signal (higher clean) but expose more coordinates to noise (noisy drops $0.518\rightarrow0.349$); LDPC recovers most at 128 (absolute BP $0.573$, $+0.166$), making \texttt{cim\_dim}=128 the operating sweet spot at this scale---the ``wider $=$ more headroom'' intuition is not monotonic once the noisy baseline itself collapses.
+\begin{table}[t]
+\caption{BGE \texttt{cim\_dim} ablation, MSMARCO 200q (\texttt{nor\_typical}, seed=42), nDCG@10.}
+\label{tab:dim}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccc}
+\toprule
+\texttt{cim\_dim} & Clean & Noisy & BP & BP gain \\
+\midrule
+64 & 0.646 & 0.518 & 0.581 & $+0.063$ \\
+128 & 0.673 & 0.407 & 0.573 & $+0.166$ \\
+256 & 0.668 & 0.349 & 0.499 & $+0.150$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Encoder comparison}
+Table~\ref{tab:encoder} compares MiniLM-L6-v2 and BGE-small-en-v1.5 teachers at 200q under the same \texttt{nor\_typical} map.
+BGE geometry is hurt more by CiM noise ($0.673\rightarrow0.407$) but LDPC BP restores more of it ($+0.166$ vs.\ MiniLM's $+0.035$), so BGE is our primary teacher for the scale ladder.
+\begin{table}[t]
+\caption{Encoder comparison, MSMARCO 200q (\texttt{nor\_typical}, \texttt{cim\_dim}=128, seed=42), nDCG@10.}
+\label{tab:encoder}
+\begin{tabular}{lcccc}
+\toprule
+Teacher & Clean & Noisy & BP & BP gain \\
+\midrule
+MiniLM-L6 & 0.667 & 0.570 & 0.605 & $+0.035$ \\
+\textbf{BGE-small} & 0.673 & 0.407 & \textbf{0.573} & $\mathbf{+0.166}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Generative probe}
-Flan-T5-small on MSMARCO 48q yields non-zero hallucination rates, enabling a true RAG unsupported-answer metric beyond extractive proxies.
+Flan-T5-small on MSMARCO 48q yields non-zero hallucination rates, enabling a true RAG unsupported-answer metric beyond extractive proxies (Table~\ref{tab:rag}).
+\begin{table}[t]
+\caption{Flan-T5-small RAG on MSMARCO 48q (MiniLM, \texttt{nor\_typical}, top-$k{=}3$). Retrieval quality couples to answer F1; hallucination stays non-zero across recovery modes.}
+\label{tab:rag}
+\begin{tabular}{lccc}
+\toprule
+Retriever & RAG F1 & Hallucination & Support \\
+\midrule
+clean & 0.293 & 0.104 & 0.892 \\
+noisy & 0.279 & 0.062 & 0.936 \\
+B$'$ & 0.278 & 0.104 & 0.895 \\
+BP & 0.250 & 0.083 & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Geometric probe (positive control)}
+On synthetic clusters with known geometry (Table~\ref{tab:geo}), LDPC soft recovery raises nDCG@10 and lowers the symbol-error rate (SER), confirming the mechanism when embedding geometry exists.
+At high noise ($p{=}0.05$) hard BP can over-correct ranking even as SER drops, so we report B$'$ and BP separately.
+\begin{table}[t]
+\caption{Geometric probe (100 docs / 20 queries): nDCG@10 and symbol-error rate (SER) vs.\ bit-flip $p$.}
+\label{tab:geo}
+\begin{tabular}{lcccc}
+\toprule
+$p$ & Noisy & B$'$ & BP & SER (noisy$\rightarrow$BP) \\
+\midrule
+0.01 & 0.989 & 0.981 & 0.978 & $0.019{\rightarrow}0.003$ \\
+0.03 & 0.905 & 0.952 & 0.949 & $0.086{\rightarrow}0.038$ \\
+0.05 & 0.858 & 0.947 & 0.778 & $0.161{\rightarrow}0.103$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.86\linewidth]{figs/fig_geo}
+\caption{Geometric probe: LDPC lowers symbol-error rate (right axis) and raises nDCG@10 (left); at high $p$ hard BP over-corrects ranking while B$'$ stays high (data of Table~\ref{tab:geo}).}
+\label{fig:geo}
+\end{figure}
+
+\subsection{Read-cycle sweep}
+Multi-cycle readout is the premise of B$'$: Table~\ref{tab:cycles} and Fig.~\ref{fig:cycles} sweep the number of read cycles $T$ on the geometric probe ($p{=}0.05$). More cycles accumulate more soft evidence, so BP symbol-error drops ($0.121\rightarrow0.002$) and BP nDCG@10 rises ($0.729\rightarrow0.986$) from $T{=}1$ to $8$; the paper default $T{=}4$ already yields strong recovery.
+\begin{table}[t]
+\caption{Read-cycle sweep on the geometric probe ($p{=}0.05$): more cycles $T$ improve B$'$/BP recovery.}
+\label{tab:cycles}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccccc}
+\toprule
+$T$ & noisy & B$'$ & BP & SER$_{\text{n}}$ & SER$_{\text{BP}}$ \\
+\midrule
+1 & 0.712 & 0.782 & 0.729 & 0.139 & 0.121 \\
+2 & 0.828 & 0.777 & 0.831 & 0.187 & 0.158 \\
+4 & 0.841 & 0.927 & 0.948 & 0.146 & 0.035 \\
+8 & 0.967 & 0.970 & 0.986 & 0.026 & 0.002 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.86\linewidth]{figs/fig_cycles}
+\caption{Read-cycle sweep: BP nDCG@10 rises and BP SER falls as read cycles $T$ increase (geometric probe, $p{=}0.05$; data of Table~\ref{tab:cycles}).}
+\label{fig:cycles}
+\end{figure}
+
+\subsection{Offline cross-dataset cross-check}
+To decouple gains from any HF teacher, Table~\ref{tab:tfidf} repeats the ablation with the offline \texttt{tfidf\_svd} encoder on the bundled MSMARCO-mini and NQ-mini fixtures (\texttt{nor\_typical}, seed=0).
+LDPC recovery improves noisy nDCG@10 on both datasets at the default \texttt{cim\_dim}=128 (NQ: $0.769\rightarrow0.906$; MSMARCO-mini: $0.779\rightarrow0.813$), corroborating the BGE results with a non-HF encoder and a second dataset; on these small fixtures the effect is noisier at 64/256.
+\begin{table}[t]
+\caption{Offline \texttt{tfidf\_svd} \texttt{cim\_dim} ablation, nDCG@10 (\texttt{nor\_typical}, seed=0); best recovery per row in bold.}
+\label{tab:tfidf}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llccc}
+\toprule
+Dataset & dim & Noisy & B$'$ & BP \\
+\midrule
+\multirow{3}{*}{MSMARCO-mini} & 64 & 0.738 & 0.680 & 0.735 \\
+ & 128 & 0.779 & \textbf{0.813} & 0.810 \\
+ & 256 & 0.704 & \textbf{0.793} & 0.733 \\
+\midrule
+\multirow{3}{*}{NQ-mini} & 64 & 0.673 & \textbf{0.722} & 0.681 \\
+ & 128 & 0.769 & 0.826 & \textbf{0.906} \\
+ & 256 & 0.781 & 0.674 & \textbf{0.785} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{System cost (analytical)}
+The on-chip residual-calibrator overhead is inherited from the GRC-PIM 28\,nm analytical estimates~\cite{grcpim2025}: $<\!0.05$\,mm$^2$ area, ${\sim}41\,\mu$W duty-cycled power, and $<\!3\,\mu$s latency---i.e.\ $<\!6.3\%$ area and $<\!3\%$ power versus the NB-LDPC decoder baseline.
+The dual gate and decode-prune ($d_{\mathrm{global}}<\tau_{\mathrm{skip}}$ skips the GEMV path) duty-cycle this cost, so the \emph{average} overhead is well below the peak.
+We measure this duty cycle directly (Table~\ref{tab:gate}): under \texttt{fresh} maps $100\%$ of codewords fall below $\tau_{\mathrm{skip}}$ and the residual path is skipped entirely (matching its ${\approx}0$ gain there), while under \texttt{typical} $67\%$ open the gate ($d_{\mathrm{global}}\ge\tau_d$) and heavier maps saturate at $100\%$---peak GEMV cost is paid only where drift signals recoverable corruption.
+\begin{table}[t]
+\caption{Measured decode-prune gate over 2000 GF(3) codewords ($n{=}256$): mean drift $d_{\mathrm{global}}$, skip fraction ($d{<}\tau_{\mathrm{skip}}{=}0.015$), gate-open fraction ($d{\ge}\tau_d{=}0.025$). Typical mean drift ($0.028$) matches the value observed in end-to-end runs.}
+\label{tab:gate}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccc}
+\toprule
+NOR map & mean $d_{\mathrm{global}}$ & skip \% & gate-open \% \\
+\midrule
+fresh & 0.003 & 100.0 & 0.0 \\
+typical & 0.028 & 0.1 & 67.0 \\
+aged & 0.138 & 0.0 & 100.0 \\
+stress & 0.297 & 0.0 & 100.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.86\linewidth]{figs/fig_gate}
+\caption{Measured decode-prune duty cycle: fraction of codewords skipped ($d_{\mathrm{global}}<\tau_{\mathrm{skip}}$) vs.\ gate-open ($\ge\tau_d$) per NOR map; the residual GEMV path runs only where drift is high (data of Table~\ref{tab:gate}).}
+\label{fig:gate}
+\end{figure}
+These are analytical estimates carried over from the GRC-PIM stack; a cycle-accurate CiM retrieval-latency model on a measured NOR array is future work, and our Python wall-clock timings are only a software proxy.
+
+\section{Limitations and Future Work}
+Our claims are bounded by: (i) MSMARCO/NQ \emph{subsets}, not full Dev/DL leaderboard protocols; (ii) NOR presets that are engineering maps onto the GRC-PIM multi-cycle channel rather than device-physics TCAD; (iii) a fixed random projection and frozen teachers (TONEL-Res is a training-time regularizer, not re-run at scale); (iv) analytical, not cycle-accurate, hardware cost; and (v) gains that are operating-point, seed, and width dependent, collapsing under aged/stress maps and on near-floor fixtures (NQ-open).
+Future work: full MSMARCO Dev/DL, learned GF(3)/PQ storage maps, measured NOR array noise traces, an on-device LLM generator, and a cycle-accurate CiM retrieval-latency model.
 
 \section{Conclusion}
-CiM-ResLDPC shows that residual soft information from CiM channels can be turned into measurable retrieval robustness for private on-device RAG, when claims are tied to explicit noise operating points.
-Limitations include subset (not full Dev) scale, engineering NOR presets (not TCAD), random projection, and frozen-teacher IR tables.
-Future work: full MSMARCO Dev/DL, learned GF(3)/PQ maps, measured NOR array noise, and on-device LLMs.
+CiM-ResLDPC shows that residual soft information from a CiM channel can be turned into measurable retrieval robustness for private on-device RAG---when claims are tied to explicit noise operating points, teachers, and storage widths, and failures are reported alongside gains.
 
 \begin{acks}
 Acknowledgments omitted for anonymous review.

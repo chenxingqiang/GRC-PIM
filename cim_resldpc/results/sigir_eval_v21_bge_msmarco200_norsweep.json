@@ -1,0 +1,115 @@
+{
+ "protocol_version": "v2.1",
+ "notes": "BGE-small MSMARCO HF (200q), cim_dim=128, seed=42, NOR sweep fresh/typical/aged/stress. Reproduce: python3 -m cim_resldpc.experiments.run_scaled_eval --encoder bge --n_queries 200 --corpora msmarco_hf --nor <preset> --seed 42 --no_gemv.",
+ "encoder": "bge",
+ "corpus": "msmarco_hf",
+ "n_queries": 200,
+ "cim_dim": 128,
+ "seed": 42,
+ "nor_sweep": {
+  "nor_fresh": {
+   "dense_clean": {
+    "ndcg@10": 0.672894490911405,
+    "map": 0.5698015873015873,
+    "recall@10": 0.985,
+    "n_queries": 200.0
+   },
+   "cim_noisy_no_ldpc": {
+    "ndcg@10": 0.5677914019272762,
+    "map": 0.44856547619047615,
+    "recall@10": 0.93,
+    "n_queries": 200.0
+   },
+   "cim_ldpc_bprime": {
+    "ndcg@10": 0.5710202607865006,
+    "map": 0.4489285714285714,
+    "recall@10": 0.94,
+    "n_queries": 200.0
+   },
+   "cim_ldpc_bp": {
+    "ndcg@10": 0.5732122292282763,
+    "map": 0.4518452380952381,
+    "recall@10": 0.94,
+    "n_queries": 200.0
+   }
+  },
+  "nor_typical": {
+   "dense_clean": {
+    "ndcg@10": 0.672894490911405,
+    "map": 0.5698015873015873,
+    "recall@10": 0.985,
+    "n_queries": 200.0
+   },
+   "cim_noisy_no_ldpc": {
+    "ndcg@10": 0.40701388611020106,
+    "map": 0.3013611111111111,
+    "recall@10": 0.7183333333333333,
+    "n_queries": 200.0
+   },
+   "cim_ldpc_bprime": {
+    "ndcg@10": 0.4932447119563627,
+    "map": 0.3816904761904762,
+    "recall@10": 0.8258333333333333,
+    "n_queries": 200.0
+   },
+   "cim_ldpc_bp": {
+    "ndcg@10": 0.5732122292282763,
+    "map": 0.4518452380952381,
+    "recall@10": 0.94,
+    "n_queries": 200.0
+   }
+  },
+  "nor_aged": {
+   "dense_clean": {
+    "ndcg@10": 0.672894490911405,
+    "map": 0.5698015873015873,
+    "recall@10": 0.985,
+    "n_queries": 200.0
+   },
+   "cim_noisy_no_ldpc": {
+    "ndcg@10": 0.1887310632187468,
+    "map": 0.1382996031746032,
+    "recall@10": 0.33666666666666667,
+    "n_queries": 200.0
+   },
+   "cim_ldpc_bprime": {
+    "ndcg@10": 0.22205922182562887,
+    "map": 0.1616984126984127,
+    "recall@10": 0.39083333333333337,
+    "n_queries": 200.0
+   },
+   "cim_ldpc_bp": {
+    "ndcg@10": 0.0764067476122666,
+    "map": 0.05745039682539683,
+    "recall@10": 0.125,
+    "n_queries": 200.0
+   }
+  },
+  "nor_stress_sweep": {
+   "dense_clean": {
+    "ndcg@10": 0.672894490911405,
+    "map": 0.5698015873015873,
+    "recall@10": 0.985,
+    "n_queries": 200.0
+   },
+   "cim_noisy_no_ldpc": {
+    "ndcg@10": 0.08656666945745846,
+    "map": 0.07118055555555555,
+    "recall@10": 0.1275,
+    "n_queries": 200.0
+   },
+   "cim_ldpc_bprime": {
+    "ndcg@10": 0.05136117554975234,
+    "map": 0.02963690476190476,
+    "recall@10": 0.11,
+    "n_queries": 200.0
+   },
+   "cim_ldpc_bp": {
+    "ndcg@10": 0.05001998879563249,
+    "map": 0.03864484126984127,
+    "recall@10": 0.0825,
+    "n_queries": 200.0
+   }
+  }
+ }
+}
