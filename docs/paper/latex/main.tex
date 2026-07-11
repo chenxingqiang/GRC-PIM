@@ -418,6 +418,23 @@ Dataset & dim & Noisy & B$'$ & BP \\
 \subsection{System cost (analytical)}
 The on-chip residual-calibrator overhead is inherited from the GRC-PIM 28\,nm analytical estimates~\cite{grcpim2025}: $<\!0.05$\,mm$^2$ area, ${\sim}41\,\mu$W duty-cycled power, and $<\!3\,\mu$s latency---i.e.\ $<\!6.3\%$ area and $<\!3\%$ power versus the NB-LDPC decoder baseline.
 The dual gate and decode-prune ($d_{\mathrm{global}}<\tau_{\mathrm{skip}}$ skips the GEMV path) duty-cycle this cost, so the \emph{average} overhead is well below the peak.
+We measure this duty cycle directly (Table~\ref{tab:gate}): under \texttt{fresh} maps $100\%$ of codewords fall below $\tau_{\mathrm{skip}}$ and the residual path is skipped entirely (matching its ${\approx}0$ gain there), while under \texttt{typical} $67\%$ open the gate ($d_{\mathrm{global}}\ge\tau_d$) and heavier maps saturate at $100\%$---peak GEMV cost is paid only where drift signals recoverable corruption.
+\begin{table}[t]
+\caption{Measured decode-prune gate over 2000 GF(3) codewords ($n{=}256$): mean drift $d_{\mathrm{global}}$, skip fraction ($d{<}\tau_{\mathrm{skip}}{=}0.015$), gate-open fraction ($d{\ge}\tau_d{=}0.025$). Typical mean drift ($0.028$) matches the value observed in end-to-end runs.}
+\label{tab:gate}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccc}
+\toprule
+NOR map & mean $d_{\mathrm{global}}$ & skip \% & gate-open \% \\
+\midrule
+fresh & 0.003 & 100.0 & 0.0 \\
+typical & 0.028 & 0.1 & 67.0 \\
+aged & 0.138 & 0.0 & 100.0 \\
+stress & 0.297 & 0.0 & 100.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
 These are analytical estimates carried over from the GRC-PIM stack; a cycle-accurate CiM retrieval-latency model on a measured NOR array is future work, and our Python wall-clock timings are only a software proxy.
 
 \section{Limitations and Future Work}
