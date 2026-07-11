@@ -333,6 +333,11 @@ $p$ & Noisy & B$'$ & BP & SER (noisy$\rightarrow$BP) \\
 \end{tabular}
 \end{table}
 
+\subsection{System cost (analytical)}
+The on-chip residual-calibrator overhead is inherited from the GRC-PIM 28\,nm analytical estimates~\cite{grcpim2025}: $<\!0.05$\,mm$^2$ area, ${\sim}41\,\mu$W duty-cycled power, and $<\!3\,\mu$s latency---i.e.\ $<\!6.3\%$ area and $<\!3\%$ power versus the NB-LDPC decoder baseline.
+The dual gate and decode-prune ($d_{\mathrm{global}}<\tau_{\mathrm{skip}}$ skips the GEMV path) duty-cycle this cost, so the \emph{average} overhead is well below the peak.
+These are analytical estimates carried over from the GRC-PIM stack; a cycle-accurate CiM retrieval-latency model on a measured NOR array is future work, and our Python wall-clock timings are only a software proxy.
+
 \section{Conclusion}
 CiM-ResLDPC shows that residual soft information from CiM channels can be turned into measurable retrieval robustness for private on-device RAG, when claims are tied to explicit noise operating points.
 Limitations include subset (not full Dev) scale, engineering NOR presets (not TCAD), random projection, and frozen-teacher IR tables.
