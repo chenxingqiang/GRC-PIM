@@ -3,6 +3,9 @@
 % Requires ACM acmart class (https://github.com/borisveytsman/acmart)
 \documentclass[sigconf,review,anonymous]{acmart}
 
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+
 \AtBeginDocument{%
   \providecommand\BibTeX{{%
     Bib\TeX}}}
@@ -125,6 +128,28 @@ Multi-cycle analog readout (drift, disturb, quantization) corrupts vectors and c
 Prior CiM-RAG accelerates MAC but does not protect ternary embeddings with NB-LDPC or feed residual soft evidence into retrieval.
 
 \subsection{CiM-ResLDPC pipeline}
+Figure~\ref{fig:pipeline} summarizes the eight-stage pipeline.
+\begin{figure}[t]
+\centering
+\footnotesize
+\begin{tikzpicture}[
+  node distance=3mm,
+  box/.style={draw, rounded corners, align=center, inner sep=2.5pt, text width=0.82\linewidth, minimum height=5.5mm},
+  ch/.style={draw, rounded corners, align=center, inner sep=2.5pt, text width=0.82\linewidth, minimum height=5.5mm, fill=black!8},
+  arr/.style={-{Latex[length=2mm]}}]
+\node[box] (t) {Teacher encode (BGE/MiniLM) $\rightarrow$ project to \texttt{cim\_dim}};
+\node[box, below=of t] (q) {Base-3 GF(3) pack (2 symbols/dim)};
+\node[box, below=of q] (e) {LDPC encode (systematic $G$)};
+\node[ch, below=of e] (c) {Multi-cycle CiM / NOR channel (GRC-PIM noise)};
+\node[box, below=of c] (r) {Recover: B$'$ soft-LLR / BP ($+$ optional gated GEMV $\Delta$LLR)};
+\node[box, below=of r] (ret) {Asymmetric retrieve (digital query) $+$ hybrid BM25 fusion};
+\node[box, below=of ret] (g) {RAG generate (extractive / Flan-T5)};
+\draw[arr] (t)--(q); \draw[arr] (q)--(e); \draw[arr] (e)--(c);
+\draw[arr] (c)--(r); \draw[arr] (r)--(ret); \draw[arr] (ret)--(g);
+\end{tikzpicture}
+\caption{CiM-ResLDPC pipeline. Documents are GF(3)-packed, LDPC-protected, exposed to a multi-cycle CiM/NOR channel, and recovered via B$'$/BP before asymmetric retrieval and generation; the query stays digital.}
+\label{fig:pipeline}
+\end{figure}
 \begin{enumerate}
   \item Teacher encode (BGE/MiniLM) $\rightarrow$ project to edge width \texttt{cim\_dim}.
   \item Base-3 GF(3) pack (2 symbols/dim).
