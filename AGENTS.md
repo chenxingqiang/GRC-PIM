@@ -46,3 +46,18 @@ process**. Standard commands live in the READMEs and `pim_predecoder/Makefile`; 
 - End-to-end eval (hello-world): `python3 -m cim_resldpc.experiments.run_sigir_eval --out_json
   <path>`. `results/*.json` are tracked bundled artifacts — write experiment output to a temp
   path (or clean up) rather than overwriting them.
+
+### Paper (`docs/paper/`)
+
+- The SIGIR-AP paper draft is `docs/paper/latex/main.tex` (ACM `acmart`, `sigconf`). Build with
+  `latexmk -pdf -interaction=nonstopmode main` from `docs/paper/latex/` (equivalent to the
+  header's `pdflatex; bibtex; pdflatex; pdflatex`). It compiles to a clean 3-page PDF with all
+  14 `references.bib` entries resolved.
+- **The LaTeX toolchain is a system dependency and is NOT installed by the update script.** To
+  build the paper you need TeX Live with the `acmart` class + `ACM-Reference-Format.bst`:
+  `texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-publishers
+  texlive-bibtex-extra latexmk`, plus the scalable Type1 fonts `cm-super` and `lmodern`.
+  Without `cm-super`/`lmodern`, `acmart` + microtype font expansion fails with
+  "pdfTeX error (font expansion): auto expansion is only possible with scalable fonts".
+- Build outputs (`main.pdf`, `main.aux`, `main.bbl`, ...) are untracked and should not be
+  committed; `.gitignore` already ignores `*.log`.
