@@ -1,0 +1,1959 @@
+{
+  "name": "nq_hf_hard",
+  "documents": [
+    {
+      "doc_id": "nq_0",
+      "text": "14 December 1972 UTC is a known entity or fact referenced in open-domain QA resources. Additional context: 14 December 1972 UTC.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_0_d0",
+      "text": "Bobby Scott appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_0_d1",
+      "text": "one appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_0_d2",
+      "text": "2017 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_0_d3",
+      "text": "South Carolina appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_0_d4",
+      "text": "During the last Ice Age appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_0_d5",
+      "text": "Rihanna appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_0_d6",
+      "text": "James I appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_0_d7",
+      "text": "a normally inaccessible mini-game appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_37",
+      "text": "October 24, 2006 is a known entity or fact referenced in open-domain QA resources. Additional context: October 24, 2006.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_37_d0",
+      "text": "Fifty Shades of Grey appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_37_d1",
+      "text": "judges appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_37_d2",
+      "text": "E-8s senior chief petty officer appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_37_d3",
+      "text": "Omar Khayyam appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_37_d4",
+      "text": "Guy Boucher appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_37_d5",
+      "text": "53 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_37_d6",
+      "text": "1976 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_37_d7",
+      "text": "blue appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_74",
+      "text": "1997 is a known entity or fact referenced in open-domain QA resources. Additional context: 1997.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_74_d0",
+      "text": "Gwendoline Christie appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_74_d1",
+      "text": "Wendy Fraser appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_74_d2",
+      "text": "19 July 1990 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_74_d3",
+      "text": "Bartolomeu Dias appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_74_d4",
+      "text": "Zhu Di appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_74_d5",
+      "text": "Jewel Akens appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_74_d6",
+      "text": "the President appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_74_d7",
+      "text": "9 seasons appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_111",
+      "text": "17.32% is a known entity or fact referenced in open-domain QA resources. Additional context: 17.32%.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_111_d0",
+      "text": "Helena appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_111_d1",
+      "text": "1999 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_111_d2",
+      "text": "16 March 2018 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_111_d3",
+      "text": "Sir Ernest Rutherford appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_111_d4",
+      "text": "a bank appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_111_d5",
+      "text": "Caroline Forbes appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_111_d6",
+      "text": "Carbon copy appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_111_d7",
+      "text": "Augustus Waters appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_148",
+      "text": "Melvil Dewey is a known entity or fact referenced in open-domain QA resources. Additional context: Melvil Dewey.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_148_d0",
+      "text": "English author Rudyard Kipling appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_148_d1",
+      "text": "Staring at the Sun appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_148_d2",
+      "text": "Austria-Hungary appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_148_d3",
+      "text": "Rachel Sarah Bilson appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_148_d4",
+      "text": "Chuck Noland appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_148_d5",
+      "text": "V8-engine appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_148_d6",
+      "text": "March 2016 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_148_d7",
+      "text": "1938 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_185",
+      "text": "Atomic Power is a known entity or fact referenced in open-domain QA resources. Additional context: Atomic Power.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_185_d0",
+      "text": "The Lightning Thief appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_185_d1",
+      "text": "Tom Selleck appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_185_d2",
+      "text": "Proposition 103 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_185_d3",
+      "text": "Nicole DuPort appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_185_d4",
+      "text": "Debbie Gibson appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_185_d5",
+      "text": "President of the United States appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_185_d6",
+      "text": "Zakarian appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_185_d7",
+      "text": "11 p.m. to 3 a.m. appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_222",
+      "text": "Confederate victory is a known entity or fact referenced in open-domain QA resources. Additional context: Confederate victory.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_222_d0",
+      "text": "Canada appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_222_d1",
+      "text": "Billie Jean King appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_222_d2",
+      "text": "defendants appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_222_d3",
+      "text": "pretectal nucleus appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_222_d4",
+      "text": "February 1834 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_222_d5",
+      "text": "Kryptonite appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_222_d6",
+      "text": "Bart Millard appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_222_d7",
+      "text": "Lead appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_259",
+      "text": "Can't Change Me is a known entity or fact referenced in open-domain QA resources. Additional context: Can't Change Me.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_259_d0",
+      "text": "Roddy McDowall appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_259_d1",
+      "text": "Ricky Nelson appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_259_d2",
+      "text": "inorganic molecules such as water appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_259_d3",
+      "text": "New Orleans appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_259_d4",
+      "text": "Lord Irwin appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_259_d5",
+      "text": "4 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_259_d6",
+      "text": "1994 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_259_d7",
+      "text": "nearby objects appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_296",
+      "text": "in the s-block is a known entity or fact referenced in open-domain QA resources. Additional context: in the s-block.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_296_d0",
+      "text": "Montgomery appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_296_d1",
+      "text": "1960 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_296_d2",
+      "text": "Marvel's Iron Fist appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_296_d3",
+      "text": "Carolina Panthers appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_296_d4",
+      "text": "President James Madison appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_296_d5",
+      "text": "surface of the enamel appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_296_d6",
+      "text": "1603 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_296_d7",
+      "text": "2018-01-22 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_333",
+      "text": "165 is a known entity or fact referenced in open-domain QA resources. Additional context: 165.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_333_d0",
+      "text": "South Asia appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_333_d1",
+      "text": "December 20, 1951 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_333_d2",
+      "text": "Ewan McGregor appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_333_d3",
+      "text": "prior to June 1592 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_333_d4",
+      "text": "over 74 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_333_d5",
+      "text": "2011 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_333_d6",
+      "text": "Tamar Braxton appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_333_d7",
+      "text": "somatic cell nuclear transfer appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_370",
+      "text": "March 1930 is a known entity or fact referenced in open-domain QA resources. Additional context: March 1930.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_370_d0",
+      "text": "agriculture appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_370_d1",
+      "text": "nearly all living cells appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_370_d2",
+      "text": "Pebe Sebert appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_370_d3",
+      "text": "Cincinnati appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_370_d4",
+      "text": "Anthony Hopkins appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_370_d5",
+      "text": "Emilia Clarke appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_370_d6",
+      "text": "2002 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_370_d7",
+      "text": "the 1840s appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_407",
+      "text": "Woody Paige is a known entity or fact referenced in open-domain QA resources. Additional context: Woody Paige.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_407_d0",
+      "text": "pharmaceuticals appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_407_d1",
+      "text": "Kelly Osbourne appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_407_d2",
+      "text": "the Ramones appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_407_d3",
+      "text": "Florida appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_407_d4",
+      "text": "March 24, 2017 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_407_d5",
+      "text": "the May Revolution of 1810 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_407_d6",
+      "text": "General George Washington appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_407_d7",
+      "text": "a centre for international trade appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_444",
+      "text": "1977 is a known entity or fact referenced in open-domain QA resources. Additional context: 1977.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_444_d0",
+      "text": "Tommy Shaw appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_444_d1",
+      "text": "Tim Duncan appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_444_d2",
+      "text": "Justin Timberlake appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_444_d3",
+      "text": "efferent nerves appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_444_d4",
+      "text": "Kusha appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_444_d5",
+      "text": "Charles Hart appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_444_d6",
+      "text": "Help! appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_444_d7",
+      "text": "George II appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_481",
+      "text": "May 10, 2018 is a known entity or fact referenced in open-domain QA resources. Additional context: May 10, 2018.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_481_d0",
+      "text": "Gianluigi Buffon appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_481_d1",
+      "text": "drilling exploratory wells appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_481_d2",
+      "text": "routing table appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_481_d3",
+      "text": "Akbar the Great appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_481_d4",
+      "text": "\"Mirror Image\" appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_481_d5",
+      "text": "1951–52 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_481_d6",
+      "text": "Om Prakash Rawat appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_481_d7",
+      "text": "Hugo von Mohl appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_518",
+      "text": "Decatur in Dekalb County is a known entity or fact referenced in open-domain QA resources. Additional context: Decatur in Dekalb County.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_518_d0",
+      "text": "Nigel Lythgoe appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_518_d1",
+      "text": "the portal tomb appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_518_d2",
+      "text": "a week appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_518_d3",
+      "text": "Chandragupta II appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_518_d4",
+      "text": "English language patronymic surname appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_518_d5",
+      "text": "2017 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_518_d6",
+      "text": "Australia's Sir Donald Bradman appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_518_d7",
+      "text": "2018 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_555",
+      "text": "actress Dakota Johnson is a known entity or fact referenced in open-domain QA resources. Additional context: actress Dakota Johnson.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_555_d0",
+      "text": "May 15, 2018 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_555_d1",
+      "text": "Isabela Moner appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_555_d2",
+      "text": "Emmitt Smith appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_555_d3",
+      "text": "Kozunak appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_555_d4",
+      "text": "1902 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_555_d5",
+      "text": "1890 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_555_d6",
+      "text": "the Indian national cricket team appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_555_d7",
+      "text": "1996 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_592",
+      "text": "Howard Caine is a known entity or fact referenced in open-domain QA resources. Additional context: Howard Caine.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_592_d0",
+      "text": "in the 7th century appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_592_d1",
+      "text": "Kate Walsh appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_592_d2",
+      "text": "the states appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_592_d3",
+      "text": "March 16, 2018 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_592_d4",
+      "text": "the late 6th century BCE appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_592_d5",
+      "text": "1960 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_592_d6",
+      "text": "\"Old Dan Tucker\" appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_592_d7",
+      "text": "Ford appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_629",
+      "text": "September 2017 is a known entity or fact referenced in open-domain QA resources. Additional context: September 2017.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_629_d0",
+      "text": "doorbell installations appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_629_d1",
+      "text": "nucleus appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_629_d2",
+      "text": "1982 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_629_d3",
+      "text": "before the first year begins appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_629_d4",
+      "text": "July 1, 1890 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_629_d5",
+      "text": "Monroe Doctrine appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_629_d6",
+      "text": "Hugo Weaving appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_629_d7",
+      "text": "Denver Broncos appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_666",
+      "text": "Bing Russell is a known entity or fact referenced in open-domain QA resources. Additional context: Bing Russell.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_666_d0",
+      "text": "Sloane Stephens appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_666_d1",
+      "text": "romantic drama appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_666_d2",
+      "text": "the states appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_666_d3",
+      "text": "George H. McLain appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_666_d4",
+      "text": "2013 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_666_d5",
+      "text": "Peter Vale appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_666_d6",
+      "text": "Super Bowl LII, appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_666_d7",
+      "text": "Thaddeus Rowe Luckinbill appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_703",
+      "text": "1984 is a known entity or fact referenced in open-domain QA resources. Additional context: 1984.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_703_d0",
+      "text": "Upstate New York appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_703_d1",
+      "text": "United States appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_703_d2",
+      "text": "Argentina appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_703_d3",
+      "text": "George Washington Steele appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_703_d4",
+      "text": "November 10, 2017 appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_703_d5",
+      "text": "instantaneous speed appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_703_d6",
+      "text": "12.65 m appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_703_d7",
+      "text": "Sylvester Stallone appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_740",
+      "text": "Rich Mullins is a known entity or fact referenced in open-domain QA resources. Additional context: Rich Mullins.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_740_d0",
+      "text": "in the 1960s appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_740_d1",
+      "text": "Camping World Stadium in Orlando appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_740_d2",
+      "text": "Marty Robbins appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_740_d3",
+      "text": "Arsenal appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_740_d4",
+      "text": "Jason Paige appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_740_d5",
+      "text": "Hellenism appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_740_d6",
+      "text": "UNESCO/ILO appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_740_d7",
+      "text": "Ben Faulks appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_777",
+      "text": "Pre-evaluation is a known entity or fact referenced in open-domain QA resources. Additional context: Pre-evaluation.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_777_d0",
+      "text": "Thomas Lennon appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_777_d1",
+      "text": "Nashville, Tennessee appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_777_d2",
+      "text": "China appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_777_d3",
+      "text": "six appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_777_d4",
+      "text": "Master Christopher Jones appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_777_d5",
+      "text": "42–62 minutes appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_777_d6",
+      "text": "seven appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_777_d7",
+      "text": "Stephen A. Douglas appears in unrelated Wikipedia-style notes.",
+      "labels": [
+        "nq_d"
+      ]
+    },
+    {
+      "doc_id": "nq_814",
+      "text": "white is a known entity or fact referenced in open-domain QA resources. Additional context: white.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_851",
+      "text": "cars of the royal family is a known entity or fact referenced in open-domain QA resources. Additional context: cars of the royal family.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_888",
+      "text": "May 8, 2014 is a known entity or fact referenced in open-domain QA resources. Additional context: May 8, 2014.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_925",
+      "text": "outside City 17 is a known entity or fact referenced in open-domain QA resources. Additional context: outside City 17.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_962",
+      "text": "Fort Kent, Maine is a known entity or fact referenced in open-domain QA resources. Additional context: Fort Kent, Maine.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_999",
+      "text": "member is a known entity or fact referenced in open-domain QA resources. Additional context: member.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1036",
+      "text": "two is a known entity or fact referenced in open-domain QA resources. Additional context: two.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1073",
+      "text": "midpiece is a known entity or fact referenced in open-domain QA resources. Additional context: midpiece.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1110",
+      "text": "Twenty-seven is a known entity or fact referenced in open-domain QA resources. Additional context: Twenty-seven.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1147",
+      "text": "\"Heroes and Villains\" is a known entity or fact referenced in open-domain QA resources. Additional context: \"Heroes and Villains\".",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1184",
+      "text": "Fructose, or fruit sugar is a known entity or fact referenced in open-domain QA resources. Additional context: Fructose, or fruit sugar.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1221",
+      "text": "Jerry Leiber and Mike Stoller is a known entity or fact referenced in open-domain QA resources. Additional context: Jerry Leiber and Mike Stoller.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1258",
+      "text": "Mickey Rourke is a known entity or fact referenced in open-domain QA resources. Additional context: Mickey Rourke.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1295",
+      "text": "2012–13 is a known entity or fact referenced in open-domain QA resources. Additional context: 2012–13.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1332",
+      "text": "Chloe Keenan is a known entity or fact referenced in open-domain QA resources. Additional context: Chloe Keenan.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1369",
+      "text": "Lodi is a known entity or fact referenced in open-domain QA resources. Additional context: Lodi.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1406",
+      "text": "Central States is a known entity or fact referenced in open-domain QA resources. Additional context: Central States.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1443",
+      "text": "Houston Rockets is a known entity or fact referenced in open-domain QA resources. Additional context: Houston Rockets.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1480",
+      "text": "Lord's is a known entity or fact referenced in open-domain QA resources. Additional context: Lord's.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1517",
+      "text": "Megan Park is a known entity or fact referenced in open-domain QA resources. Additional context: Megan Park.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1554",
+      "text": "18 January 1788 is a known entity or fact referenced in open-domain QA resources. Additional context: 18 January 1788.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1591",
+      "text": "Dr. Hartwell Carver is a known entity or fact referenced in open-domain QA resources. Additional context: Dr. Hartwell Carver.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1628",
+      "text": "Virginia Dare is a known entity or fact referenced in open-domain QA resources. Additional context: Virginia Dare.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1665",
+      "text": "winter is a known entity or fact referenced in open-domain QA resources. Additional context: winter.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1702",
+      "text": "improved economics of distribution is a known entity or fact referenced in open-domain QA resources. Additional context: improved economics of distribution.",
+      "labels": [
+        "nq"
+      ]
+    },
+    {
+      "doc_id": "nq_1739",
+      "text": "Karen Gillan is a known entity or fact referenced in open-domain QA resources. Additional context: Karen Gillan.",
+      "labels": [
+        "nq"
+      ]
+    }
+  ],
+  "queries": [
+    {
+      "qid": "nq_q_0",
+      "query": "when was the last time anyone was on the moon",
+      "relevant_doc_ids": [
+        "nq_0"
+      ],
+      "answer": "14 December 1972 UTC"
+    },
+    {
+      "qid": "nq_q_37",
+      "query": "when did taylor swift's first album release",
+      "relevant_doc_ids": [
+        "nq_37"
+      ],
+      "answer": "October 24, 2006"
+    },
+    {
+      "qid": "nq_q_74",
+      "query": "when was corporal punishment banned in south africa",
+      "relevant_doc_ids": [
+        "nq_74"
+      ],
+      "answer": "1997"
+    },
+    {
+      "qid": "nq_q_111",
+      "query": "what is the share of agriculture in indian economy",
+      "relevant_doc_ids": [
+        "nq_111"
+      ],
+      "answer": "17.32%"
+    },
+    {
+      "qid": "nq_q_148",
+      "query": "where did the dewey decimal system come from",
+      "relevant_doc_ids": [
+        "nq_148"
+      ],
+      "answer": "Melvil Dewey"
+    },
+    {
+      "qid": "nq_q_185",
+      "query": "which is produced in plants of narora kakrapar tarapur",
+      "relevant_doc_ids": [
+        "nq_185"
+      ],
+      "answer": "Atomic Power"
+    },
+    {
+      "qid": "nq_q_222",
+      "query": "who won the battle of the first battle of bull run",
+      "relevant_doc_ids": [
+        "nq_222"
+      ],
+      "answer": "Confederate victory"
+    },
+    {
+      "qid": "nq_q_259",
+      "query": "chris cornell she's going to change the world",
+      "relevant_doc_ids": [
+        "nq_259"
+      ],
+      "answer": "Can't Change Me"
+    },
+    {
+      "qid": "nq_q_296",
+      "query": "where are alkali metals located on the periodic table",
+      "relevant_doc_ids": [
+        "nq_296"
+      ],
+      "answer": "in the s-block"
+    },
+    {
+      "qid": "nq_q_333",
+      "query": "what episode does goku give up against cell",
+      "relevant_doc_ids": [
+        "nq_333"
+      ],
+      "answer": "165"
+    },
+    {
+      "qid": "nq_q_370",
+      "query": "when was the biltmore house opened to the public",
+      "relevant_doc_ids": [
+        "nq_370"
+      ],
+      "answer": "March 1930"
+    },
+    {
+      "qid": "nq_q_407",
+      "query": "who has the most wins on around the horn",
+      "relevant_doc_ids": [
+        "nq_407"
+      ],
+      "answer": "Woody Paige"
+    },
+    {
+      "qid": "nq_q_444",
+      "query": "when did seattle slew win the triple crown",
+      "relevant_doc_ids": [
+        "nq_444"
+      ],
+      "answer": "1977"
+    },
+    {
+      "qid": "nq_q_481",
+      "query": "when do the new episodes of supernatural start",
+      "relevant_doc_ids": [
+        "nq_481"
+      ],
+      "answer": "May 10, 2018"
+    },
+    {
+      "qid": "nq_q_518",
+      "query": "where was the tv show in the heat of the night filmed",
+      "relevant_doc_ids": [
+        "nq_518"
+      ],
+      "answer": "Decatur in Dekalb County"
+    },
+    {
+      "qid": "nq_q_555",
+      "query": "who plays whitey bulger's girlfriend in black mass",
+      "relevant_doc_ids": [
+        "nq_555"
+      ],
+      "answer": "actress Dakota Johnson"
+    },
+    {
+      "qid": "nq_q_592",
+      "query": "who played major hochstetter in hogan's heroes",
+      "relevant_doc_ids": [
+        "nq_592"
+      ],
+      "answer": "Howard Caine"
+    },
+    {
+      "qid": "nq_q_629",
+      "query": "when did fortnite battle royal come out on xbox",
+      "relevant_doc_ids": [
+        "nq_629"
+      ],
+      "answer": "September 2017"
+    },
+    {
+      "qid": "nq_q_666",
+      "query": "who played in last train from gun hill",
+      "relevant_doc_ids": [
+        "nq_666"
+      ],
+      "answer": "Bing Russell"
+    },
+    {
+      "qid": "nq_q_703",
+      "query": "when did the first ninja turtles come out",
+      "relevant_doc_ids": [
+        "nq_703"
+      ],
+      "answer": "1984"
+    },
+    {
+      "qid": "nq_q_740",
+      "query": "who sang our god is an awesome god",
+      "relevant_doc_ids": [
+        "nq_740"
+      ],
+      "answer": "Rich Mullins"
+    },
+    {
+      "qid": "nq_q_777",
+      "query": "five tools of security management to overcome computer crime",
+      "relevant_doc_ids": [
+        "nq_777"
+      ],
+      "answer": "Pre-evaluation"
+    },
+    {
+      "qid": "nq_q_814",
+      "query": "what color is the cue ball in pool",
+      "relevant_doc_ids": [
+        "nq_814"
+      ],
+      "answer": "white"
+    },
+    {
+      "qid": "nq_q_851",
+      "query": "what does aa on a license plate mean",
+      "relevant_doc_ids": [
+        "nq_851"
+      ],
+      "answer": "cars of the royal family"
+    },
+    {
+      "qid": "nq_q_888",
+      "query": "when did slave to the rhythm come out",
+      "relevant_doc_ids": [
+        "nq_888"
+      ],
+      "answer": "May 8, 2014"
+    },
+    {
+      "qid": "nq_q_925",
+      "query": "where does half life 2 episode 2 take place",
+      "relevant_doc_ids": [
+        "nq_925"
+      ],
+      "answer": "outside City 17"
+    },
+    {
+      "qid": "nq_q_962",
+      "query": "where does us highway 1 start and end",
+      "relevant_doc_ids": [
+        "nq_962"
+      ],
+      "answer": "Fort Kent, Maine"
+    },
+    {
+      "qid": "nq_q_999",
+      "query": "in the texas legislature the house has members and the senate has",
+      "relevant_doc_ids": [
+        "nq_999"
+      ],
+      "answer": "member"
+    },
+    {
+      "qid": "nq_q_1036",
+      "query": "how many times has south korea held the winter olympics",
+      "relevant_doc_ids": [
+        "nq_1036"
+      ],
+      "answer": "two"
+    },
+    {
+      "qid": "nq_q_1073",
+      "query": "where are the mitochondria located in the sperm",
+      "relevant_doc_ids": [
+        "nq_1073"
+      ],
+      "answer": "midpiece"
+    },
+    {
+      "qid": "nq_q_1110",
+      "query": "how many ammendments to the constitution have there been",
+      "relevant_doc_ids": [
+        "nq_1110"
+      ],
+      "answer": "Twenty-seven"
+    },
+    {
+      "qid": "nq_q_1147",
+      "query": "batman and robin episode only fools and horses",
+      "relevant_doc_ids": [
+        "nq_1147"
+      ],
+      "answer": "\"Heroes and Villains\""
+    },
+    {
+      "qid": "nq_q_1184",
+      "query": "where does the sweetness of fruit come from",
+      "relevant_doc_ids": [
+        "nq_1184"
+      ],
+      "answer": "Fructose, or fruit sugar"
+    },
+    {
+      "qid": "nq_q_1221",
+      "query": "who wrote the song going to kansas city",
+      "relevant_doc_ids": [
+        "nq_1221"
+      ],
+      "answer": "Jerry Leiber and Mike Stoller"
+    },
+    {
+      "qid": "nq_q_1258",
+      "query": "who played harley in harley davidson and the marlboro man",
+      "relevant_doc_ids": [
+        "nq_1258"
+      ],
+      "answer": "Mickey Rourke"
+    },
+    {
+      "qid": "nq_q_1295",
+      "query": "when was last time bayern munich won champions league",
+      "relevant_doc_ids": [
+        "nq_1295"
+      ],
+      "answer": "2012–13"
+    },
+    {
+      "qid": "nq_q_1332",
+      "query": "who won britain's next top model 2016",
+      "relevant_doc_ids": [
+        "nq_1332"
+      ],
+      "answer": "Chloe Keenan"
+    },
+    {
+      "qid": "nq_q_1369",
+      "query": "what cities are in san joaquin county california",
+      "relevant_doc_ids": [
+        "nq_1369"
+      ],
+      "answer": "Lodi"
+    },
+    {
+      "qid": "nq_q_1406",
+      "query": "china in chinese is called zhongguo which means",
+      "relevant_doc_ids": [
+        "nq_1406"
+      ],
+      "answer": "Central States"
+    },
+    {
+      "qid": "nq_q_1443",
+      "query": "who has the best nba record this season",
+      "relevant_doc_ids": [
+        "nq_1443"
+      ],
+      "answer": "Houston Rockets"
+    },
+    {
+      "qid": "nq_q_1480",
+      "query": "where was the first t20 cricket match played",
+      "relevant_doc_ids": [
+        "nq_1480"
+      ],
+      "answer": "Lord's"
+    },
+    {
+      "qid": "nq_q_1517",
+      "query": "who plays grace in the secret life of the american teenager",
+      "relevant_doc_ids": [
+        "nq_1517"
+      ],
+      "answer": "Megan Park"
+    },
+    {
+      "qid": "nq_q_1554",
+      "query": "when did the first fleet arive in australia",
+      "relevant_doc_ids": [
+        "nq_1554"
+      ],
+      "answer": "18 January 1788"
+    },
+    {
+      "qid": "nq_q_1591",
+      "query": "who came up with the idea of the transcontinental railroad",
+      "relevant_doc_ids": [
+        "nq_1591"
+      ],
+      "answer": "Dr. Hartwell Carver"
+    },
+    {
+      "qid": "nq_q_1628",
+      "query": "who was the first english child born in north america",
+      "relevant_doc_ids": [
+        "nq_1628"
+      ],
+      "answer": "Virginia Dare"
+    },
+    {
+      "qid": "nq_q_1665",
+      "query": "during which season does cape town receive rainfall",
+      "relevant_doc_ids": [
+        "nq_1665"
+      ],
+      "answer": "winter"
+    },
+    {
+      "qid": "nq_q_1702",
+      "query": "how and why were serial novels a phenomenon in the nineteenth century",
+      "relevant_doc_ids": [
+        "nq_1702"
+      ],
+      "answer": "improved economics of distribution"
+    },
+    {
+      "qid": "nq_q_1739",
+      "query": "who is nebula on guardians of the galaxy",
+      "relevant_doc_ids": [
+        "nq_1739"
+      ],
+      "answer": "Karen Gillan"
+    }
+  ]
+}

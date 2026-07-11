@@ -1,0 +1,206 @@
+{
+  "protocol_version": "v1.1",
+  "notes": "Asymmetric RAG (clean digital query, CiM doc store). base3 multi-symbol GF(3) packing. Dense-only is the scientific core; hybrid is system-only. geometric_probe validates LDPC ranking gains under controlled geometry. Channel = GRC-PIM multi-cycle PIM noise (NOR = target substrate).",
+  "config": {
+    "embed_dim": 64,
+    "n_cycles": 4,
+    "tau_d": 0.025,
+    "tau_g": 0.6,
+    "tau_skip": 0.015,
+    "lambda_res": 0.5,
+    "lambda_gf3": 0.1,
+    "alpha": 0.3,
+    "beta": 0.5,
+    "gamma": 0.2,
+    "bm25_cutoff_m": 32,
+    "p_indep": 0.05,
+    "p_drift": 0.05,
+    "p_row_burst": 0.0,
+    "drift_persist": 3,
+    "top_k": 10,
+    "local_only": true,
+    "seed": 42,
+    "gf3_levels": [
+      -1.0,
+      0.0,
+      1.0
+    ],
+    "n_sym_per_dim": 2,
+    "quant_mode": "base3",
+    "asymmetric_query": true,
+    "learning_rate": 0.001,
+    "contrastive_temp": 0.07
+  },
+  "synthetic": {
+    "n_docs": 24,
+    "n_queries": 6
+  },
+  "semi": {
+    "n_docs": 8,
+    "n_queries": 8
+  },
+  "dense_only": {
+    "naive_dense_clean": {
+      "ndcg@10": 0.6295345417829993,
+      "map": 0.47380952380952374,
+      "recall@10": 0.8333333333333334,
+      "n_queries": 6.0
+    },
+    "cim_noisy_no_ldpc": {
+      "ndcg@10": 0.13354830113131425,
+      "map": 0.06666666666666667,
+      "recall@10": 0.25,
+      "n_queries": 6.0
+    },
+    "cim_ldpc_bprime": {
+      "ndcg@10": 0.3084451896604564,
+      "map": 0.19722222222222222,
+      "recall@10": 0.3333333333333333,
+      "n_queries": 6.0
+    },
+    "cim_ldpc_bp": {
+      "ndcg@10": 0.21328799394841993,
+      "map": 0.12797619047619047,
+      "recall@10": 0.25,
+      "n_queries": 6.0
+    },
+    "cim_ldpc_soft": {
+      "ndcg@10": 0.3234498107532586,
+      "map": 0.1966931216931217,
+      "recall@10": 0.5,
+      "n_queries": 6.0
+    }
+  },
+  "robustness_dense": {
+    "noise_p": 0.05,
+    "noisy_vs_clean": 0.787861837170885,
+    "bprime_vs_clean": 0.5100424691759368,
+    "bp_vs_clean": 0.6611973135829291,
+    "bprime_gain_vs_noisy": 0.17489688852914217,
+    "bp_gain_vs_noisy": 0.07973969281710569
+  },
+  "geometric_probe": {
+    "rows": [
+      {
+        "p": 0.01,
+        "ser_noisy": 0.018515625,
+        "ser_bp": 0.003203125,
+        "ndcg_float": 0.9984689106710686,
+        "ndcg_noisy": 0.9887766691946327,
+        "ndcg_bprime": 0.9814600116381905,
+        "ndcg_bp": 0.9779146506501141
+      },
+      {
+        "p": 0.03,
+        "ser_noisy": 0.085625,
+        "ser_bp": 0.037734375,
+        "ndcg_float": 0.9984689106710686,
+        "ndcg_noisy": 0.9052009499159673,
+        "ndcg_bprime": 0.9524415444361969,
+        "ndcg_bp": 0.9488652409354378
+      },
+      {
+        "p": 0.05,
+        "ser_noisy": 0.160703125,
+        "ser_bp": 0.1028125,
+        "ndcg_float": 0.9984689106710686,
+        "ndcg_noisy": 0.8580847441576951,
+        "ndcg_bprime": 0.9472648079655007,
+        "ndcg_bp": 0.7781273065383535
+      },
+      {
+        "p": 0.08,
+        "ser_noisy": 0.255234375,
+        "ser_bp": 0.204453125,
+        "ndcg_float": 0.9984689106710686,
+        "ndcg_noisy": 0.6915092618372041,
+        "ndcg_bprime": 0.7901952385653604,
+        "ndcg_bp": 0.79198268041365
+      },
+      {
+        "p": 0.12,
+        "ser_noisy": 0.330859375,
+        "ser_bp": 0.2546875,
+        "ndcg_float": 0.9984689106710686,
+        "ndcg_noisy": 0.6073411241644666,
+        "ndcg_bprime": 0.46768582791179664,
+        "ndcg_bp": 0.5133611224962574
+      }
+    ]
+  },
+  "system": {
+    "bm25": {
+      "ndcg@10": 0.9355245321275764,
+      "map": 0.9027777777777777,
+      "recall@10": 1.0,
+      "n_queries": 6.0
+    },
+    "cim_resldpc_dense": {
+      "ndcg@10": 0.3084451896604564,
+      "map": 0.19722222222222222,
+      "recall@10": 0.3333333333333333,
+      "n_queries": 6.0,
+      "latency_ms_mean": 0.07071566263524194
+    },
+    "cim_resldpc_hybrid": {
+      "ndcg@10": 0.8765270612407604,
+      "map": 0.7847222222222222,
+      "recall@10": 0.9166666666666666,
+      "n_queries": 6.0,
+      "latency_ms_mean": 0.190261166911417
+    }
+  },
+  "cim_resldpc": {
+    "synthetic": {
+      "ndcg@10": 0.3084451896604564,
+      "map": 0.19722222222222222,
+      "recall@10": 0.3333333333333333,
+      "n_queries": 6.0,
+      "latency_ms_mean": 0.07071566263524194
+    },
+    "semi": {
+      "ndcg@10": 0.5367137890020249,
+      "map": 0.38660714285714287,
+      "recall@10": 1.0,
+      "n_queries": 8.0,
+      "latency_ms_mean": 0.07160799759731162
+    },
+    "hybrid_synthetic": {
+      "ndcg@10": 0.8765270612407604,
+      "map": 0.7847222222222222,
+      "recall@10": 0.9166666666666666,
+      "n_queries": 6.0,
+      "latency_ms_mean": 0.190261166911417
+    },
+    "semi_full": {
+      "hybrid": {
+        "ndcg@10": 0.7950366480451047,
+        "map": 0.7172619047619048,
+        "recall@10": 1.0,
+        "n_queries": 8.0,
+        "latency_ms_mean": 0.15040487596706953
+      },
+      "dense": {
+        "ndcg@10": 0.5367137890020249,
+        "map": 0.38660714285714287,
+        "recall@10": 1.0,
+        "n_queries": 8.0,
+        "latency_ms_mean": 0.07160799759731162
+      },
+      "bm25": {
+        "ndcg@10": 0.9251244310318,
+        "map": 0.8791666666666667,
+        "recall@10": 1.0,
+        "n_queries": 8.0
+      }
+    },
+    "robustness": {
+      "noise_p": 0.05,
+      "noisy_vs_clean": 0.787861837170885,
+      "bprime_vs_clean": 0.5100424691759368,
+      "bp_vs_clean": 0.6611973135829291,
+      "bprime_gain_vs_noisy": 0.17489688852914217,
+      "bp_gain_vs_noisy": 0.07973969281710569
+    }
+  }
+}

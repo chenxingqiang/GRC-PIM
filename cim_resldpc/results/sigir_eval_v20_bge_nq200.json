@@ -1,0 +1,42 @@
+{
+ "protocol_version": "v2.0",
+ "notes": "BGE-small on HF NQ-open (nq_hf, 200q/911 docs), nor_typical, cim_dim=128, seed=42. Reproduce: python3 -m cim_resldpc.experiments.run_scaled_eval --encoder bge --n_queries 200 --corpora nq_hf --nor nor_typical --seed 42 --no_gemv. FINDING: projected teacher near-floor on NQ-open answer-only pseudo-passages; no geometry to recover (scope limitation).",
+ "encoder": "bge",
+ "corpus": "nq_hf",
+ "n_queries": 200,
+ "nor": "nor_typical",
+ "cim_dim": 128,
+ "seed": 42,
+ "dense_only": {
+  "bm25": {
+   "ndcg@10": 0.08975657065921333,
+   "map": 0.08495833333333333,
+   "recall@10": 0.105,
+   "n_queries": 200.0
+  },
+  "dense_clean": {
+   "ndcg@10": 0.08541060283637084,
+   "map": 0.07643650793650794,
+   "recall@10": 0.115,
+   "n_queries": 200.0
+  },
+  "cim_noisy_no_ldpc": {
+   "ndcg@10": 0.03202475219716176,
+   "map": 0.02505952380952381,
+   "recall@10": 0.055,
+   "n_queries": 200.0
+  },
+  "cim_ldpc_bprime": {
+   "ndcg@10": 0.028304367465477185,
+   "map": 0.02308333333333333,
+   "recall@10": 0.045,
+   "n_queries": 200.0
+  },
+  "cim_ldpc_bp": {
+   "ndcg@10": 0.03436166015185594,
+   "map": 0.02815079365079365,
+   "recall@10": 0.055,
+   "n_queries": 200.0
+  }
+ }
+}

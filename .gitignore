@@ -44,3 +44,9 @@ Thumbs.db
 # Local env / secrets
 .env
 .env.*
+
+# Large regenerable HF cache (build via cim_resldpc.experiments.build_hf_cache)
+cim_resldpc/data/cache/msmarco_hf_n10000.json
+
+# Large embedding caches (rebuild with run_ablation_v15 --force_encode)
+cim_resldpc/data/cache/*_emb.npz

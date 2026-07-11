@@ -1,0 +1,28 @@
+{
+  "name": "nq_mini",
+  "description": "Offline Natural-Questions-style QA fixture with short answers for RAG generation eval.",
+  "documents": [
+    {"doc_id": "nq_1", "text": "The capital of France is Paris. Paris is located on the Seine river and hosts the Louvre museum.", "labels": ["geo"]},
+    {"doc_id": "nq_2", "text": "GF(3) is the finite field with three elements {0,1,2} under modulo-3 arithmetic, used in non-binary LDPC codes.", "labels": ["math"]},
+    {"doc_id": "nq_3", "text": "MS MARCO is a large-scale passage ranking and QA dataset built from Bing search queries and web passages.", "labels": ["ir"]},
+    {"doc_id": "nq_4", "text": "NOR flash CiM stores multi-level cell conductance for in-array MAC; drift and read disturb are major reliability issues.", "labels": ["nor"]},
+    {"doc_id": "nq_5", "text": "nDCG@10 is a standard information retrieval metric evaluating the top-10 ranked documents with graded relevance.", "labels": ["metric"]},
+    {"doc_id": "nq_6", "text": "A residual GEMV calibrator adds a gated delta-LLR correction on top of the multi-cycle B-prime soft LLR product.", "labels": ["grc"]},
+    {"doc_id": "nq_7", "text": "Edge RAG keeps the document corpus on-device so private semiconductor process documents are never uploaded.", "labels": ["privacy"]},
+    {"doc_id": "nq_8", "text": "Belief propagation decoding iteratively exchanges messages on the Tanner graph of a parity-check matrix H.", "labels": ["ldpc"]},
+    {"doc_id": "nq_9", "text": "The SIGIR conference is the premier venue for research in information retrieval, ranking, and search systems.", "labels": ["sigir"]},
+    {"doc_id": "nq_10", "text": "Hallucination in RAG occurs when a language model generates facts not supported by the retrieved passages.", "labels": ["rag"]}
+  ],
+  "queries": [
+    {"qid": "nq_q1", "query": "What is the capital of France?", "relevant_doc_ids": ["nq_1"], "answer": "Paris"},
+    {"qid": "nq_q2", "query": "What is GF(3) in coding theory?", "relevant_doc_ids": ["nq_2"], "answer": "finite field with three elements"},
+    {"qid": "nq_q3", "query": "What is MS MARCO used for?", "relevant_doc_ids": ["nq_3"], "answer": "passage ranking and QA"},
+    {"qid": "nq_q4", "query": "What reliability issues affect NOR flash CiM?", "relevant_doc_ids": ["nq_4"], "answer": "drift and read disturb"},
+    {"qid": "nq_q5", "query": "What does nDCG@10 evaluate?", "relevant_doc_ids": ["nq_5"], "answer": "top-10 ranking quality"},
+    {"qid": "nq_q6", "query": "What does a residual GEMV calibrator add to B-prime?", "relevant_doc_ids": ["nq_6"], "answer": "gated delta-LLR"},
+    {"qid": "nq_q7", "query": "Why does edge RAG keep documents on-device?", "relevant_doc_ids": ["nq_7"], "answer": "privacy"},
+    {"qid": "nq_q8", "query": "How does belief propagation decoding work?", "relevant_doc_ids": ["nq_8"], "answer": "message passing on Tanner graph"},
+    {"qid": "nq_q9", "query": "What is SIGIR known for?", "relevant_doc_ids": ["nq_9"], "answer": "information retrieval conference"},
+    {"qid": "nq_q10", "query": "When does hallucination happen in RAG?", "relevant_doc_ids": ["nq_10"], "answer": "unsupported generated facts"}
+  ]
+}

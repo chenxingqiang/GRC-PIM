@@ -1,0 +1,246 @@
+{
+  "protocol_version": "v1.4",
+  "notes": "Scaled HF subsets (default 200q). Encoders: MiniLM / BGE-small / tfidf. Optional Flan-T5-small generative RAG. Teacher\u2192cim_dim projection before CiM.",
+  "config": {
+    "encoder": "st",
+    "st_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "nor": "nor_typical",
+    "use_gemv": true,
+    "n_queries": 200,
+    "cim_dim": 128,
+    "rag_generator": "extractive",
+    "seed": 42
+  },
+  "msmarco_hf": {
+    "corpus": "msmarco_hf",
+    "n_docs": 1720,
+    "n_queries": 200,
+    "dense_only": {
+      "bm25": {
+        "ndcg@10": 0.5276998851410782,
+        "map": 0.401718253968254,
+        "recall@10": 0.91,
+        "n_queries": 200.0
+      },
+      "dense_clean": {
+        "ndcg@10": 0.667425796824662,
+        "map": 0.558672619047619,
+        "recall@10": 0.99,
+        "n_queries": 200.0
+      },
+      "cim_noisy_no_ldpc": {
+        "ndcg@10": 0.5703455696415874,
+        "map": 0.4478888888888889,
+        "recall@10": 0.9325,
+        "n_queries": 200.0
+      },
+      "cim_ldpc_bprime": {
+        "ndcg@10": 0.6127429533700267,
+        "map": 0.4967906746031746,
+        "recall@10": 0.96,
+        "n_queries": 200.0
+      },
+      "cim_ldpc_bp": {
+        "ndcg@10": 0.6046874675352213,
+        "map": 0.48612896825396823,
+        "recall@10": 0.96,
+        "n_queries": 200.0
+      },
+      "cim_ldpc_gemv_bp": {
+        "ndcg@10": 0.6046874675352213,
+        "map": 0.48612896825396823,
+        "recall@10": 0.96,
+        "n_queries": 200.0
+      }
+    },
+    "robustness": {
+      "nor_preset": "nor_typical",
+      "encoder": "st",
+      "st_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "teacher_dim": 384,
+      "cim_dim": 128,
+      "noisy_vs_clean": 0.14545471218664666,
+      "bprime_gain_vs_noisy": 0.042397383728439264,
+      "bp_gain_vs_noisy": 0.034341897893633844,
+      "gemv_gain_vs_noisy": 0.034341897893633844
+    },
+    "rag_generation": {
+      "clean": {
+        "rag_f1": 0.2213299255850249,
+        "rag_em": 0.02,
+        "rag_support": 0.9977496502311147,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.74,
+        "n_queries": 200.0,
+        "k": 3.0,
+        "generator": "extractive"
+      },
+      "noisy": {
+        "rag_f1": 0.20231872151429375,
+        "rag_em": 0.02,
+        "rag_support": 0.9966319927699219,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.585,
+        "n_queries": 200.0,
+        "k": 3.0,
+        "generator": "extractive"
+      },
+      "bprime": {
+        "rag_f1": 0.20597910797751987,
+        "rag_em": 0.015,
+        "rag_support": 0.9967236594365885,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.615,
+        "n_queries": 200.0,
+        "k": 3.0,
+        "generator": "extractive"
+      },
+      "bp": {
+        "rag_f1": 0.20736218048926255,
+        "rag_em": 0.02,
+        "rag_support": 0.9959770845964782,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.63,
+        "n_queries": 200.0,
+        "k": 3.0,
+        "generator": "extractive"
+      },
+      "bm25": {
+        "rag_f1": 0.17757331129173246,
+        "rag_em": 0.01,
+        "rag_support": 0.9972179783551031,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.485,
+        "n_queries": 200.0,
+        "k": 3.0,
+        "generator": "extractive"
+      },
+      "gemv_bp": {
+        "rag_f1": 0.20736218048926255,
+        "rag_em": 0.02,
+        "rag_support": 0.9959770845964782,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.63,
+        "n_queries": 200.0,
+        "k": 3.0,
+        "generator": "extractive"
+      }
+    }
+  },
+  "nq_hf": {
+    "corpus": "nq_hf",
+    "n_docs": 911,
+    "n_queries": 200,
+    "dense_only": {
+      "bm25": {
+        "ndcg@10": 0.08975657065921333,
+        "map": 0.08495833333333333,
+        "recall@10": 0.105,
+        "n_queries": 200.0
+      },
+      "dense_clean": {
+        "ndcg@10": 0.1452812799552259,
+        "map": 0.1196031746031746,
+        "recall@10": 0.23,
+        "n_queries": 200.0
+      },
+      "cim_noisy_no_ldpc": {
+        "ndcg@10": 0.10600317788202018,
+        "map": 0.0908611111111111,
+        "recall@10": 0.155,
+        "n_queries": 200.0
+      },
+      "cim_ldpc_bprime": {
+        "ndcg@10": 0.11805264953697633,
+        "map": 0.10352579365079365,
+        "recall@10": 0.165,
+        "n_queries": 200.0
+      },
+      "cim_ldpc_bp": {
+        "ndcg@10": 0.11088175545913069,
+        "map": 0.09705555555555556,
+        "recall@10": 0.155,
+        "n_queries": 200.0
+      },
+      "cim_ldpc_gemv_bp": {
+        "ndcg@10": 0.11088175545913069,
+        "map": 0.09705555555555556,
+        "recall@10": 0.155,
+        "n_queries": 200.0
+      }
+    },
+    "robustness": {
+      "nor_preset": "nor_typical",
+      "encoder": "st",
+      "st_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "teacher_dim": 384,
+      "cim_dim": 128,
+      "noisy_vs_clean": 0.2703590034814589,
+      "bprime_gain_vs_noisy": 0.012049471654956151,
+      "bp_gain_vs_noisy": 0.004878577577110507,
+      "gemv_gain_vs_noisy": 0.004878577577110507
+    },
+    "rag_generation": {
+      "clean": {
+        "rag_f1": 0.04821232422548212,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.135,
+        "n_queries": 200.0,
+        "k": 3.0,
+        "generator": "extractive"
+      },
+      "noisy": {
+        "rag_f1": 0.0459397357028936,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.1,
+        "n_queries": 200.0,
+        "k": 3.0,
+        "generator": "extractive"
+      },
+      "bprime": {
+        "rag_f1": 0.04802006997130836,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.115,
+        "n_queries": 200.0,
+        "k": 3.0,
+        "generator": "extractive"
+      },
+      "bp": {
+        "rag_f1": 0.04459931734931735,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.1,
+        "n_queries": 200.0,
+        "k": 3.0,
+        "generator": "extractive"
+      },
+      "bm25": {
+        "rag_f1": 0.03732064134695714,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.09,
+        "n_queries": 200.0,
+        "k": 3.0,
+        "generator": "extractive"
+      },
+      "gemv_bp": {
+        "rag_f1": 0.04459931734931735,
+        "rag_em": 0.0,
+        "rag_support": 1.0,
+        "rag_hallucination_rate": 0.0,
+        "rag_retrieval_hit@k": 0.1,
+        "n_queries": 200.0,
+        "k": 3.0,
+        "generator": "extractive"
+      }
+    }
+  }
+}

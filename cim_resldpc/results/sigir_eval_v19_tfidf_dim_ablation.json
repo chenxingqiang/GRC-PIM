@@ -1,0 +1,171 @@
+{
+ "protocol_version": "v1.9",
+ "notes": "Offline tfidf_svd encoder cim_dim ablation across bundled MSMARCO-mini and NQ-mini, nor_typical, seed=0. Reproduce: python3 -m cim_resldpc.experiments.run_extended_eval --encoder tfidf_svd --nor nor_typical --seed 0 --emb_dim {64,128,256}.",
+ "encoder": "tfidf_svd",
+ "nor": "nor_typical",
+ "seed": 0,
+ "dims": {
+  "64": {
+   "msmarco_mini": {
+    "dense_clean": {
+     "ndcg@10": 0.7543248933717471,
+     "map": 0.6718584656084655,
+     "recall@10": 0.9583333333333334,
+     "n_queries": 12.0
+    },
+    "cim_noisy_no_ldpc": {
+     "ndcg@10": 0.7375162703131838,
+     "map": 0.6479497354497354,
+     "recall@10": 1.0,
+     "n_queries": 12.0
+    },
+    "cim_ldpc_bprime": {
+     "ndcg@10": 0.6797251490071474,
+     "map": 0.5723214285714285,
+     "recall@10": 0.9583333333333334,
+     "n_queries": 12.0
+    },
+    "cim_ldpc_bp": {
+     "ndcg@10": 0.7345469225075868,
+     "map": 0.641765873015873,
+     "recall@10": 0.9583333333333334,
+     "n_queries": 12.0
+    }
+   },
+   "nq_mini": {
+    "dense_clean": {
+     "ndcg@10": 0.8362636307308831,
+     "map": 0.7861111111111111,
+     "recall@10": 1.0,
+     "n_queries": 10.0
+    },
+    "cim_noisy_no_ldpc": {
+     "ndcg@10": 0.67260366983061,
+     "map": 0.5658333333333333,
+     "recall@10": 1.0,
+     "n_queries": 10.0
+    },
+    "cim_ldpc_bprime": {
+     "ndcg@10": 0.7218843494416853,
+     "map": 0.6361111111111111,
+     "recall@10": 1.0,
+     "n_queries": 10.0
+    },
+    "cim_ldpc_bp": {
+     "ndcg@10": 0.6809030937666017,
+     "map": 0.5819444444444445,
+     "recall@10": 1.0,
+     "n_queries": 10.0
+    }
+   }
+  },
+  "128": {
+   "msmarco_mini": {
+    "dense_clean": {
+     "ndcg@10": 0.8852175636458073,
+     "map": 0.8174603174603176,
+     "recall@10": 1.0,
+     "n_queries": 12.0
+    },
+    "cim_noisy_no_ldpc": {
+     "ndcg@10": 0.7786914559909883,
+     "map": 0.6775132275132275,
+     "recall@10": 1.0,
+     "n_queries": 12.0
+    },
+    "cim_ldpc_bprime": {
+     "ndcg@10": 0.8130162872794879,
+     "map": 0.7184854497354497,
+     "recall@10": 1.0,
+     "n_queries": 12.0
+    },
+    "cim_ldpc_bp": {
+     "ndcg@10": 0.8098770865506953,
+     "map": 0.7195436507936508,
+     "recall@10": 1.0,
+     "n_queries": 12.0
+    }
+   },
+   "nq_mini": {
+    "dense_clean": {
+     "ndcg@10": 0.9630929753571458,
+     "map": 0.95,
+     "recall@10": 1.0,
+     "n_queries": 10.0
+    },
+    "cim_noisy_no_ldpc": {
+     "ndcg@10": 0.7692536065216309,
+     "map": 0.6916666666666667,
+     "recall@10": 1.0,
+     "n_queries": 10.0
+    },
+    "cim_ldpc_bprime": {
+     "ndcg@10": 0.8261859507142916,
+     "map": 0.7666666666666667,
+     "recall@10": 1.0,
+     "n_queries": 10.0
+    },
+    "cim_ldpc_bp": {
+     "ndcg@10": 0.906160631164485,
+     "map": 0.875,
+     "recall@10": 1.0,
+     "n_queries": 10.0
+    }
+   }
+  },
+  "256": {
+   "msmarco_mini": {
+    "dense_clean": {
+     "ndcg@10": 0.8813638825053772,
+     "map": 0.8099206349206348,
+     "recall@10": 1.0,
+     "n_queries": 12.0
+    },
+    "cim_noisy_no_ldpc": {
+     "ndcg@10": 0.7041388935879512,
+     "map": 0.6049603174603174,
+     "recall@10": 0.9583333333333334,
+     "n_queries": 12.0
+    },
+    "cim_ldpc_bprime": {
+     "ndcg@10": 0.7932584031528926,
+     "map": 0.725,
+     "recall@10": 0.9583333333333334,
+     "n_queries": 12.0
+    },
+    "cim_ldpc_bp": {
+     "ndcg@10": 0.732756968270655,
+     "map": 0.638888888888889,
+     "recall@10": 1.0,
+     "n_queries": 12.0
+    }
+   },
+   "nq_mini": {
+    "dense_clean": {
+     "ndcg@10": 0.8692536065216308,
+     "map": 0.825,
+     "recall@10": 1.0,
+     "n_queries": 10.0
+    },
+    "cim_noisy_no_ldpc": {
+     "ndcg@10": 0.7806847387123887,
+     "map": 0.7133333333333334,
+     "recall@10": 1.0,
+     "n_queries": 10.0
+    },
+    "cim_ldpc_bprime": {
+     "ndcg@10": 0.674346039867711,
+     "map": 0.5683333333333334,
+     "recall@10": 1.0,
+     "n_queries": 10.0
+    },
+    "cim_ldpc_bp": {
+     "ndcg@10": 0.7850671137962738,
+     "map": 0.7183333333333334,
+     "recall@10": 1.0,
+     "n_queries": 10.0
+    }
+   }
+  }
+ }
+}
