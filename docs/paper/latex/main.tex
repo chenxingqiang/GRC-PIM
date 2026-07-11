@@ -322,6 +322,25 @@ stress & 0.284 & 0.239 & 0.184 & $-0.099$ \\
 \end{tabular}
 \end{table}
 
+\subsection{Storage-width ablation}
+Table~\ref{tab:dim} varies \texttt{cim\_dim} for BGE (200q, \texttt{nor\_typical}, seed=42).
+Wider vectors carry more teacher signal (higher clean) but expose more coordinates to noise (noisy drops $0.518\rightarrow0.349$); LDPC recovers most at 128 (absolute BP $0.573$, $+0.166$), making \texttt{cim\_dim}=128 the operating sweet spot at this scale---the ``wider $=$ more headroom'' intuition is not monotonic once the noisy baseline itself collapses.
+\begin{table}[t]
+\caption{BGE \texttt{cim\_dim} ablation, MSMARCO 200q (\texttt{nor\_typical}, seed=42), nDCG@10.}
+\label{tab:dim}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccc}
+\toprule
+\texttt{cim\_dim} & Clean & Noisy & BP & BP gain \\
+\midrule
+64 & 0.646 & 0.518 & 0.581 & $+0.063$ \\
+128 & 0.673 & 0.407 & 0.573 & $+0.166$ \\
+256 & 0.668 & 0.349 & 0.499 & $+0.150$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Encoder comparison}
 Table~\ref{tab:encoder} compares MiniLM-L6-v2 and BGE-small-en-v1.5 teachers at 200q under the same \texttt{nor\_typical} map.
 BGE geometry is hurt more by CiM noise ($0.673\rightarrow0.407$) but LDPC BP restores more of it ($+0.166$ vs.\ MiniLM's $+0.035$), so BGE is our primary teacher for the scale ladder.
