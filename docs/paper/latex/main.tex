@@ -99,9 +99,9 @@ Gains remain operating-point and seed dependent---we report failures rather than
 
 \subsection{LLM-oriented RAG and retrieval noise}
 Modern RAG pipelines retrieve passages to condition LLM generation~\cite{lewis2020rag,guu2020realm}.
-Most IR work models \emph{textual} noise or retrieval--generation mismatch.
+Most IR work models \emph{textual} noise or retrieval--generation mismatch, e.g.\ aligning noisy queries back to clean roots~\cite{campos2023capot}.
 Edge local RAG adds a different noise source: \textbf{analog CiM storage and MAC}.
-Text denoisers and LLM-side filters do not correct corrupted embedding coordinates.
+Text denoisers, query-alignment, and LLM-side filters do not correct corrupted \emph{document-embedding} coordinates stored in the array.
 
 \subsection{Dense retrieval and edge constraints}
 Dense encoders (DPR~\cite{karpukhin2020dpr}, Contriever~\cite{izacard2022contriever}, BGE~\cite{xiao2023bge}, Sentence-BERT~\cite{reimers2019sentencebert}) dominate MSMARCO-style ranking.
@@ -110,9 +110,10 @@ We adopt a transparent protocol---frozen teacher $\rightarrow$ fixed projection 
 
 \subsection{CiM-accelerated retrieval}
 CiM / PIM accelerators reduce data movement for similarity search~\cite{sebastian2017pcm,shafiee2016isaac}.
-Representative CiM-RAG efforts emphasize in-array MAC throughput; their noise treatments are typically insufficient for NOR-like multi-cycle soft channels.
-SRAM CiM is quieter but capacity-limited; NOR Flash CiM is denser but noise-rich.
-\textbf{CiM-ResLDPC targets the latter regime.}
+The closest prior work targets CiM-backed RAG directly: RoCR~\cite{qin2024rocr} makes document embeddings noise-resilient through contrastive, noise-aware \emph{training}, and CiMRAG~\cite{chiu2026cimrag} learns task-oriented noise-resilient embeddings (TONEL) for multi-domain edge RAG.
+Both harden the \emph{representation}; neither protects stored ternary embeddings with an explicit error-correcting \emph{channel code} nor feeds multi-cycle soft residual evidence into recovery.
+CiM-ResLDPC is complementary---it adds a GF(3) LDPC residual-recovery layer beneath the same asymmetric-RAG setting (our TONEL-Res regularizer is a residual-aware variant of the TONEL line).
+SRAM CiM is quieter but capacity-limited; NOR Flash CiM is denser but noise-rich, and \textbf{CiM-ResLDPC targets the latter regime.}
 
 \subsection{LDPC and soft residual calibration}
 Non-binary LDPC and soft-decision decoding are mature in Flash controllers~\cite{gallager1962ldpc,davey1998nbldpc}.
@@ -200,6 +201,7 @@ NOR presets are engineering maps onto the GRC-PIM channel, not full floating-gat
 MSMARCO stratified subsets are not the full leaderboard protocol.
 Flan-T5-small is a probe, not a production edge LLM.
 BP SER reductions do not always imply nDCG gains at every noise corner.
+We also do not run RoCR/CiMRAG head-to-head: they target personalization profile benchmarks with learned CiM-robust embeddings, whereas our channel-coding layer is evaluated on MSMARCO with frozen teachers, so the approaches are complementary rather than directly comparable.
 
 \section{Experiments}
 
