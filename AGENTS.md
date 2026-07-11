@@ -61,3 +61,56 @@ process**. Standard commands live in the READMEs and `pim_predecoder/Makefile`; 
   "pdfTeX error (font expansion): auto expansion is only possible with scalable fonts".
 - Build outputs (`main.pdf`, `main.aux`, `main.bbl`, ...) are untracked and should not be
   committed; `.gitignore` already ignores `*.log`.
+
+## Continuous optimization loop (无限优化循环)
+
+Durable SOP for iteratively improving this repo (esp. the CiM-ResLDPC paper + experiments)
+toward a target. This mirrors the TDD protocol (Design → Development → Testing → Verification →
+Refinement) as a repeatable, evidence-driven cycle. Run one cycle per highest-value gap; repeat.
+
+Cycle: **优化(Optimize) → update → 建议(Suggest) → 验证(Verify) → 优化(Optimize) → commit**
+
+1. **优化 / Optimize** — Pick the single highest-value item from the backlog (see priorities
+   below). Make ONE focused, incremental change (e.g. add a paper table/figure from existing
+   `results/*.json`, formalize a Method equation, add a baseline, fix code). Keep scope small so
+   it is easy to verify and revert.
+2. **update** — Refresh anything the change depends on: reinstall deps only if requirements
+   changed (`python3 -m pip install --user --break-system-packages -r ...`), regenerate derived
+   artifacts (re-run the relevant `cim_resldpc.experiments.*` to a temp/`results` path, rebuild
+   the paper with `latexmk -pdf main`). Never hand-edit generated numbers — regenerate them.
+3. **建议 / Suggest** — Write an evidence-based summary of what changed, what improved, what is
+   still weak, and the recommended next item — with rationale (this is the TDD "Verification
+   phase" suggestion step). Requesting human sign-off is appropriate for scope or claim changes.
+4. **验证 / Verify** — Prove the change is correct and non-regressing with runtime evidence:
+   - `python3 -m pytest cim_resldpc/tests -v` (and `pim_predecoder` fast suite if touched) pass.
+   - Paper rebuilds cleanly: `latexmk -pdf main`, **0 undefined citations/references** in
+     `main.log`, expected page count.
+   - Target metrics did not regress (compare against the values in `docs/paper/EXPERIMENTS.md` /
+     the `results/*.json` the claim cites).
+   - Integrity guardrails hold (see below).
+   If verification fails, go back to step 1 (refine or revert); do NOT commit a failing state.
+5. **优化 / Optimize (refine)** — Apply the minimal follow-up fixes surfaced by verification and
+   re-verify until green.
+6. **commit** — One logical change per commit with a descriptive message; `git push`; then
+   update the PR (`ManagePullRequest`). Do NOT force-push or amend. Then loop back to step 1 for
+   the next gap.
+
+### Backlog / priority anchor (why the paper is not yet a full SIGIR paper)
+
+Blocking for a Full Research Paper (7–9 pages): add the ~6 tables already backed by
+`results/*.json` (multi-seed, NOR sweep, encoder ablation, hybrid, Flan RAG, geometric probe) +
+a pipeline figure; add external baselines (RoCR / CiMRAG / DenoiseIR); formalize Method
+equations; expand Related Work. Strong: converge the "NOR" claim to the actual GRC-PIM
+multi-cycle channel (or calibrate presets), add hardware energy/latency estimates, real
+CiM-aware representation training. Short/Industry paper (4–6 pages) is a valid earlier exit.
+
+### Guardrails (never violate while looping)
+
+- **Scientific integrity (see `docs/design/SCIENTIFIC_REFLECTION.md`):** never reintroduce the
+  fixed confounds — no clean-embedding oracle blend, keep dense-only vs hybrid separated, keep
+  real LDPC `encode()`/`bp_decode()`, report operating points and aged/stress failures honestly.
+- Do not overwrite tracked bundled `results/*.json` with throwaway runs; write to temp or a new
+  file. Do not commit LaTeX build artifacts.
+- **Loop termination (bounded "infinite"):** stop when the target track's checklist
+  (`docs/paper/PAPER_OUTLINE.md`) is met, when no positive-value gap remains, or when a change
+  fails verification repeatedly — then revert and surface a suggestion instead of forcing it.
