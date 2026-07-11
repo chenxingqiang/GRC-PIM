@@ -268,6 +268,12 @@ Scale & Noisy $\rightarrow$ BP & Gain & Hybrid vs.\ BM25 \\
 \bottomrule
 \end{tabular}
 \end{table}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.86\linewidth]{figs/fig_scale}
+\caption{Scale ladder (BGE, \texttt{cim\_dim}=128, seed=42, \texttt{nor\_typical}): LDPC BP and hybrid hold nDCG@10 as unprotected CiM noise degrades with corpus size (data of Table~\ref{tab:scale}).}
+\label{fig:scale}
+\end{figure}
 
 \subsection{NOR operating-point honesty}
 Table~\ref{tab:nor} sweeps NOR maps at 2000q (seed=42).
@@ -322,6 +328,12 @@ stress & 0.284 & 0.239 & 0.184 & $-0.099$ \\
 \bottomrule
 \end{tabular}
 \end{table}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.86\linewidth]{figs/fig_nor}
+\caption{NOR operating-point curves (MSMARCO 200q): LDPC BP recovers ranking under \texttt{typical} for both teachers, is negligible under \texttt{fresh}, and collapses under \texttt{aged}/\texttt{stress} (data of Tables~\ref{tab:norfull},~\ref{tab:norfullmini}).}
+\label{fig:nor}
+\end{figure}
 
 \subsection{Storage-width ablation}
 Table~\ref{tab:dim} varies \texttt{cim\_dim} for BGE (200q, \texttt{nor\_typical}, seed=42).
