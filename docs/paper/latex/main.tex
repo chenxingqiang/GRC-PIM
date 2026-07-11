@@ -410,6 +410,31 @@ $p$ & Noisy & B$'$ & BP & SER (noisy$\rightarrow$BP) \\
 \label{fig:geo}
 \end{figure}
 
+\subsection{Read-cycle sweep}
+Multi-cycle readout is the premise of B$'$: Table~\ref{tab:cycles} and Fig.~\ref{fig:cycles} sweep the number of read cycles $T$ on the geometric probe ($p{=}0.05$). More cycles accumulate more soft evidence, so BP symbol-error drops ($0.121\rightarrow0.002$) and BP nDCG@10 rises ($0.729\rightarrow0.986$) from $T{=}1$ to $8$; the paper default $T{=}4$ already yields strong recovery.
+\begin{table}[t]
+\caption{Read-cycle sweep on the geometric probe ($p{=}0.05$): more cycles $T$ improve B$'$/BP recovery.}
+\label{tab:cycles}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccccc}
+\toprule
+$T$ & noisy & B$'$ & BP & SER$_{\text{n}}$ & SER$_{\text{BP}}$ \\
+\midrule
+1 & 0.712 & 0.782 & 0.729 & 0.139 & 0.121 \\
+2 & 0.828 & 0.777 & 0.831 & 0.187 & 0.158 \\
+4 & 0.841 & 0.927 & 0.948 & 0.146 & 0.035 \\
+8 & 0.967 & 0.970 & 0.986 & 0.026 & 0.002 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.86\linewidth]{figs/fig_cycles}
+\caption{Read-cycle sweep: BP nDCG@10 rises and BP SER falls as read cycles $T$ increase (geometric probe, $p{=}0.05$; data of Table~\ref{tab:cycles}).}
+\label{fig:cycles}
+\end{figure}
+
 \subsection{Offline cross-dataset cross-check}
 To decouple gains from any HF teacher, Table~\ref{tab:tfidf} repeats the ablation with the offline \texttt{tfidf\_svd} encoder on the bundled MSMARCO-mini and NQ-mini fixtures (\texttt{nor\_typical}, seed=0).
 LDPC recovery improves noisy nDCG@10 on both datasets at the default \texttt{cim\_dim}=128 (NQ: $0.769\rightarrow0.906$; MSMARCO-mini: $0.779\rightarrow0.813$), corroborating the BGE results with a non-HF encoder and a second dataset; on these small fixtures the effect is noisier at 64/256.

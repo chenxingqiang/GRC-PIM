@@ -97,6 +97,22 @@ def fig_gate():
     fig.savefig(OUT / "fig_gate.pdf"); plt.close(fig)
 
 
+def fig_cycles():
+    r = json.loads((RES / "sigir_eval_v25_cycle_sweep.json").read_text())["rows"]
+    T = [row["T"] for row in r]
+    fig, ax = plt.subplots(figsize=(3.3, 2.3))
+    ax.plot(T, [row["ndcg_noisy"] for row in r], "o--", color="#d62728", label="noisy nDCG")
+    ax.plot(T, [row["ndcg_bp"] for row in r], "o-", color="#1f77b4", label="BP nDCG")
+    ax.set_xscale("log", base=2); ax.set_xticks(T); ax.set_xticklabels(T)
+    ax.set_xlabel("read cycles $T$"); ax.set_ylabel("nDCG@10")
+    ax2 = ax.twinx(); ax2.grid(False)
+    ax2.plot(T, [row["ser_bp"] for row in r], "x:", color="#8c564b", label="BP SER")
+    ax2.set_ylabel("BP symbol-error rate")
+    h1, l1 = ax.get_legend_handles_labels(); h2, l2 = ax2.get_legend_handles_labels()
+    ax.legend(h1 + h2, l1 + l2, fontsize=6, loc="center right")
+    fig.savefig(OUT / "fig_cycles.pdf"); plt.close(fig)
+
+
 if __name__ == "__main__":
-    fig_nor(); fig_scale(); fig_geo(); fig_gate()
+    fig_nor(); fig_scale(); fig_geo(); fig_gate(); fig_cycles()
     print("wrote figures to", OUT)
