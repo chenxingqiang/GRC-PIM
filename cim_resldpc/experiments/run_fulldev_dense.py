@@ -47,8 +47,24 @@ def _eval(q_emb, d_emb, q_rel, doc_ids, k=10, batch=256):
             ndcgs.append(ndcg_at_k(rels, k))
             aps.append(average_precision([int(x) for x in rels]))
             recs.append(recall_at_k([int(x) for x in rels], n_relevant=len(rel_idx[s + r]), k=k))
-    return {"ndcg@10": mean_metric(ndcgs), "map": mean_metric(aps),
-            "recall@10": mean_metric(recs), "n_queries": float(len(q))}
+    summary = {"ndcg@10": mean_metric(ndcgs), "map": mean_metric(aps),
+               "recall@10": mean_metric(recs), "n_queries": float(len(q))}
+    return summary, np.asarray(ndcgs, dtype=np.float64)
+
+
+def _paired_sig(a, b, n_boot=10000, seed=0):
+    """Paired significance of per-query nDCG improvement a-b (a=method, b=baseline)."""
+    from scipy import stats
+
+    diff = a - b
+    t, p = stats.ttest_rel(a, b)
+    wsp = stats.wilcoxon(a, b).pvalue if np.any(diff != 0) else 1.0
+    rng = np.random.default_rng(seed)
+    idx = rng.integers(0, len(diff), size=(n_boot, len(diff)))
+    boots = diff[idx].mean(axis=1)
+    lo, hi = np.percentile(boots, [2.5, 97.5])
+    return {"mean_delta": float(diff.mean()), "t": float(t), "p_ttest": float(p),
+            "p_wilcoxon": float(wsp), "ci95": [float(lo), float(hi)], "n": int(len(diff))}
 
 
 def main(argv=None):
@@ -89,19 +105,30 @@ def main(argv=None):
                               n_sym_per_dim=2, quant_mode="base3")
     print(f"recovered in {time.time()-t:.0f}s", flush=True)
 
-    res = {}
+    res, pq = {}, {}
     for name, demb in [("dense_clean", d_clean), ("cim_noisy_no_ldpc", d_noisy),
                        ("cim_ldpc_bprime", rec.emb_bprime), ("cim_ldpc_bp", rec.emb_bp)]:
         t = time.time()
-        res[name] = _eval(q_emb, demb, q_rel, doc_ids)
+        res[name], pq[name] = _eval(q_emb, demb, q_rel, doc_ids)
         print(f"  {name:22s} nDCG@10={res[name]['ndcg@10']:.4f}  ({time.time()-t:.0f}s)", flush=True)
+
+    sig = {
+        "bp_vs_noisy": _paired_sig(pq["cim_ldpc_bp"], pq["cim_noisy_no_ldpc"]),
+        "bprime_vs_noisy": _paired_sig(pq["cim_ldpc_bprime"], pq["cim_noisy_no_ldpc"]),
+    }
+    for k2, v in sig.items():
+        print(f"  sig {k2}: delta={v['mean_delta']:.4f} p_t={v['p_ttest']:.2e} "
+              f"CI95=[{v['ci95'][0]:.4f},{v['ci95'][1]:.4f}]", flush=True)
 
     out = {"protocol_version": "v2.6", "encoder": "bge", "st_model": args.st_model,
            "corpus": "msmarco_hf_fulldev", "n_docs": len(docs), "n_queries": len(queries),
            "nor": args.nor, "cim_dim": args.cim_dim, "seed": args.seed,
            "notes": "Full MSMARCO v1.1 validation (~10k q). Dense-only scientific core "
-                    "(asymmetric digital query); BM25/hybrid/RAG skipped (infeasible at scale).",
+                    "(asymmetric digital query); BM25/hybrid/RAG skipped (infeasible at scale). "
+                    "Per-query paired significance (t-test, Wilcoxon, bootstrap 95% CI) of the "
+                    "nDCG@10 improvement over the noisy baseline.",
            "dense_only": res,
+           "significance": sig,
            "robustness": {"bp_gain_vs_noisy": res["cim_ldpc_bp"]["ndcg@10"] - res["cim_noisy_no_ldpc"]["ndcg@10"]}}
     Path(args.out_json).write_text(json.dumps(out, indent=1))
     print("wrote", args.out_json, flush=True)

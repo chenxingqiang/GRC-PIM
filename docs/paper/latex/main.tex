@@ -35,7 +35,7 @@ Prior CiM-RAG systems mainly accelerate similarity with in-array MAC and treat n
 We present \textbf{CiM-ResLDPC}, a hardware--IR co-design on the GRC-PIM multi-cycle PIM channel~\cite{grcpim2025}.
 Document embeddings are packed into GF(3) symbols, LDPC-protected for CiM storage, and recovered via B$'$ soft LLRs and/or belief propagation (optionally with gated GEMV residual $\Delta$LLR).
 Queries remain digital (\emph{asymmetric} RAG).
-On MSMARCO passage subsets with a BGE-small teacher~\cite{xiao2023bge} under typical NOR-mapped stress, unprotected CiM noise causes large nDCG@10 drops; LDPC BP recovers ranking (e.g., $+0.221$ at 2000 queries / 16894 passages, and $+0.185$ on the full ${\sim}10$k-query validation set / 82k passages), and hybrid BM25$+$BP exceeds BM25 alone.
+On MSMARCO passage subsets with a BGE-small teacher~\cite{xiao2023bge} under typical NOR-mapped stress, unprotected CiM noise causes large nDCG@10 drops; LDPC BP recovers ranking (e.g., $+0.221$ at 2000 queries / 16894 passages, and $+0.185$, 95\% CI $[.178,.192]$, on the full ${\sim}10$k-query validation set / 82k passages), and hybrid BM25$+$BP exceeds BM25 alone.
 Multi-seed BP gains remain positive at 128-D and 256-D.
 Gains are operating-point and seed dependent; we report failures rather than hide them.
 \end{abstract}
@@ -277,6 +277,7 @@ Scale & Noisy $\rightarrow$ BP & Gain & Hybrid vs.\ BM25 \\
 
 \subsection{Full MSMARCO Dev}
 Scaling to the \emph{entire} MSMARCO v1.1 validation set (9{,}706 queries / 82{,}360 passages; dense-only core, asymmetric query), LDPC BP recovers $+0.185$ nDCG@10 ($0.353\rightarrow0.538$) and $+0.268$ Recall@10 ($0.544\rightarrow0.812$), nearly restoring the clean projected teacher ($0.585$)---the gain persists at full-Dev scale (Table~\ref{tab:fulldev}), not just on stratified subsets.
+The improvement is statistically significant across all 9{,}706 queries: a per-query paired $t$-test gives $t{=}56.5$ ($p<10^{-300}$; Wilcoxon concurs) with a 10k-sample bootstrap 95\% CI of $[+0.178,+0.192]$ for the BP$-$noisy nDCG@10 gain; B$'$ alone contributes a smaller but still significant $+0.030$ ($p{=}2.1{\times}10^{-14}$), confirming that most of the recovery comes from full BP decoding rather than the soft-LLR anchor.
 \begin{table}[t]
 \caption{Full MSMARCO v1.1 Dev (9{,}706 q / 82{,}360 passages), BGE, \texttt{nor\_typical}, \texttt{cim\_dim}=128, seed=42; dense-only core.}
 \label{tab:fulldev}

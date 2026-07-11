@@ -8,7 +8,7 @@
  "nor": "nor_typical",
  "cim_dim": 128,
  "seed": 42,
- "notes": "Full MSMARCO v1.1 validation (~10k q). Dense-only scientific core (asymmetric digital query); BM25/hybrid/RAG skipped (infeasible at scale).",
+ "notes": "Full MSMARCO v1.1 validation (~10k q). Dense-only scientific core (asymmetric digital query); BM25/hybrid/RAG skipped (infeasible at scale). Per-query paired significance (t-test, Wilcoxon, bootstrap 95% CI) of the nDCG@10 improvement over the noisy baseline.",
  "dense_only": {
   "dense_clean": {
    "ndcg@10": 0.5852646132537024,
@@ -33,6 +33,30 @@
    "map": 0.44434553110114616,
    "recall@10": 0.8115306683151315,
    "n_queries": 9706.0
+  }
+ },
+ "significance": {
+  "bp_vs_noisy": {
+   "mean_delta": 0.18494317718628175,
+   "t": 56.47879938593225,
+   "p_ttest": 0.0,
+   "p_wilcoxon": 0.0,
+   "ci95": [
+    0.1785328499583857,
+    0.19149563847277204
+   ],
+   "n": 9706
+  },
+  "bprime_vs_noisy": {
+   "mean_delta": 0.03039702748139821,
+   "t": 7.654967564833869,
+   "p_ttest": 2.1180075517196253e-14,
+   "p_wilcoxon": 3.0614232009266644e-15,
+   "ci95": [
+    0.022689278652134312,
+    0.0381918628325919
+   ],
+   "n": 9706
   }
  },
  "robustness": {
