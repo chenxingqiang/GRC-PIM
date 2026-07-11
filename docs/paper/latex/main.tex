@@ -303,6 +303,24 @@ stress & 0.087 & 0.051 & 0.050 & $-0.037$ \\
 \bottomrule
 \end{tabular}
 \end{table}
+Comparing teachers (Tables~\ref{tab:norfull},~\ref{tab:norfullmini}): MiniLM embeddings are intrinsically more noise-tolerant (typical noisy $0.570$ vs.\ BGE $0.407$), so LDPC has less to recover ($+0.034$ vs.\ $+0.166$)---the stronger BGE teacher is hurt more but recovers more.
+Under \texttt{aged}, the conservative B$'$ product stays above the noisy baseline for both teachers while full BP over-corrects (MiniLM B$'$ $0.517$ vs.\ BP $0.287$), reinforcing that B$'$ is the safer prior at extreme operating points.
+\begin{table}[t]
+\caption{Full MiniLM NOR sweep, MSMARCO 200q (\texttt{cim\_dim}=128, seed=42), nDCG@10; clean${=}0.667$. Pair with Table~\ref{tab:norfull}.}
+\label{tab:norfullmini}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccc}
+\toprule
+NOR map & Noisy & B$'$ & BP & BP gain \\
+\midrule
+fresh & 0.603 & 0.605 & 0.605 & $+0.002$ \\
+typical & 0.570 & 0.613 & 0.605 & $+0.034$ \\
+aged & 0.457 & 0.517 & 0.287 & $-0.170$ \\
+stress & 0.284 & 0.239 & 0.184 & $-0.099$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Encoder comparison}
 Table~\ref{tab:encoder} compares MiniLM-L6-v2 and BGE-small-en-v1.5 teachers at 200q under the same \texttt{nor\_typical} map.
