@@ -35,7 +35,7 @@ Prior CiM-RAG systems mainly accelerate similarity with in-array MAC and treat n
 We present \textbf{CiM-ResLDPC}, a hardware--IR co-design on the GRC-PIM multi-cycle PIM channel~\cite{grcpim2025}.
 Document embeddings are packed into GF(3) symbols, LDPC-protected for CiM storage, and recovered via B$'$ soft LLRs and/or belief propagation (optionally with gated GEMV residual $\Delta$LLR).
 Queries remain digital (\emph{asymmetric} RAG).
-On MSMARCO passage subsets with a BGE-small teacher~\cite{xiao2023bge} under typical NOR-mapped stress, unprotected CiM noise causes large nDCG@10 drops; LDPC BP recovers ranking (e.g., $+0.221$ at 2000 queries / 16894 passages; $+0.214$ at 1000q), and hybrid BM25$+$BP exceeds BM25 alone.
+On MSMARCO passage subsets with a BGE-small teacher~\cite{xiao2023bge} under typical NOR-mapped stress, unprotected CiM noise causes large nDCG@10 drops; LDPC BP recovers ranking (e.g., $+0.221$ at 2000 queries / 16894 passages, and $+0.185$ on the full ${\sim}10$k-query validation set / 82k passages), and hybrid BM25$+$BP exceeds BM25 alone.
 Multi-seed BP gains remain positive at 128-D and 256-D.
 Gains are operating-point and seed dependent; we report failures rather than hide them.
 \end{abstract}
@@ -93,7 +93,7 @@ A hybrid BM25~\cite{robertson2009bm25} $+$ residual-calibrated dense scorer prov
 \paragraph{Empirical highlight.}
 On MSMARCO (2000 queries / 16894 passages, BGE-small, \texttt{nor\_typical}, \texttt{cim\_dim}=128, seed=42), LDPC BP recovers $+0.221$ nDCG@10 versus unprotected CiM noise (0.254$\rightarrow$0.475); hybrid BM25$+$BP reaches 0.557 (above BM25 0.531).
 Multi-seed BP gain is $0.145\pm0.050$.
-At 1000q the same protocol yields $+0.214$ with multi-seed $0.182\pm0.031$ (128-D).
+At 1000q the same protocol yields $+0.214$ with multi-seed $0.182\pm0.031$ (128-D), and on the full validation set (9{,}706 q / 82{,}360 passages) BP still recovers $+0.185$ ($0.353\rightarrow0.538$).
 Gains remain operating-point and seed dependent---we report failures rather than hide them.
 
 \section{Related Work}
@@ -274,6 +274,25 @@ Scale & Noisy $\rightarrow$ BP & Gain & Hybrid vs.\ BM25 \\
 \caption{Scale ladder (BGE, \texttt{cim\_dim}=128, seed=42, \texttt{nor\_typical}): LDPC BP and hybrid hold nDCG@10 as unprotected CiM noise degrades with corpus size (data of Table~\ref{tab:scale}).}
 \label{fig:scale}
 \end{figure}
+
+\subsection{Full MSMARCO Dev}
+Scaling to the \emph{entire} MSMARCO v1.1 validation set (9{,}706 queries / 82{,}360 passages; dense-only core, asymmetric query), LDPC BP recovers $+0.185$ nDCG@10 ($0.353\rightarrow0.538$) and $+0.268$ Recall@10 ($0.544\rightarrow0.812$), nearly restoring the clean projected teacher ($0.585$)---the gain persists at full-Dev scale (Table~\ref{tab:fulldev}), not just on stratified subsets.
+\begin{table}[t]
+\caption{Full MSMARCO v1.1 Dev (9{,}706 q / 82{,}360 passages), BGE, \texttt{nor\_typical}, \texttt{cim\_dim}=128, seed=42; dense-only core.}
+\label{tab:fulldev}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lcc}
+\toprule
+Method & nDCG@10 & Recall@10 \\
+\midrule
+Dense clean & 0.585 & 0.861 \\
+CiM noisy (no LDPC) & 0.353 & 0.544 \\
+CiM LDPC B$'$ & 0.383 & 0.583 \\
+\textbf{CiM LDPC BP} & \textbf{0.538} & \textbf{0.812} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{NOR operating-point honesty}
 Table~\ref{tab:nor} sweeps NOR maps at 2000q (seed=42).
