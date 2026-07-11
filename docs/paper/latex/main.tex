@@ -403,6 +403,12 @@ $p$ & Noisy & B$'$ & BP & SER (noisy$\rightarrow$BP) \\
 \bottomrule
 \end{tabular}
 \end{table}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.86\linewidth]{figs/fig_geo}
+\caption{Geometric probe: LDPC lowers symbol-error rate (right axis) and raises nDCG@10 (left); at high $p$ hard BP over-corrects ranking while B$'$ stays high (data of Table~\ref{tab:geo}).}
+\label{fig:geo}
+\end{figure}
 
 \subsection{Offline cross-dataset cross-check}
 To decouple gains from any HF teacher, Table~\ref{tab:tfidf} repeats the ablation with the offline \texttt{tfidf\_svd} encoder on the bundled MSMARCO-mini and NQ-mini fixtures (\texttt{nor\_typical}, seed=0).
@@ -447,6 +453,12 @@ stress & 0.297 & 0.0 & 100.0 \\
 \bottomrule
 \end{tabular}
 \end{table}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.86\linewidth]{figs/fig_gate}
+\caption{Measured decode-prune duty cycle: fraction of codewords skipped ($d_{\mathrm{global}}<\tau_{\mathrm{skip}}$) vs.\ gate-open ($\ge\tau_d$) per NOR map; the residual GEMV path runs only where drift is high (data of Table~\ref{tab:gate}).}
+\label{fig:gate}
+\end{figure}
 These are analytical estimates carried over from the GRC-PIM stack; a cycle-accurate CiM retrieval-latency model on a measured NOR array is future work, and our Python wall-clock timings are only a software proxy.
 
 \section{Limitations and Future Work}
