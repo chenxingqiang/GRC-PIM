@@ -286,6 +286,23 @@ aged & 0.055 & 0.061 & $+0.006$ & 0.492 \\
 \end{table}
 Under aged/stress maps, ranking can still collapse even when symbol-error rate improves; we report the operating point rather than claim a universal win (the same ECC lesson that SER $\neq$ IR nDCG).
 A \texttt{cim\_dim}=256 spot-check at seed=42 recovers $+0.208$ ($0.137\rightarrow0.345$), showing wider CiM vectors leave more recovery headroom at higher storage/MAC cost.
+A self-run 4-preset BGE sweep at 200q (Table~\ref{tab:norfull}) traces the full degradation curve: BP recovers to near-clean under \texttt{typical} ($0.407\rightarrow0.573$, clean $0.673$), is negligible under \texttt{fresh}, and collapses under \texttt{aged}/\texttt{stress}---a clear applicability boundary rather than a universal claim.
+\begin{table}[t]
+\caption{Full BGE NOR sweep, MSMARCO 200q (\texttt{cim\_dim}=128, seed=42), nDCG@10; clean${=}0.673$.}
+\label{tab:norfull}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccc}
+\toprule
+NOR map & Noisy & B$'$ & BP & BP gain \\
+\midrule
+fresh & 0.568 & 0.571 & 0.573 & $+0.005$ \\
+typical & 0.407 & 0.493 & 0.573 & $+0.166$ \\
+aged & 0.189 & 0.222 & 0.076 & $-0.112$ \\
+stress & 0.087 & 0.051 & 0.050 & $-0.037$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Encoder comparison}
 Table~\ref{tab:encoder} compares MiniLM-L6-v2 and BGE-small-en-v1.5 teachers at 200q under the same \texttt{nor\_typical} map.
