@@ -177,6 +177,8 @@ Absolute BP nDCG@10 is remarkably stable ($0.480\pm0.003$); the \emph{gain} over
 \begin{table}[t]
 \caption{Multi-seed stability, MSMARCO 2000q (BGE, \texttt{nor\_typical}, \texttt{cim\_dim}=128). Gains are computed at full precision.}
 \label{tab:multiseed}
+\small
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{lcccc}
 \toprule
 Seed & Noisy & BP & BP gain & Hybrid \\
@@ -186,7 +188,7 @@ Seed & Noisy & BP & BP gain & Hybrid \\
 2 & 0.386 & 0.479 & $+0.093$ & 0.559 \\
 42 & 0.254 & 0.475 & $+0.221$ & 0.557 \\
 \midrule
-mean$\pm$std & $0.335{\pm}0.052$ & $0.480{\pm}0.003$ & $0.145{\pm}0.050$ & --- \\
+$\mu{\pm}\sigma$ & $.335{\pm}.052$ & $.480{\pm}.003$ & $.145{\pm}.050$ & --- \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -226,8 +228,55 @@ aged & 0.055 & 0.061 & $+0.006$ & 0.492 \\
 Under aged/stress maps, ranking can still collapse even when symbol-error rate improves; we report the operating point rather than claim a universal win (the same ECC lesson that SER $\neq$ IR nDCG).
 A \texttt{cim\_dim}=256 spot-check at seed=42 recovers $+0.208$ ($0.137\rightarrow0.345$), showing wider CiM vectors leave more recovery headroom at higher storage/MAC cost.
 
+\subsection{Encoder comparison}
+Table~\ref{tab:encoder} compares MiniLM-L6-v2 and BGE-small-en-v1.5 teachers at 200q under the same \texttt{nor\_typical} map.
+BGE geometry is hurt more by CiM noise ($0.673\rightarrow0.407$) but LDPC BP restores more of it ($+0.166$ vs.\ MiniLM's $+0.035$), so BGE is our primary teacher for the scale ladder.
+\begin{table}[t]
+\caption{Encoder comparison, MSMARCO 200q (\texttt{nor\_typical}, \texttt{cim\_dim}=128, seed=42), nDCG@10.}
+\label{tab:encoder}
+\begin{tabular}{lcccc}
+\toprule
+Teacher & Clean & Noisy & BP & BP gain \\
+\midrule
+MiniLM-L6 & 0.667 & 0.570 & 0.605 & $+0.035$ \\
+\textbf{BGE-small} & 0.673 & 0.407 & \textbf{0.573} & $\mathbf{+0.166}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Generative probe}
-Flan-T5-small on MSMARCO 48q yields non-zero hallucination rates, enabling a true RAG unsupported-answer metric beyond extractive proxies.
+Flan-T5-small on MSMARCO 48q yields non-zero hallucination rates, enabling a true RAG unsupported-answer metric beyond extractive proxies (Table~\ref{tab:rag}).
+\begin{table}[t]
+\caption{Flan-T5-small RAG on MSMARCO 48q (MiniLM, \texttt{nor\_typical}, top-$k{=}3$). Retrieval quality couples to answer F1; hallucination stays non-zero across recovery modes.}
+\label{tab:rag}
+\begin{tabular}{lccc}
+\toprule
+Retriever & RAG F1 & Hallucination & Support \\
+\midrule
+clean & 0.293 & 0.104 & 0.892 \\
+noisy & 0.279 & 0.062 & 0.936 \\
+B$'$ & 0.278 & 0.104 & 0.895 \\
+BP & 0.250 & 0.083 & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Geometric probe (positive control)}
+On synthetic clusters with known geometry (Table~\ref{tab:geo}), LDPC soft recovery raises nDCG@10 and lowers the symbol-error rate (SER), confirming the mechanism when embedding geometry exists.
+At high noise ($p{=}0.05$) hard BP can over-correct ranking even as SER drops, so we report B$'$ and BP separately.
+\begin{table}[t]
+\caption{Geometric probe (100 docs / 20 queries): nDCG@10 and symbol-error rate (SER) vs.\ bit-flip $p$.}
+\label{tab:geo}
+\begin{tabular}{lcccc}
+\toprule
+$p$ & Noisy & B$'$ & BP & SER (noisy$\rightarrow$BP) \\
+\midrule
+0.01 & 0.989 & 0.981 & 0.978 & $0.019{\rightarrow}0.003$ \\
+0.03 & 0.905 & 0.952 & 0.949 & $0.086{\rightarrow}0.038$ \\
+0.05 & 0.858 & 0.947 & 0.778 & $0.161{\rightarrow}0.103$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Conclusion}
 CiM-ResLDPC shows that residual soft information from CiM channels can be turned into measurable retrieval robustness for private on-device RAG, when claims are tied to explicit noise operating points.
