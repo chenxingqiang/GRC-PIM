@@ -161,8 +161,38 @@ Figure~\ref{fig:pipeline} summarizes the eight-stage pipeline.
   \item Generate: extractive or Flan-T5 conditioned on top-$k$ passages.
 \end{enumerate}
 
+\subsection{Formalization}
+\paragraph{GF(3) base-3 packing.} Each teacher coordinate $e\in[-1,1]$ maps to $s$ ternary digits with $L=3^{s}$ levels ($s{=}2\Rightarrow L{=}9$):
+\begin{equation}
+r=\Big\lfloor\tfrac{e+1}{2}(L-1)\Big\rceil,\quad r=\sum_{j=0}^{s-1} c_j\,3^{j},\; c_j\in\mathrm{GF}(3),
+\end{equation}
+dequantized as $\hat e=\tfrac{2r}{L-1}-1$. Multi-symbol packing preserves the cosine geometry that single-centroid ternary collapses.
+
+\paragraph{Channel and drift.} Packed symbols are stored and read over $T$ cycles through the GRC-PIM noise channel~\cite{grcpim2025}; a global drift score $d_{\mathrm{global}}\in[0,1]$ measures cross-cycle bit disagreement.
+
+\paragraph{Recovery.} The training-free B$'$ product accumulates per-cycle soft LLRs $\ell_i^{B'}=\sum_{t=1}^{T}\ell_{i,t}$ with hard readout $\hat c_i=\arg\max_k \ell_{i,k}^{B'}$; GF(3) BP refines $\ell^{B'}$ into a posterior over the systematic prefix, whose information symbols are dequantized to $\hat e$.
+
+\paragraph{Dual gate (latency prune).} The optional GEMV residual $\Delta$LLR is applied only when
+\begin{equation}
+\mathrm{USE\_GEMV}=\mathbb{1}[d_{\mathrm{global}}\ge\tau_d]\wedge\mathbb{1}[\bar g\ge\tau_g],
+\end{equation}
+and skipped when $d_{\mathrm{global}}<\tau_{\mathrm{skip}}$; otherwise recovery equals B$'$/BP by construction (no extra risk).
+
+\paragraph{Hybrid fusion.} Final ranking fuses min-max--normalized ($\tilde n$) channels
+\begin{equation}
+s = \alpha\,\tilde n(\text{BM25}) + \beta\,\tilde n(\text{dense}) + \gamma\,\tilde n(\text{res\_conf}),
+\end{equation}
+with defaults $(\alpha,\beta,\gamma)=(0.3,0.5,0.2)$.
+
 \subsection{TONEL-Res}
-Train/adapt embeddings with residual alignment to \emph{channel-calibrated} reconstructions (no clean oracle) plus a soft ternary quantization penalty.
+Train/adapt embeddings with residual alignment to \emph{channel-calibrated} reconstructions $\hat e_{\mathrm{cal}}$ (B$'$/BP, never a clean-embedding oracle) plus a soft ternary quantization penalty:
+\begin{equation}
+\mathcal{L}=\mathcal{L}_{\mathrm{ret}} + w\big(1-\cos(e,\hat e_{\mathrm{cal}})\big) + \lambda_q\,\overline{\min_{l\in\{-1,0,1\}}\lvert e-l\rvert},
+\end{equation}
+with a dynamic residual weight driven by drift and gate confidence,
+\begin{equation}
+w=\mathrm{clip}\big(0.25\min(d_{\mathrm{global}}/\tau_d,2)+0.5\,\bar g,\;0,1\big).
+\end{equation}
 In large-scale tables we evaluate frozen teachers $+$ projection for IR fairness; TONEL remains the training-time regularizer for CiM-aware fine-tuning.
 
 \subsection{What we do not claim}
