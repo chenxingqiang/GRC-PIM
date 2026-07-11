@@ -171,7 +171,25 @@ CiM noisy (no LDPC) & 0.283 & 0.254 \\
 \end{table}
 
 BP recovers $+0.214$ / $+0.221$ nDCG@10 vs.\ unprotected noise at 1000q / 2000q.
-Multi-seed BP gain at 2000q (seeds $\{0,1,2,42\}$): $0.145\pm0.050$ at 128-D; dim=256 seed=42 spot-check $+0.208$.
+\subsection{Multi-seed stability}
+Table~\ref{tab:multiseed} sweeps seeds $\{0,1,2,42\}$ at 2000q.
+Absolute BP nDCG@10 is remarkably stable ($0.480\pm0.003$); the \emph{gain} over unprotected noise varies ($0.145\pm0.050$) because the noisy baseline itself is seed-sensitive.
+\begin{table}[t]
+\caption{Multi-seed stability, MSMARCO 2000q (BGE, \texttt{nor\_typical}, \texttt{cim\_dim}=128). Gains are computed at full precision.}
+\label{tab:multiseed}
+\begin{tabular}{lcccc}
+\toprule
+Seed & Noisy & BP & BP gain & Hybrid \\
+\midrule
+0 & 0.375 & 0.482 & $+0.106$ & 0.564 \\
+1 & 0.324 & 0.484 & $+0.160$ & 0.548 \\
+2 & 0.386 & 0.479 & $+0.093$ & 0.559 \\
+42 & 0.254 & 0.475 & $+0.221$ & 0.557 \\
+\midrule
+mean$\pm$std & $0.335{\pm}0.052$ & $0.480{\pm}0.003$ & $0.145{\pm}0.050$ & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Scale ladder}
 \begin{table}[t]
@@ -189,9 +207,24 @@ Scale & Noisy $\rightarrow$ BP & Gain & Hybrid vs.\ BM25 \\
 \end{tabular}
 \end{table}
 
-\subsection{Operating-point honesty}
-Under aged/stress NOR maps, ranking can still degrade even when SER improves.
-We report the operating point and historical pathological seeds (e.g., 500q dim=128 seed=0 with negative BP gain).
+\subsection{NOR operating-point honesty}
+Table~\ref{tab:nor} sweeps NOR maps at 2000q (seed=42).
+BP helps most under the \texttt{typical} map; under \texttt{fresh} the channel is mild (little to recover) and under \texttt{aged} both the noisy baseline and BP collapse.
+\begin{table}[t]
+\caption{NOR operating-point sweep, MSMARCO 2000q (BGE, \texttt{cim\_dim}=128, seed=42).}
+\label{tab:nor}
+\begin{tabular}{lcccc}
+\toprule
+NOR map & Noisy & BP & BP gain & Hybrid \\
+\midrule
+fresh & 0.465 & 0.475 & $+0.010$ & 0.558 \\
+typical & 0.254 & 0.475 & $+0.221$ & 0.557 \\
+aged & 0.055 & 0.061 & $+0.006$ & 0.492 \\
+\bottomrule
+\end{tabular}
+\end{table}
+Under aged/stress maps, ranking can still collapse even when symbol-error rate improves; we report the operating point rather than claim a universal win (the same ECC lesson that SER $\neq$ IR nDCG).
+A \texttt{cim\_dim}=256 spot-check at seed=42 recovers $+0.208$ ($0.137\rightarrow0.345$), showing wider CiM vectors leave more recovery headroom at higher storage/MAC cost.
 
 \subsection{Generative probe}
 Flan-T5-small on MSMARCO 48q yields non-zero hallucination rates, enabling a true RAG unsupported-answer metric beyond extractive proxies.
