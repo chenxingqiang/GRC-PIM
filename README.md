@@ -1,4 +1,4 @@
-# GRC-PIM / GRC-PIM-IR
+# GRC-PIM
 
 **Gated Residual Calibration for soft-decision error correction in RRAM processing-in-memory (PIM).**
 
@@ -7,27 +7,6 @@ Public code and data for the npj manuscript:
 > *GRC-PIM: A Drift-Gated, GEMV-Reusing Residual Calibrator for Soft-Decision Error Correction in Processing-in-Memory*
 
 Repository: [github.com/chenxingqiang/GRC-PIM](https://github.com/chenxingqiang/GRC-PIM)
-
----
-
-## CiM-ResLDPC (SIGIR-AP 2026 track) — IR extension
-
-This tree also hosts **CiM-ResLDPC**: residual error–calibrated robust **edge RAG** on NOR Flash / PIM CiM, reusing the GRC-PIM noise + gated residual stack as retrieval soft evidence.
-
-| Item | Location |
-|------|----------|
-| Package | [`cim_resldpc/`](cim_resldpc/) |
-| Design | [`docs/design/CIM_RESLDPC_DESIGN.md`](docs/design/CIM_RESLDPC_DESIGN.md) |
-| Paper drafts | [`docs/paper/`](docs/paper/) (abstract, related work, experiments, test report) |
-| Offline eval | `PYTHONPATH=. python3 -m cim_resldpc.experiments.run_sigir_eval` |
-| Extended eval (v1.2) | `PYTHONPATH=. python3 -m cim_resldpc.experiments.run_extended_eval --nor nor_typical` |
-| HF MiniLM eval (v1.3) | `pip install -r cim_resldpc/requirements-ir.txt && PYTHONPATH=. python3 -m cim_resldpc.experiments.run_hf_eval` |
-| Scaled BGE / Flan (v1.4) | `PYTHONPATH=. python3 -m cim_resldpc.experiments.run_scaled_eval --encoder bge --n_queries 200` |
-| Ablations (v1.5) | `PYTHONPATH=. python3 -m cim_resldpc.experiments.run_ablation_v15 --encoder bge` |
-| MSMARCO 500q (v1.6) | `...run_ablation_v15 --n_queries 500 --emb_cache cim_resldpc/data/cache/bge_msmarco_n500_emb.npz` |
-| Tests | `PYTHONPATH=. python3 -m pytest cim_resldpc/tests -v` |
-
-English title: *CiM-ResLDPC: Residual Error Calibrated Robust Retrieval-Augmented Generation on NOR Flash Compute-in-Memory Arrays*.
 
 ---
 
