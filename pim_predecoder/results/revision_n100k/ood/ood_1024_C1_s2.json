@@ -1,0 +1,75 @@
+{
+  "label": "ood_1024_C1_static_spread_only_s2",
+  "train_p_drift": 0.005,
+  "train_p_row_burst": 0.005,
+  "test_p_drift": 0.005,
+  "test_p_row_burst": 0.005,
+  "n_codewords": 20000,
+  "n_cycles": 4,
+  "eval_chunk": 2000,
+  "seed": 2,
+  "eval_seed": 2,
+  "matrix_info": 1024,
+  "matrix_rate": "16_17",
+  "matrix_shape": {
+    "H": [
+      64,
+      1088
+    ],
+    "G": [
+      1024,
+      1088
+    ]
+  },
+  "model": "GEMVResidualCalibrator",
+  "baselines": "majority_vote + per_column_affine",
+  "channel": "conductance",
+  "cond_params": {
+    "sigma_ln": 0.1,
+    "drift_nu": 0.0,
+    "rtn_traps": 0,
+    "rtn_amp": 0.0,
+    "rtn_switch": 0.5
+  },
+  "drift_score_threshold": 0.011,
+  "composite_drift_threshold": null,
+  "model_gate_threshold": 0.6,
+  "rows": [
+    {
+      "p_bit": 0.005,
+      "p_effective": 0.016001355698529413,
+      "channel": "conductance",
+      "Bp_post": 0.06805165441176471,
+      "Bp_post_BER": 0.041484949448529415,
+      "Bp_iters": 3.0,
+      "Maj_post": 0.016338373161764706,
+      "Maj_post_BER": 0.01600181525735294,
+      "Maj_iters": 3.0,
+      "GEMV_post": 0.06805165441176471,
+      "GEMV_post_BER": 0.041484949448529415,
+      "GEMV_iters": 3.0,
+      "GEMV_raw_symbol": 0.01633745404411765,
+      "GEMV_raw_BER": 0.016001355698529413,
+      "GEMV_gate": 0.9770723029971122,
+      "drift_score": 0.0,
+      "column_persistence": 0.0,
+      "row_burst": 0.07485367421823413,
+      "syndrome_instability": 0.1936546891927719,
+      "composite_drift": 0.053701672682201204,
+      "use_gemv": false,
+      "resolution_floor": 1.3786764705882352e-07,
+      "n_codewords_eval": 20000,
+      "n_blocks": 10,
+      "eval_chunk": 2000,
+      "drift_score_sd": 0.0,
+      "composite_drift_sd": 0.000361284377149913,
+      "Bp_symbol_errors": 1480804,
+      "Bp_bit_errors": 1805425,
+      "GEMV_symbol_errors": 1480804,
+      "GEMV_bit_errors": 1805425,
+      "Affine_post": 0.06806305147058823,
+      "Affine_post_BER": 0.041490349264705885,
+      "Affine_iters": 3.0
+    }
+  ]
+}

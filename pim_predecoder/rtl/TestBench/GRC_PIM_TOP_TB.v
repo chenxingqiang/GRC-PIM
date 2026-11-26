@@ -6,20 +6,21 @@ module GRC_PIM_TOP_TB;
     reg cim_e;
     reg ce;
     reg [2:0] adc_in;
-    reg cycle_last;
-    reg symbol_last;
+    reg [3:0] cycle;
+    reg last_row, batch_last;
     reg signed [13 * 8 - 1:0] feat_in;
     reg feat_valid;
     wire use_gemv;
     wire [15:0] drift_q16;
     wire [15:0] gate_mean_q16;
-    wire signed [8:0] out_llr;
+    wire signed [23:0] out_llr;
     wire out_valid;
 
-    GRC_PIM_TOP #(.N_CYCLES(2), .WEIGHT_DIR("pim_predecoder/rtl/Weights"))
+    GRC_PIM_TOP #(.N_SYMBOLS(1), .N_BITS(2), .N_CYCLES(2), .WEIGHT_DIR("pim_predecoder/rtl/Weights"))
         DUT (
             .CLK(clk), .RST(rst), .CIM_E(cim_e), .CE(ce),
-            .ADC_IN(adc_in), .CYCLE_LAST(cycle_last), .SYMBOL_LAST(symbol_last),
+            .ADC_IN(adc_in), .SYM_IDX(4'd0), .CYC_IDX(cycle),
+            .CYCLE_ROW_LAST(last_row), .BATCH_LAST(batch_last),
             .FEAT_IN(feat_in), .FEAT_VALID(feat_valid),
             .USE_GEMV(use_gemv), .DRIFT_SCORE_Q16(drift_q16),
             .GATE_MEAN_Q16(gate_mean_q16), .OUT_LLR(out_llr), .OUT_VALID(out_valid)
@@ -32,20 +33,20 @@ module GRC_PIM_TOP_TB;
 
     initial begin
         rst = 1; ce = 0; cim_e = 1; adc_in = 3'b010;
-        cycle_last = 0; symbol_last = 0; feat_valid = 0; feat_in = 0;
-        #20 rst = 0;
-        // Two-cycle B' accumulation with toggling bits (drift).
-        ce = 1;
-        #10 cycle_last = 1; #10 cycle_last = 0;
-        adc_in = 3'b011;
-        #10 cycle_last = 1; #10 cycle_last = 0;
-        feat_in = {13{8'sd4}};
-        feat_valid = 1;
-        symbol_last = 1;
-        #10 symbol_last = 0;
-        #100;
-        $display("drift_q16=%0d gate_mean=%0d use_gemv=%0d out_valid=%0d out_llr=%0d",
-                 drift_q16, gate_mean_q16, use_gemv, out_valid, out_llr);
+        cycle = 0; last_row = 0; batch_last = 0; feat_valid = 0; feat_in = 0;
+        repeat (2) @(negedge clk);
+        rst = 0; ce = 1; last_row = 1; feat_valid = 1; feat_in = {13{8'sd4}};
+        @(negedge clk);
+        cycle = 1; adc_in = 3'b011; batch_last = 1;
+        @(negedge clk);
+        ce = 0; last_row = 0; batch_last = 0; feat_valid = 0;
+        wait (out_valid);
+        // Identical ADC[2:1] across reads: gate closed, output = summed LUTs.
+        if ({drift_q16, use_gemv, out_llr} !== {16'd0, 1'b0, 8'd3, 8'd2, 8'd3})
+            $fatal(1, "unexpected gated output: drift=%0d use=%b llr=%h", drift_q16, use_gemv, out_llr);
+        $display("TOP smoke: correct B-prime fallback");
         $finish;
     end
+
+    initial #10000 $fatal(1, "Timed out waiting for OUT_VALID");
 endmodule

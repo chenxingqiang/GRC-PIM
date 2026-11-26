@@ -19,8 +19,13 @@ from pim_predecoder.hw.llr import hw_drift_score_q16, message_llr_int
 from pim_predecoder.paths import RTL_WEIGHTS
 
 WEIGHTS_DIR = RTL_WEIGHTS
-TAU_D_Q16 = 1638   # 0.025
-TAU_G_Q16 = 39321  # 0.6
+# Must match the defaults in rtl/DRIFT_DETECTOR.v and rtl/GRC_PIM_TOP.v.
+# The drift gate is a band: the lower bound requires that multi-cycle evidence
+# exists, the upper bound requires that the impairment is no stronger than the
+# calibrator was calibrated for (see sn-article.tex Sec. 4.4).
+TAU_D_Q16 = 721      # 0.011  * 65535
+TAU_D_MAX_Q16 = 2490  # 0.038 * 65535
+TAU_G_Q16 = 39321    # 0.6
 
 
 def _read_hex_int8(path: Path) -> np.ndarray:
@@ -101,6 +106,7 @@ class GemvMlpHw:
 class GrcPimSim:
     n_cycles: int = 4
     tau_d_q16: int = TAU_D_Q16
+    tau_d_max_q16: int = TAU_D_MAX_Q16
     tau_g_q16: int = TAU_G_Q16
     cim_e: bool = True
     accum_llr: np.ndarray = field(default_factory=lambda: np.zeros(3, dtype=np.int32))
@@ -236,7 +242,7 @@ def compare_with_float_pipeline(n_codewords: int = 8, seed: int = 1) -> dict:
     float_out = llr_f[0, 0].numpy()
 
     llr_hw_f = np.array(hw_res["llr_out"], dtype=np.float32)
-    drift_ok = hw_res["drift_q16"] >= TAU_D_Q16
+    drift_ok = (TAU_D_Q16 <= hw_res["drift_q16"] <= TAU_D_MAX_Q16)
 
     x_hw, _, _ = bp_decode(
         soft_llr_product(bits, 5e-3), H, 3, True  # use sw B' for batch BER baseline

@@ -1,0 +1,77 @@
+{
+  "label": "ood_1024_C2_drift_plus_rtn_bandpass_s1",
+  "train_p_drift": 0.005,
+  "train_p_row_burst": 0.005,
+  "test_p_drift": 0.005,
+  "test_p_row_burst": 0.005,
+  "n_codewords": 20000,
+  "n_cycles": 4,
+  "eval_chunk": 2000,
+  "seed": 1,
+  "eval_seed": 1,
+  "matrix_info": 1024,
+  "matrix_rate": "16_17",
+  "matrix_shape": {
+    "H": [
+      64,
+      1088
+    ],
+    "G": [
+      1024,
+      1088
+    ]
+  },
+  "model": "GEMVResidualCalibrator",
+  "baselines": "majority_vote + per_column_affine",
+  "channel": "conductance",
+  "cond_params": {
+    "sigma_ln": 0.05,
+    "drift_nu": 0.05,
+    "rtn_traps": 2,
+    "rtn_amp": 0.03,
+    "rtn_switch": 0.5
+  },
+  "drift_score_threshold": 0.011,
+  "drift_score_max": 0.035,
+  "composite_drift_threshold": null,
+  "model_gate_threshold": 0.6,
+  "rows": [
+    {
+      "p_bit": 0.005,
+      "p_effective": 0.010250315946691175,
+      "channel": "conductance",
+      "Bp_post": 0.008161213235294118,
+      "Bp_post_BER": 0.005031824448529411,
+      "Bp_iters": 3.0,
+      "Maj_post": 0.004600137867647059,
+      "Maj_post_BER": 0.004087936580882353,
+      "Maj_iters": 3.0,
+      "GEMV_post": 0.006636948529411765,
+      "GEMV_post_BER": 0.004140992647058824,
+      "GEMV_iters": 3.0,
+      "GEMV_raw_symbol": 0.010201286764705882,
+      "GEMV_raw_BER": 0.006855376838235294,
+      "GEMV_gate": 0.9802515536546708,
+      "drift_score": 0.02108304761350155,
+      "column_persistence": 0.10080712586641312,
+      "row_burst": 0.07537776696644584,
+      "syndrome_instability": 0.271963283419609,
+      "composite_drift": 0.10204905820853982,
+      "use_gemv": true,
+      "drift_score_max": 0.035,
+      "resolution_floor": 1.3786764705882352e-07,
+      "n_codewords_eval": 20000,
+      "n_blocks": 10,
+      "eval_chunk": 2000,
+      "drift_score_sd": 0.00012749582324226346,
+      "composite_drift_sd": 0.00047906639718544843,
+      "Bp_symbol_errors": 177588,
+      "Bp_bit_errors": 218985,
+      "GEMV_symbol_errors": 144420,
+      "GEMV_bit_errors": 180216,
+      "Affine_post": 0.00818235294117647,
+      "Affine_post_BER": 0.005038625919117647,
+      "Affine_iters": 3.0
+    }
+  ]
+}

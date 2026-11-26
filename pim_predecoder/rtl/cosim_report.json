@@ -1,0 +1,16 @@
+{
+  "info_length": 1024,
+  "rate": "16_17",
+  "p_bit": 0.005,
+  "n_codewords": 16,
+  "llr_frontend": {
+    "mean_abs_diff": 14.835197448730469,
+    "max_abs_diff": 38.346439361572266,
+    "prob_argmax_agree": 0.9991957720588235
+  },
+  "ber_sw_llr": 0.01401654411764706,
+  "ber_hw_llr": 0.020278033088235295,
+  "drift_q16_mean": 1281.25,
+  "ber_gemv_float": 0.008386948529411764,
+  "gate_mean": 0.9845501184463501
+}

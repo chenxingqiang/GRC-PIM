@@ -156,13 +156,42 @@ def soft_llr_product(noisy_bits_3d: np.ndarray, p_bit: float) -> np.ndarray:
     return llr.astype(np.float32)
 
 
+def weighted_soft_llr_product(noisy_bits_3d: np.ndarray, p_bit: float,
+                              rho: float) -> np.ndarray:
+    """Geometrically weighted T-cycle soft-LLR product (weighted-BP baseline).
+
+    Cycle ``t`` (0-based loop index) contributes with weight ``rho**t``,
+    i.e. cycle ``t`` counting from 1 carries ``rho**(t-1)`` and the first
+    cycle always has weight 1. ``rho=1`` reproduces the
+    plain B' product exactly; ``rho < 1`` discounts the later cycles, which
+    is the natural correction for the assumption B' violates: drift
+    persistence keeps a drifted column corrupted for consecutive reads, so
+    the T reads are not conditionally independent evidence. Feeding this
+    prior to the same BP decoder isolates the effect of re-weighting the
+    multi-cycle evidence from the learned residual correction.
+    """
+    if not 0.0 <= rho <= 1.0:
+        raise ValueError(f"rho must be in [0, 1], got {rho!r}")
+    n_cycles = noisy_bits_3d.shape[1]
+    llr = sum(rho ** t * init_llr_from_bits(noisy_bits_3d[:, t, :], p_bit=p_bit)
+              for t in range(n_cycles))
+    llr -= llr.max(axis=-1, keepdims=True)
+    return llr.astype(np.float32)
+
+
 def build_gemv_features(noisy_bits_3d: np.ndarray,
-                        p_bit: float) -> tuple[np.ndarray, np.ndarray]:
+                        p_bit: float,
+                        raw_bits: bool = False) -> tuple[np.ndarray, np.ndarray]:
     """Build compact per-symbol features for the residual calibrator.
 
+    The 13 default features are all invariant to the order of the T reads,
+    so they cannot express *when* a column disagreed -- which is where drift
+    persistence lives. ``raw_bits=True`` appends the symbol's 2T reads in
+    +-1 coding (column ``13 + 2t + b`` holds cycle ``t``, bit ``b``).
+
     Returns:
-      features: (B, n, 13), suitable for a shared per-symbol GEMV/MLP.
-      llr_bp:   (B, n, 3), the B' soft-LLR product anchor.
+      features: (B, n, 13 [+ 2T]), for a shared per-symbol GEMV/MLP.
+      anchor:   (B, n, 3), B' soft-LLR product.
     """
     batch_size, n_cycles, two_n = noisy_bits_3d.shape
     n_symbols = two_n // 2
@@ -187,19 +216,29 @@ def build_gemv_features(noisy_bits_3d: np.ndarray,
     col = col[None, :, None].repeat(batch_size, axis=0)
 
     llr_scale = llr_bp / 20.0
-    features = np.concatenate(
-        [llr_scale, sym_counts, bit_mean, bit_disagree, entropy.astype(np.float32), col],
-        axis=-1,
-    )
+    parts = [llr_scale, sym_counts, bit_mean, bit_disagree,
+             entropy.astype(np.float32), col]
+    if raw_bits:
+        seq = bits.transpose(0, 2, 1, 3).reshape(batch_size, n_symbols, 2 * n_cycles)
+        parts.append(2.0 * seq - 1.0)
+    features = np.concatenate(parts, axis=-1)
     return features.astype(np.float32), llr_bp.astype(np.float32)
 
 
 class GEMVResidualCalibrator(nn.Module):
-    """Shared per-symbol residual model: B' + gate * clipped_delta."""
+    """Shared per-symbol residual model: anchor + gate * clipped_delta.
 
-    def __init__(self, in_features: int = GEMV_FEATURES,
-                 hidden: int = 24, clip: float = 2.0):
+    ``raw_bit_cycles = T > 0`` selects the order-aware variant whose input
+    adds the 2T raw reads of each symbol (``build_gemv_features(raw_bits=True)``).
+    """
+
+    def __init__(self, in_features: int | None = None,
+                 hidden: int = 24, clip: float = 2.0,
+                 raw_bit_cycles: int = 0):
         super().__init__()
+        if in_features is None:
+            in_features = GEMV_FEATURES + 2 * int(raw_bit_cycles)
+        self.raw_bits = raw_bit_cycles > 0
         self.fc1 = nn.Linear(in_features, hidden)
         self.fc2 = nn.Linear(hidden, GF)
         self.gate = nn.Linear(in_features, 1)
@@ -219,7 +258,8 @@ class GEMVResidualCalibrator(nn.Module):
         out = []
         gates = []
         for start in range(0, noisy_bits_3d.shape[0], chunk):
-            feats, llr_bp = build_gemv_features(noisy_bits_3d[start:start + chunk], p_bit)
+            feats, llr_bp = build_gemv_features(noisy_bits_3d[start:start + chunk], p_bit,
+                                                raw_bits=self.raw_bits)
             x = torch.from_numpy(feats).to(device)
             anchor = torch.from_numpy(llr_bp).to(device)
             llr, gate = self.forward(x, anchor)
@@ -257,7 +297,8 @@ class GEMVResidualCalibrator(nn.Module):
 
         for start in range(0, noisy_bits_3d.shape[0], chunk):
             end = min(start + chunk, noisy_bits_3d.shape[0])
-            feats, llr_bp = build_gemv_features(noisy_bits_3d[start:end], p_bit)
+            feats, llr_bp = build_gemv_features(noisy_bits_3d[start:end], p_bit,
+                                                raw_bits=self.raw_bits)
             x = torch.from_numpy(feats).to(device)
             anchor = torch.from_numpy(llr_bp).to(device)
 
@@ -292,6 +333,44 @@ class GEMVResidualCalibrator(nn.Module):
         return out
 
 
+class LinearResidualCalibrator(nn.Module):
+    """Hidden-layer-free variant of GEMVResidualCalibrator.
+
+    Identical anchor/gate/clip semantics, but the correction head is a single
+    affine map of the same 13 features (56 parameters vs the GEMV head's 425).
+    It isolates the value of the non-linear hidden layer at matched features,
+    training data, loss and gating.
+    """
+
+    def __init__(self, in_features: int = GEMV_FEATURES, clip: float = 2.0):
+        super().__init__()
+        self.fc = nn.Linear(in_features, GF)
+        self.gate = nn.Linear(in_features, 1)
+        self.clip = clip
+
+    def forward(self, features: torch.Tensor,
+                llr_anchor: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        delta = self.clip * torch.tanh(self.fc(features) / self.clip)
+        gate = torch.sigmoid(self.gate(features))
+        return llr_anchor + gate * delta, gate
+
+    @torch.no_grad()
+    def soft_llr(self, noisy_bits_3d: np.ndarray, p_bit: float,
+                 device: str = "cpu", chunk: int = 512) -> tuple[np.ndarray, float]:
+        self.eval()
+        out = []
+        gates = []
+        for start in range(0, noisy_bits_3d.shape[0], chunk):
+            feats, llr_bp = build_gemv_features(noisy_bits_3d[start:start + chunk], p_bit)
+            x = torch.from_numpy(feats).to(device)
+            anchor = torch.from_numpy(llr_bp).to(device)
+            llr, gate = self.forward(x, anchor)
+            llr = llr - llr.max(dim=-1, keepdim=True).values
+            out.append(llr.cpu().numpy().astype(np.float32))
+            gates.append(float(gate.mean().cpu()))
+        return np.concatenate(out, axis=0), float(np.mean(gates))
+
+
 def make_training_batch_gemv(
     G: np.ndarray,
     batch_size: int,
@@ -300,15 +379,18 @@ def make_training_batch_gemv(
     p_drift: float,
     p_row_burst: float,
     rng: np.random.Generator,
+    drift_persist: int = 3,
+    raw_bits: bool = False,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Build features, B' anchor, and clean GF(3) target symbols."""
+    """Build features, B' anchor, and clean GF(3) targets."""
     info = rng.integers(0, GF, size=(batch_size, G.shape[0]))
     clean = encode(info, G)
     noisy_bits_3d = apply_pim_noise_3d(
         clean, n_cycles=n_cycles, p_indep=p_indep,
         p_drift=p_drift, p_row_burst=p_row_burst, rng=rng,
+        drift_persist=drift_persist,
     )
-    features, llr_bp = build_gemv_features(noisy_bits_3d, p_indep)
+    features, llr_bp = build_gemv_features(noisy_bits_3d, p_indep, raw_bits=raw_bits)
     return features, llr_bp, clean
 
 
@@ -413,13 +495,88 @@ def train_gemv_calibrator(
     hidden: int = 24,
     lr: float = 2e-3,
     residual_l2: float = 1e-2,
+    clip: float = 2.0,
     device: str = "cpu",
     seed: int = 0,
     log_every: int = 100,
+    raw_bits: bool = False,
+    drift_persist_choices: tuple[int, ...] = (3,),
 ) -> GEMVResidualCalibrator:
+    """Train the residual calibrator.
+
+    ``clip`` is the saturation level ``c`` of ``Delta = c tanh(./c)`` and
+    ``residual_l2`` is the shrinkage weight ``lambda``. Together they bound
+    how far the calibrator may move away from the B' anchor: the largest
+    amount by which it can re-rank a symbol is ``2c``, so a confidently
+    wrong B' prior whose log-margin exceeds ``2c`` is out of reach whatever
+    the features say. Both are exposed so that the ceiling can be swept
+    rather than assumed (Results, *Comparison with classical baselines*).
+
+    ``raw_bits`` adds the order-carrying raw reads to the input, and each
+    step draws the channel's drift persistence uniformly from
+    ``drift_persist_choices``; the default ``(3,)`` is the original
+    single-structure training.
+    """
     rng = np.random.default_rng(seed)
     torch.manual_seed(seed)
-    model = GEMVResidualCalibrator(hidden=hidden).to(device)
+    model = GEMVResidualCalibrator(
+        hidden=hidden, clip=clip,
+        raw_bit_cycles=n_cycles if raw_bits else 0).to(device)
+    opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
+    persists = tuple(int(k) for k in drift_persist_choices)
+
+    for step in range(n_steps):
+        p_bit = float(np.exp(rng.uniform(np.log(p_indep_range[0]),
+                                          np.log(p_indep_range[1]))))
+        persist = (persists[0] if len(persists) == 1
+                   else int(persists[rng.integers(len(persists))]))
+        features, llr_bp, clean = make_training_batch_gemv(
+            G, batch_size=batch, n_cycles=n_cycles, p_indep=p_bit,
+            p_drift=p_drift, p_row_burst=p_row_burst, rng=rng,
+            drift_persist=persist, raw_bits=raw_bits,
+        )
+        x = torch.from_numpy(features).to(device)
+        anchor = torch.from_numpy(llr_bp).to(device)
+        y = torch.from_numpy(clean).long().to(device)
+
+        out, gate = model(x, anchor)
+        loss = F.cross_entropy(out.reshape(-1, GF), y.reshape(-1))
+        loss = loss + residual_l2 * torch.mean((out - anchor) ** 2)
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+
+        if step % log_every == 0 or step == n_steps - 1:
+            acc = (out.argmax(dim=-1) == y).float().mean().item()
+            print(f"[train-gemv] step {step:5d}  p_bit={p_bit:.1e}  "
+                  f"loss={loss.item():.4f}  symbol-acc={acc:.4f}  "
+                  f"gate={float(gate.mean().detach()):.3f}")
+    return model
+
+
+def train_linear_calibrator(
+    G: np.ndarray,
+    n_cycles: int = 4,
+    p_indep_range: tuple[float, float] = (1e-4, 5e-3),
+    p_drift: float = 5e-3,
+    p_row_burst: float = 5e-3,
+    n_steps: int = 900,
+    batch: int = 128,
+    lr: float = 2e-3,
+    residual_l2: float = 1e-2,
+    device: str = "cpu",
+    seed: int = 0,
+    log_every: int = 100,
+) -> LinearResidualCalibrator:
+    """Train the hidden-layer-free variant of the GEMV residual calibrator.
+
+    Shares the training-data generator, loss, optimiser settings and RNG
+    usage of train_gemv_calibrator, so that the comparison between the two
+    models isolates the architecture and nothing else.
+    """
+    rng = np.random.default_rng(seed)
+    torch.manual_seed(seed)
+    model = LinearResidualCalibrator().to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
 
     for step in range(n_steps):
@@ -442,7 +599,7 @@ def train_gemv_calibrator(
 
         if step % log_every == 0 or step == n_steps - 1:
             acc = (out.argmax(dim=-1) == y).float().mean().item()
-            print(f"[train-gemv] step {step:5d}  p_bit={p_bit:.1e}  "
+            print(f"[train-linear] step {step:5d}  p_bit={p_bit:.1e}  "
                   f"loss={loss.item():.4f}  symbol-acc={acc:.4f}  "
                   f"gate={float(gate.mean().detach()):.3f}")
     return model

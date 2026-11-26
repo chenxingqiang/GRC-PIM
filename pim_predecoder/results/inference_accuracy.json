@@ -4,7 +4,19 @@
   "clean_accuracy": 91.5,
   "weight_precision": "INT8",
   "n_seeds_per_point": 10,
-  "ablation_source": "pim_predecoder/results/ablation/ablation_gemv_1024.json",
+  "ablation_source": "pim_predecoder/results/revision_n100k/recal",
+  "ecc_seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
   "results": [
     {
       "pipeline": "broad-sweep",
@@ -57,17 +69,17 @@
     {
       "pipeline": "B'+NB-LDPC",
       "p_bit": 0.005,
-      "ber": 0.0036269914215686268,
-      "accuracy_mean": 79.917,
-      "accuracy_std": 4.25454280087114,
+      "ber": 0.003922063419117647,
+      "accuracy_mean": 77.899,
+      "accuracy_std": 4.429096847991575,
       "n_seeds": 10
     },
     {
       "pipeline": "B'+GEMV+NB-LDPC",
       "p_bit": 0.005,
-      "ber": 0.0017948835784313726,
-      "accuracy_mean": 88.023,
-      "accuracy_std": 1.2372913965594357,
+      "ber": 0.0021946098345588237,
+      "accuracy_mean": 86.647,
+      "accuracy_std": 1.5793954539633193,
       "n_seeds": 10
     },
     {
@@ -81,17 +93,17 @@
     {
       "pipeline": "B'+NB-LDPC",
       "p_bit": 0.003,
-      "ber": 0.005197916666666667,
-      "accuracy_mean": 70.712,
-      "accuracy_std": 4.888373508188133,
+      "ber": 0.003807618106617647,
+      "accuracy_mean": 78.46099999999998,
+      "accuracy_std": 4.620087661506,
       "n_seeds": 10
     },
     {
       "pipeline": "B'+GEMV+NB-LDPC",
       "p_bit": 0.003,
-      "ber": 0.0025517769607843136,
-      "accuracy_mean": 84.986,
-      "accuracy_std": 2.7026538397985376,
+      "ber": 0.0019811966911764704,
+      "accuracy_mean": 87.38399999999999,
+      "accuracy_std": 1.3544839115569707,
       "n_seeds": 10
     },
     {
@@ -105,17 +117,17 @@
     {
       "pipeline": "B'+NB-LDPC",
       "p_bit": 0.001,
-      "ber": 0.0031463694852941182,
-      "accuracy_mean": 82.395,
-      "accuracy_std": 3.4880948317893474,
+      "ber": 0.003714358455882353,
+      "accuracy_mean": 79.446,
+      "accuracy_std": 4.140607040841555,
       "n_seeds": 10
     },
     {
       "pipeline": "B'+GEMV+NB-LDPC",
       "p_bit": 0.001,
-      "ber": 0.0017638633578431373,
-      "accuracy_mean": 88.32000000000001,
-      "accuracy_std": 1.0961954408062675,
+      "ber": 0.0020931410845588237,
+      "accuracy_mean": 87.09299999999999,
+      "accuracy_std": 1.2227659901496555,
       "n_seeds": 10
     },
     {
@@ -129,17 +141,17 @@
     {
       "pipeline": "B'+NB-LDPC",
       "p_bit": 0.0003,
-      "ber": 0.004389322916666666,
-      "accuracy_mean": 75.285,
-      "accuracy_std": 4.352167403847316,
+      "ber": 0.0034723984375,
+      "accuracy_mean": 80.945,
+      "accuracy_std": 3.6259657717327927,
       "n_seeds": 10
     },
     {
       "pipeline": "B'+GEMV+NB-LDPC",
       "p_bit": 0.0003,
-      "ber": 0.002411611519607843,
-      "accuracy_mean": 85.932,
-      "accuracy_std": 2.1701909798192642,
+      "ber": 0.0020322251838235292,
+      "accuracy_mean": 87.27000000000001,
+      "accuracy_std": 1.262105824054036,
       "n_seeds": 10
     },
     {
@@ -153,17 +165,17 @@
     {
       "pipeline": "B'+NB-LDPC",
       "p_bit": 0.0001,
-      "ber": 0.0027491574754901957,
-      "accuracy_mean": 84.03399999999999,
-      "accuracy_std": 2.675324279409881,
+      "ber": 0.0035879420955882355,
+      "accuracy_mean": 79.988,
+      "accuracy_std": 4.218590601926982,
       "n_seeds": 10
     },
     {
       "pipeline": "B'+GEMV+NB-LDPC",
       "p_bit": 0.0001,
-      "ber": 0.0018161764705882353,
-      "accuracy_mean": 88.02000000000001,
-      "accuracy_std": 1.1858049305570186,
+      "ber": 0.002328795955882353,
+      "accuracy_mean": 86.051,
+      "accuracy_std": 2.167473952169515,
       "n_seeds": 10
     },
     {

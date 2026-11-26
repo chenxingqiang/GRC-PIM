@@ -12,6 +12,7 @@ import numpy as np
 
 from pim_predecoder.hw.llr import hw_drift_score_q16, message_llr_int
 from pim_predecoder.hw.simulate import (
+    TAU_D_MAX_Q16,
     TAU_D_Q16,
     TAU_G_Q16,
     GemvMlpHw,
@@ -102,7 +103,9 @@ def generate_trace(cfg: CosimConfig | None = None) -> CosimTrace:
         })
 
     gate_mean = gate_sum // cfg.n_symbols
-    use_gemv = bool(drift_q16 >= TAU_D_Q16 and gate_mean >= TAU_G_Q16)
+    # Band-pass drift gate, mirroring GRC_PIM_TOP.v exactly.
+    use_gemv = bool(TAU_D_Q16 <= drift_q16 <= TAU_D_MAX_Q16
+                    and gate_mean >= TAU_G_Q16)
     for row in trace.symbol_rows:
         sym = row["sym"]
         row["llr_out"] = (gemv_out[sym] if use_gemv else anchors[sym]).tolist()

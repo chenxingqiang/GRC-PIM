@@ -9,7 +9,8 @@ module GRC_PIM_TOP #(
     parameter FIELD = 3,
     parameter FEAT_NUM = 13,
     parameter HIDDEN = 24,
-    parameter TAU_D_Q16 = 16'd1638,
+    parameter TAU_D_Q16 = 16'd721,
+    parameter TAU_D_MAX_Q16 = 16'd2490,
     parameter TAU_G_Q16 = 16'd39321,
     parameter WEIGHT_DIR = "pim_predecoder/rtl/Weights"
 ) (
@@ -188,6 +189,7 @@ module GRC_PIM_TOP #(
                                 gate_sum_compute = gate_sum_compute + sym_gate_mem[gi_mean];
                             gate_mean_r <= gate_sum_compute / N_SYMBOLS;
                             use_gemv_r = (DRIFT_SCORE_Q16 >= TAU_D_Q16) &&
+                                (DRIFT_SCORE_Q16 <= TAU_D_MAX_Q16) &&
                                 (gate_sum_compute / N_SYMBOLS >= TAU_G_Q16);
                             emit_sym <= 0;
                             state <= S_EMIT;

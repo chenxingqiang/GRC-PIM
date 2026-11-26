@@ -114,6 +114,29 @@ def test_regression_python_k1024_digest():
 
 
 @pytest.mark.rtl
+def test_drift_bounds_tb(require_iverilog, tmp_path):
+    """Q16 drift scaling and the band-pass gate bounds, in RTL.
+
+    Covers the overflow the widened product fixes: at 3998 accumulated
+    comparisons the intermediate disagree*65535 exceeds 2^32, and the original
+    32-bit expression reported 15981 instead of 32767.
+    """
+    exe = tmp_path / "tb_drift"
+    build = subprocess.run(
+        ["iverilog", "-g2005", "-o", str(exe), "-s", "tb_drift_bounds",
+         str(RTL / "tb_drift_bounds.v"),
+         str(RTL / "DRIFT_DETECTOR_CODEWORD.v"),
+         str(RTL / "DRIFT_DETECTOR.v")],
+        capture_output=True, text=True,
+    )
+    assert build.returncode == 0, build.stderr
+    run = subprocess.run([str(exe)], capture_output=True, text=True)
+    assert run.returncode == 0, run.stderr
+    assert "ALL CHECKS PASSED" in run.stdout, run.stdout
+    assert "FAIL" not in run.stdout, run.stdout
+
+
+@pytest.mark.rtl
 def test_cosim_batch_rtl(require_iverilog):
     trace = generate_trace(CosimConfig(n_symbols=8, n_cycles=4, seed=42))
     out_dir = RTL / "cosim"

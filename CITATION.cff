@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this software or the accompanying result data, please cite it as below."
+type: software
+title: "GRC-PIM: drift-gated GEMV-reusing residual calibration for soft-decision error correction in processing-in-memory"
+abstract: >-
+  Simulation code, RTL and result data for a reliability-gated calibration stack
+  for RRAM processing-in-memory readout. The package contains a multi-cycle B'
+  soft-LLR baseline, a compact GEMV residual calibrator with drift and confidence
+  gates, GF(3) NB-LDPC channel decoding at the 256- and 1024-symbol scales, the
+  Verilog datapath and its testbenches, the yosys synthesis script, and the JSON
+  result files behind every table and figure of the manuscript.
+authors:
+  - family-names: Chen
+    given-names: Xingqiang
+    orcid: "https://orcid.org/0009-0007-7545-0689"
+    affiliation: >-
+      Hangzhou Zhicun (Witmem) Technology Co., Ltd., Hangzhou, China;
+      Department of Physics, Xiamen University, Xiamen, China
+version: 1.0.0
+date-released: "2026-11-03"
+license: MIT
+keywords:
+  - NB-LDPC
+  - GF(3)
+  - processing-in-memory
+  - drift-aware calibration
+  - GEMV
+  - soft-decision error correction
+  - hardware architecture

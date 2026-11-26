@@ -1,0 +1,91 @@
+{
+  "label": "agrid_1024_p8r2_bandpass_s2",
+  "train_p_drift": 0.005,
+  "train_p_row_burst": 0.005,
+  "test_p_drift": 0.005,
+  "test_p_row_burst": 0.005,
+  "n_codewords": 20000,
+  "n_cycles": 4,
+  "eval_chunk": 2000,
+  "seed": 2,
+  "eval_seed": 2,
+  "matrix_info": 1024,
+  "matrix_rate": "16_17",
+  "matrix_shape": {
+    "H": [
+      64,
+      1088
+    ],
+    "G": [
+      1024,
+      1088
+    ]
+  },
+  "model": "GEMVResidualCalibrator",
+  "baselines": "majority_vote + per_column_affine",
+  "channel": "aihwkit",
+  "cond_params": {
+    "t_inference": 86400.0,
+    "level_pitch_us": 8.0,
+    "acceptance_range": 2.0,
+    "prog_noise_scale": 1.0,
+    "read_noise_scale": 2.0,
+    "drift_scale": 1.0
+  },
+  "drift_score_threshold": 0.011,
+  "drift_score_max": 0.038,
+  "composite_drift_threshold": null,
+  "model_gate_threshold": 0.6,
+  "rows": [
+    {
+      "p_bit": 0.005,
+      "p_effective": 0.00288137637867647,
+      "channel": "aihwkit",
+      "Bp_post": 0.002246875,
+      "Bp_post_BER": 0.001338625919117647,
+      "Bp_iters": 3.0,
+      "Maj_post": 0.002162454044117647,
+      "Maj_post_BER": 0.00151484375,
+      "Maj_iters": 3.0,
+      "GEMV_post": 0.002246875,
+      "GEMV_post_BER": 0.001338625919117647,
+      "GEMV_iters": 3.0,
+      "GEMV_raw_symbol": 0.0027321231617647057,
+      "GEMV_raw_BER": 0.0018646139705882352,
+      "GEMV_gate": 0.987620747089386,
+      "drift_score": 0.0051028952468186615,
+      "column_persistence": 0.032316550984978674,
+      "row_burst": 0.0750604308820796,
+      "syndrome_instability": 0.12432304644584656,
+      "composite_drift": 0.04974184654821643,
+      "use_gemv": false,
+      "drift_score_max": 0.038,
+      "resolution_floor": 1.3786764705882352e-07,
+      "n_codewords_eval": 20000,
+      "n_blocks": 10,
+      "eval_chunk": 2000,
+      "drift_score_sd": 3.0528260638635745e-05,
+      "drift_out_of_band_frac": 1.0,
+      "drift_score_blocks": [
+        0.005104,
+        0.005117,
+        0.005096,
+        0.005107,
+        0.005156,
+        0.005105,
+        0.005061,
+        0.005053,
+        0.005135,
+        0.005093
+      ],
+      "composite_drift_sd": 0.00039351566086101954,
+      "Bp_symbol_errors": 48892,
+      "Bp_bit_errors": 58257,
+      "GEMV_symbol_errors": 48892,
+      "GEMV_bit_errors": 58257,
+      "Affine_post": 0.0022666819852941176,
+      "Affine_post_BER": 0.00135,
+      "Affine_iters": 3.0
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "label": "ood_1024_C3_rtn_dominated_s2",
+  "train_p_drift": 0.005,
+  "train_p_row_burst": 0.005,
+  "test_p_drift": 0.005,
+  "test_p_row_burst": 0.005,
+  "n_codewords": 20000,
+  "n_cycles": 4,
+  "eval_chunk": 2000,
+  "seed": 2,
+  "eval_seed": 2,
+  "matrix_info": 1024,
+  "matrix_rate": "16_17",
+  "matrix_shape": {
+    "H": [
+      64,
+      1088
+    ],
+    "G": [
+      1024,
+      1088
+    ]
+  },
+  "model": "GEMVResidualCalibrator",
+  "baselines": "majority_vote + per_column_affine",
+  "channel": "conductance",
+  "cond_params": {
+    "sigma_ln": 0.05,
+    "drift_nu": 0.0,
+    "rtn_traps": 3,
+    "rtn_amp": 0.05,
+    "rtn_switch": 0.5
+  },
+  "drift_score_threshold": 0.011,
+  "composite_drift_threshold": null,
+  "model_gate_threshold": 0.6,
+  "rows": [
+    {
+      "p_bit": 0.005,
+      "p_effective": 0.022803659237132352,
+      "channel": "conductance",
+      "Bp_post": 0.019350045955882352,
+      "Bp_post_BER": 0.013402734375,
+      "Bp_iters": 3.0,
+      "Maj_post": 0.0090375,
+      "Maj_post_BER": 0.009023460477941177,
+      "Maj_iters": 3.0,
+      "GEMV_post": 0.019887454044117646,
+      "GEMV_post_BER": 0.01436626838235294,
+      "GEMV_iters": 3.0,
+      "GEMV_raw_symbol": 0.022102987132352942,
+      "GEMV_raw_BER": 0.015041796875,
+      "GEMV_gate": 0.973907470703125,
+      "drift_score": 0.04620538279414177,
+      "column_persistence": 0.20856298357248307,
+      "row_burst": 0.07467110963200667,
+      "syndrome_instability": 0.5226346039851506,
+      "composite_drift": 0.18777377259450187,
+      "use_gemv": true,
+      "resolution_floor": 1.3786764705882352e-07,
+      "n_codewords_eval": 20000,
+      "n_blocks": 10,
+      "eval_chunk": 2000,
+      "drift_score_sd": 0.00013416269391664225,
+      "composite_drift_sd": 0.0004426870359492714,
+      "Bp_symbol_errors": 421057,
+      "Bp_bit_errors": 583287,
+      "GEMV_symbol_errors": 432751,
+      "GEMV_bit_errors": 625220,
+      "Affine_post": 0.019297150735294116,
+      "Affine_post_BER": 0.01337642463235294,
+      "Affine_iters": 3.0
+    }
+  ]
+}

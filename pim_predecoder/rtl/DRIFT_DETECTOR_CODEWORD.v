@@ -1,4 +1,17 @@
 // Codeword-level drift: compare all bit positions between consecutive cycles.
+//
+// The score is published once per codeword, on BATCH_END. We deliberately do
+// NOT average it over a window of codewords: the dominant variance of the
+// score comes from the drifted columns, which are a property of the crossbar
+// and persist far longer than any window a 32-bit accumulator could hold, so
+// averaging does not reduce the spread (measured: the across-codeword s.d.
+// falls only from 0.0033 to 0.0026 for a 10-codeword window, against the
+// 0.0010 that independent sampling would give). The band is therefore placed
+// at per-codeword granularity instead -- see sn-article.tex Sec. 4.4.
+//
+// The Q16 product below is evaluated in a 32-bit context and wraps at 65537
+// accumulated disagreements; one codeword contributes at most
+// (T-1)*N_BITS = 6528, so a single-codeword score has a 10x margin.
 module DRIFT_DETECTOR_CODEWORD #(
     parameter N_BITS = 16,
     parameter Q_WIDTH = 16
@@ -52,9 +65,9 @@ module DRIFT_DETECTOR_CODEWORD #(
             if (BATCH_END) begin
                 if (final_total > 0)
                     DRIFT_SCORE_Q16 <= (final_disagree * 65535) / final_total;
+                have_prev <= 0;
                 disagree <= 0;
                 total <= 0;
-                have_prev <= 0;
             end
         end
     end

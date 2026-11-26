@@ -1,0 +1,19 @@
+{
+  "liberty": "/tmp/lib/ng45.lib",
+  "cells": 15806,
+  "area_um2_liberty": 24798.914,
+  "sequential_um2": 9899.456,
+  "nand2_um2_liberty": 0.798,
+  "gate_equivalents": 31076.3,
+  "nand2_um2_target": 0.32,
+  "core_cell_area_um2_target": 9944.4,
+  "pr_utilisation": 0.6,
+  "placed_area_um2": 16574.0,
+  "weight_sram_um2": 3000.0,
+  "total_area_mm2_with_pr": 0.01957,
+  "nand2_um2_40nm": 0.65,
+  "weight_sram_um2_40nm": 6000.0,
+  "total_area_mm2_40nm": 0.03967,
+  "decoder_area_mm2_40nm": 0.8,
+  "ratio_to_decoder_matched_40nm": 0.0496
+}

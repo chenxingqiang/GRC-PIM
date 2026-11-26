@@ -1,0 +1,72 @@
+{
+  "label": "window_L1",
+  "train_p_drift": 0.005,
+  "train_p_row_burst": 0.005,
+  "test_p_drift": 0.005,
+  "test_p_row_burst": 0.005,
+  "n_codewords": 2000,
+  "n_cycles": 4,
+  "eval_chunk": 1,
+  "seed": 1,
+  "eval_seed": 1,
+  "matrix_info": 1024,
+  "matrix_rate": "16_17",
+  "matrix_shape": {
+    "H": [
+      64,
+      1088
+    ],
+    "G": [
+      1024,
+      1088
+    ]
+  },
+  "model": "GEMVResidualCalibrator",
+  "baselines": "majority_vote + per_column_affine",
+  "channel": "synthetic",
+  "cond_params": null,
+  "drift_score_threshold": 0.011,
+  "drift_score_max": 0.035,
+  "composite_drift_threshold": null,
+  "model_gate_threshold": null,
+  "rows": [
+    {
+      "p_bit": 0.005,
+      "p_effective": 0.005,
+      "channel": "synthetic",
+      "Bp_post": 0.007842830882352941,
+      "Bp_post_BER": 0.004064797794117647,
+      "Bp_iters": 2.9665,
+      "Maj_post": 0.01870450367647059,
+      "Maj_post_BER": 0.010579044117647058,
+      "Maj_iters": 3.0,
+      "GEMV_post": 0.007850183823529411,
+      "GEMV_post_BER": 0.004067325367647059,
+      "GEMV_iters": 2.971,
+      "GEMV_raw_symbol": 0.016612132352941178,
+      "GEMV_raw_BER": 0.008403722426470589,
+      "GEMV_gate": 0.47984130115807055,
+      "drift_score": 0.030677274759858847,
+      "column_persistence": 0.6138275854587555,
+      "row_burst": 0.0,
+      "syndrome_instability": 0.5340263671875,
+      "composite_drift": 0.2709992159681395,
+      "use_gemv": true,
+      "drift_score_max": 0.035,
+      "resolution_floor": 1.3786764705882354e-06,
+      "n_codewords_eval": 2000,
+      "n_blocks": 2000,
+      "eval_chunk": 1,
+      "drift_score_sd": 0.0033087626341066594,
+      "drift_out_of_band_frac": 0.099,
+      "composite_drift_sd": 0.022812099987573397,
+      "Bp_symbol_errors": 17066,
+      "Bp_bit_errors": 17690,
+      "GEMV_symbol_errors": 17082,
+      "GEMV_bit_errors": 17701,
+      "Affine_post": 0.007842830882352941,
+      "Affine_post_BER": 0.004064797794117647,
+      "Affine_iters": 2.9665
+    }
+  ]
+}

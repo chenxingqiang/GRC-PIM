@@ -1,0 +1,72 @@
+{
+  "label": "window_L20",
+  "train_p_drift": 0.005,
+  "train_p_row_burst": 0.005,
+  "test_p_drift": 0.005,
+  "test_p_row_burst": 0.005,
+  "n_codewords": 2000,
+  "n_cycles": 4,
+  "eval_chunk": 20,
+  "seed": 1,
+  "eval_seed": 1,
+  "matrix_info": 1024,
+  "matrix_rate": "16_17",
+  "matrix_shape": {
+    "H": [
+      64,
+      1088
+    ],
+    "G": [
+      1024,
+      1088
+    ]
+  },
+  "model": "GEMVResidualCalibrator",
+  "baselines": "majority_vote + per_column_affine",
+  "channel": "synthetic",
+  "cond_params": null,
+  "drift_score_threshold": 0.011,
+  "drift_score_max": 0.035,
+  "composite_drift_threshold": null,
+  "model_gate_threshold": null,
+  "rows": [
+    {
+      "p_bit": 0.005,
+      "p_effective": 0.004999999999999999,
+      "channel": "synthetic",
+      "Bp_post": 0.007707261029411765,
+      "Bp_post_BER": 0.00397702205882353,
+      "Bp_iters": 3.0,
+      "Maj_post": 0.018665900735294116,
+      "Maj_post_BER": 0.010547794117647058,
+      "Maj_iters": 3.0,
+      "GEMV_post": 0.007714154411764706,
+      "GEMV_post_BER": 0.00398046875,
+      "GEMV_iters": 3.0,
+      "GEMV_raw_symbol": 0.016504595588235294,
+      "GEMV_raw_BER": 0.008359375,
+      "GEMV_gate": 0.4797472053766251,
+      "drift_score": 0.030680319368839262,
+      "column_persistence": 0.5043091791868209,
+      "row_burst": 0.08315637158258014,
+      "syndrome_instability": 0.5329511720240117,
+      "composite_drift": 0.2600369152971173,
+      "use_gemv": true,
+      "drift_score_max": 0.035,
+      "resolution_floor": 1.3786764705882354e-06,
+      "n_codewords_eval": 2000,
+      "n_blocks": 100,
+      "eval_chunk": 20,
+      "drift_score_sd": 0.0021974159186334673,
+      "drift_out_of_band_frac": 0.02,
+      "composite_drift_sd": 0.014546869597201693,
+      "Bp_symbol_errors": 16771,
+      "Bp_bit_errors": 17308,
+      "GEMV_symbol_errors": 16786,
+      "GEMV_bit_errors": 17323,
+      "Affine_post": 0.007707261029411765,
+      "Affine_post_BER": 0.00397702205882353,
+      "Affine_iters": 3.0
+    }
+  ]
+}

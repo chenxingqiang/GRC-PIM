@@ -16,7 +16,7 @@ cd "$ROOT"
 iverilog -g2012 -o "$OUT" \
   -I "$VDIR" \
   "$VDIR/GRC_LLR_LUT.v" \
-  "$VDIR/DRIFT_DETECTOR.v" \
+  "$VDIR/DRIFT_DETECTOR_CODEWORD.v" \
   "$VDIR/INT8_GEMV_MLP.v" \
   "$VDIR/GRC_PIM_TOP.v" \
   "$TB"
